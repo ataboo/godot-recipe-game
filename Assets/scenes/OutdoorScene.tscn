@@ -1,0 +1,79 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Assets/scripts/outdoor/PlayerMapController.cs" type="Script" id=1]
+[ext_resource path="res://Art/Characters/WitchConcept.png" type="Texture" id=2]
+[ext_resource path="res://Art/Map/Hut.png" type="Texture" id=3]
+[ext_resource path="res://Art/CanvasBackground.png" type="Texture" id=4]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 984, 12 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 12, 539 )
+
+[node name="OutdoorScene" type="Node2D"]
+
+[node name="CanvasBackground" type="Sprite" parent="."]
+texture = ExtResource( 4 )
+centered = false
+
+[node name="Hut" type="Sprite" parent="."]
+position = Vector2( 958.656, 520 )
+scale = Vector2( 0.320001, 0.320001 )
+texture = ExtResource( 3 )
+
+[node name="Area2D" type="Area2D" parent="Hut"]
+position = Vector2( 0.000244141, 56.5388 )
+scale = Vector2( 4.10564, 4.10564 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Hut/Area2D"]
+position = Vector2( 309.098, 188.732 )
+polygon = PoolVector2Array( -283.719, -105.076, -289.808, -92.8981, -320.254, -92.8981, -326.343, -105.076, -320.254, -117.255, -289.808, -117.255 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Hut"]
+position = Vector2( 0.000244141, 56.5388 )
+scale = Vector2( 4.10564, 4.10564 )
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Hut/StaticBody2D"]
+position = Vector2( 313.462, 184.368 )
+polygon = PoolVector2Array( -263.726, -100.712, -288.083, -112.891, -330.707, -112.891, -353.609, -100.835, -397.687, -112.891, -397.687, -173.782, -318.528, -246.852, -227.191, -167.693, -227.191, -118.98 )
+
+[node name="Player" type="KinematicBody2D" parent="."]
+position = Vector2( 967.508, 709.697 )
+scale = Vector2( 0.340521, 0.340521 )
+script = ExtResource( 1 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Player"]
+polygon = PoolVector2Array( 43.6194, 115.303, 19.6678, 118.805, -7.70532, 118.725, -29.0309, 115.781, -34.4419, 106.55, -29.5879, 97.3995, -13.912, 90.2379, 9.8009, 87.8507, 28.5236, 89.6724, 43.9377, 95.1715, 46.8022, 107.187 )
+
+[node name="WitchConcept" type="Sprite" parent="Player"]
+texture = ExtResource( 2 )
+
+[node name="Walls" type="Node2D" parent="."]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Walls"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2( 960, -12 )
+shape = SubResource( 1 )
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="Walls"]
+position = Vector2( 0, 1104 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/StaticBody2D2"]
+position = Vector2( 960, -12 )
+shape = SubResource( 1 )
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="Walls"]
+position = Vector2( 0, 24 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/StaticBody2D3"]
+position = Vector2( -12, 517 )
+shape = SubResource( 2 )
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="Walls"]
+position = Vector2( 1944, 24 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/StaticBody2D4"]
+position = Vector2( -12, 517 )
+shape = SubResource( 2 )
