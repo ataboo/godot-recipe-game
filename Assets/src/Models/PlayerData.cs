@@ -9,5 +9,7 @@ namespace RecipeGame.Models
         public StorageInventory Storage { get; set; }
 
         public Cauldron Cauldron { get; set; }
+
+        public PrepBench PrepBench { get; set; }
     }
 }

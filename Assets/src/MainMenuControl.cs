@@ -3,19 +3,18 @@ using System;
 
 public class MainMenuControl : Node2D
 {
-    // Declare member variables here. Examples:
-    // private int a = 2;
-    // private string b = "text";
-
-    // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        
+        var gameRoot = GetNode<GameRoot>("/root/GameRoot") ?? throw new NullReferenceException();
+        var newGameBtn = GetNode<Button>("Panel/NewGame") ?? throw new NullReferenceException();
+        var continueBtn = GetNode<Button>("Panel/Continue") ?? throw new NullReferenceException();
+        var instructionsBtn = GetNode<Button>("Panel/Instructions") ?? throw new NullReferenceException();
+        var quitBtn = GetNode<Button>("Panel/Quit") ?? throw new NullReferenceException();
+
+        newGameBtn.Connect("pressed", gameRoot, "OnNewGameButtonPress");
+        continueBtn.Connect("pressed", gameRoot, "OnContinueButtonPress");
+        instructionsBtn.Connect("pressed", gameRoot, "OnInstructionsButtonPress");
+        quitBtn.Connect("pressed", gameRoot, "OnQuitButtonPress");
     }
 
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
-//  public override void _Process(float delta)
-//  {
-//      
-//  }
 }

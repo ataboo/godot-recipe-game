@@ -1,21 +1,36 @@
 using Godot;
+using RecipeGame.Inventory;
+using RecipeGame.Models;
 using System;
 
 public class OutdoorSceneControl : Node2D
 {
-    // Declare member variables here. Examples:
-    // private int a = 2;
-    // private string b = "text";
+    private GameRoot gameRoot;
+    private CauldronService cauldronService;
 
-    // Called when the node enters the scene tree for the first time.
+    public PlayerData PlayerData { get; set; }
+
     public override void _Ready()
     {
-        
+        cauldronService = new CauldronService();
+        gameRoot = GetNode<GameRoot>("/root/GameRoot") ?? throw new NullReferenceException();
     }
 
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
-//  public override void _Process(float delta)
-//  {
-//      
-//  }
+    public override void _Process(float delta)
+    {
+        if(PlayerData?.Cauldron == null) {
+            GD.PushError("No cauldron to update!");
+            return;
+        }
+
+        cauldronService.Update(PlayerData.Cauldron, delta);
+    }
+
+    void OnCottageEntered(Node node) 
+    {
+        if(node is PlayerMapController player) 
+        {
+            gameRoot.TransitionToCottage();
+        }
+    }
 }

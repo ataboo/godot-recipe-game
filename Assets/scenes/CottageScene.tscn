@@ -1,3 +1,83 @@
-[gd_scene format=2]
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Art/Cottage/CottageBackground.png" type="Texture" id=1]
+[ext_resource path="res://Assets/src/Cottage/CottageSceneControl.cs" type="Script" id=2]
+[ext_resource path="res://Art/Cottage/CottagePlayer.png" type="Texture" id=3]
+[ext_resource path="res://Assets/src/Cottage/CottagePlayerController.cs" type="Script" id=4]
+[ext_resource path="res://Assets/ui/SatchelPanel.tscn" type="PackedScene" id=5]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 66.8098
+
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 46.5316
+height = 96.7493
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 100.365, 26.4285 )
+
+[sub_resource type="CapsuleShape2D" id=3]
+radius = 46.5316
+height = 83.1889
+
+[sub_resource type="CircleShape2D" id=4]
+radius = 121.971
 
 [node name="CottageScene" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="CottageBackground" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+centered = false
+
+[node name="WallCollider" type="StaticBody2D" parent="CottageBackground"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CottageBackground/WallCollider"]
+polygon = PoolVector2Array( 205.442, 62.3401, 161.715, 909.964, 931.458, 1091.98, 945.442, 971.119, 864.533, 963.128, 687.733, 916.181, 568.867, 853.252, 481.966, 786.327, 414.042, 697.428, 371.091, 586.553, 374.087, 487.665, 424.031, 362.806, 548.89, 242.941, 772.637, 141.057, 960.003, 102.555, 1229.09, 127.221, 1430.9, 201.22, 1577.78, 307.734, 1662.99, 447.883, 1679.81, 540.942, 1655.14, 664.274, 1586.75, 759.575, 1474.63, 857.119, 1326.63, 931.118, 1180.88, 962.512, 1145, 970.36, 1153.21, 1096.98, 1854, 966.971, 1759.61, 48.2668 )
+
+[node name="KinematicBody2D" type="KinematicBody2D" parent="."]
+position = Vector2( 1040.56, 872.942 )
+script = ExtResource( 4 )
+
+[node name="PlayerSprite" type="Sprite" parent="KinematicBody2D"]
+texture = ExtResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody2D"]
+shape = SubResource( 1 )
+
+[node name="Triggers" type="Node" parent="."]
+
+[node name="BenchTrigger" type="Area2D" parent="Triggers"]
+position = Vector2( 542.384, 519.591 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/BenchTrigger"]
+shape = SubResource( 2 )
+
+[node name="ExitTrigger" type="Area2D" parent="Triggers"]
+position = Vector2( 1041.29, 1052.94 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/ExitTrigger"]
+position = Vector2( 4.29956, -4.90186 )
+shape = SubResource( 5 )
+
+[node name="StorageTrigger" type="Area2D" parent="Triggers"]
+position = Vector2( 797.783, 233.935 )
+rotation = -1.9181
+scale = Vector2( 1, 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/StorageTrigger"]
+shape = SubResource( 3 )
+
+[node name="Cauldron Trigger" type="Area2D" parent="Triggers"]
+position = Vector2( 1025.94, 535.634 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/Cauldron Trigger"]
+shape = SubResource( 4 )
+
+[node name="SatchelPanel" parent="." instance=ExtResource( 5 )]
+margin_left = 41.1574
+margin_top = 125.992
+margin_right = 41.1574
+margin_bottom = 125.992
+
+[connection signal="body_entered" from="Triggers/ExitTrigger" to="." method="OnHitExitTrigger"]

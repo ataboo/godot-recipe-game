@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/HutMap.png-fc9d559314eef4957fae1532fb78f3e5.stex"
+path="res://.import/Mushroom.png-5440b92d699fd1e6724e0f61ed0011d7.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/Characters/HutMap.png"
-dest_files=[ "res://.import/HutMap.png-fc9d559314eef4957fae1532fb78f3e5.stex" ]
+source_file="res://Art/UI/Items/Mushroom.png"
+dest_files=[ "res://.import/Mushroom.png-5440b92d699fd1e6724e0f61ed0011d7.stex" ]
 
 [params]
 
@@ -28,6 +28,7 @@ process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 process/invert_color=false
+process/normal_map_invert_y=false
 stream=false
 size_limit=0
 detect_3d=true

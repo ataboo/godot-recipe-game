@@ -1,23 +1,23 @@
 using Godot;
 using RecipeGame.Shared;
-public class PlayerMapController : KinematicBody2D
+
+public class CottagePlayerController : KinematicBody2D
 {
     public bool ControlEnabled { get; set; } = true;
 
-    private Sprite playerSprite;
-
     private Vector2 velocity;
+
+    private Sprite playerSprite;
 
     private CommonPlayerControl playerControl;
 
     public override void _Ready()
     {
-        playerSprite = GetNode<Sprite>("PlayerSprite");
-
+        playerSprite= GetNode<Sprite>("PlayerSprite");
         playerControl = new CommonPlayerControl() {
-            WalkAccelRate = 15f,
-            WalkAccelDecay = 20f,
-            MaxWalkSpeed = 250f
+            WalkAccelRate = 30f,
+            WalkAccelDecay = 30f,
+            MaxWalkSpeed = 500f
         };
     }
 
@@ -31,9 +31,8 @@ public class PlayerMapController : KinematicBody2D
         velocity = playerControl.PhysicsUpdate(velocity, delta);
         velocity = MoveAndSlide(velocity);
 
-        if(velocity.LengthSquared() > 1e-4) 
-        {
-            playerSprite.FlipH = velocity.x > 0;
+        if(velocity.LengthSquared() > 1e-4) {
+            playerSprite.Rotation = Mathf.LerpAngle(playerSprite.Rotation, velocity.Angle() + Mathf.Pi/2, 0.8f);
         }
     }
 }
