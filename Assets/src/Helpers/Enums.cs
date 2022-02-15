@@ -24,7 +24,8 @@ namespace RecipeGame.Helpers
             Forest,
             Swamp,
             Lake,
-            Cave
+            Cave,
+            Shore
         }
 
         public enum GameScene 

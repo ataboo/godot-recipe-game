@@ -87,7 +87,7 @@ public class GameRoot : Node2D
     {
         DoTransition(() => {
             var outdoorLevel = outdoorSceneRes.Instance<OutdoorSceneControl>();
-            // cottageLevel.PlayerData = playerData;
+            outdoorLevel.PlayerData = playerData;
             currentScene = GameScene.Map;
             
             return outdoorLevel;

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Assets/src/Outdoor/PlayerMapController.cs" type="Script" id=1]
 [ext_resource path="res://Art/Map/WitchMap.png" type="Texture" id=2]
@@ -6,6 +6,11 @@
 [ext_resource path="res://Art/CanvasBackground.png" type="Texture" id=4]
 [ext_resource path="res://Assets/fonts/MainFont.tres" type="DynamicFont" id=5]
 [ext_resource path="res://Assets/src/Outdoor/OutdoorSceneControl.cs" type="Script" id=6]
+[ext_resource path="res://Assets/ui/SatchelPanel.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Assets/ui/ForagePanel.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Assets/ui/KeyPrompt.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Assets/src/KeyPromptControl.cs" type="Script" id=10]
+[ext_resource path="res://Assets/src/Outdoor/BiomeAreaControl.cs" type="Script" id=11]
 
 [sub_resource type="CircleShape2D" id=3]
 radius = 61.0325
@@ -18,6 +23,9 @@ extents = Vector2( 12, 539 )
 
 [node name="OutdoorScene" type="Node2D"]
 script = ExtResource( 6 )
+satchelPath = NodePath("UI/SatchelPanel")
+foragePath = NodePath("UI/ForagePanel")
+promptPath = NodePath("UI/KeyPrompt")
 
 [node name="CanvasBackground" type="Sprite" parent="."]
 texture = ExtResource( 4 )
@@ -27,6 +35,7 @@ centered = false
 
 [node name="ForestArea" type="Area2D" parent="Triggers"]
 position = Vector2( 1447.66, 864.157 )
+script = ExtResource( 11 )
 
 [node name="Forest" type="Label" parent="Triggers/ForestArea"]
 margin_left = -64.3334
@@ -67,6 +76,8 @@ shape = SubResource( 3 )
 
 [node name="CaveArea" type="Area2D" parent="Triggers"]
 position = Vector2( 444.764, 253.698 )
+script = ExtResource( 11 )
+biome = 3
 
 [node name="Cave" type="Label" parent="Triggers/CaveArea"]
 margin_left = -64.3334
@@ -87,6 +98,8 @@ shape = SubResource( 3 )
 
 [node name="SwampArea" type="Area2D" parent="Triggers"]
 position = Vector2( 428.115, 771.399 )
+script = ExtResource( 11 )
+biome = 1
 
 [node name="Swamp" type="Label" parent="Triggers/SwampArea"]
 margin_left = -64.3334
@@ -105,24 +118,26 @@ __meta__ = {
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/SwampArea"]
 shape = SubResource( 3 )
 
-[node name="LakeArea" type="Area2D" parent="Triggers"]
+[node name="ShoreArea" type="Area2D" parent="Triggers"]
 position = Vector2( 1626.84, 516.116 )
+script = ExtResource( 11 )
+biome = 4
 
-[node name="Lake" type="Label" parent="Triggers/LakeArea"]
+[node name="Shore" type="Label" parent="Triggers/ShoreArea"]
 margin_left = -64.3334
 margin_top = -32.0
 margin_right = 68.6666
 margin_bottom = 37.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = ExtResource( 5 )
-text = "Lake"
+text = "Shore"
 align = 1
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/LakeArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/ShoreArea"]
 shape = SubResource( 3 )
 
 [node name="Hut" type="Sprite" parent="."]
@@ -185,5 +200,32 @@ position = Vector2( 1944, 24 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/StaticBody2D4"]
 position = Vector2( -12, 517 )
 shape = SubResource( 2 )
+
+[node name="UI" type="CanvasLayer" parent="."]
+layer = 3
+
+[node name="SatchelPanel" parent="UI" instance=ExtResource( 7 )]
+visible = false
+margin_left = 24.0
+margin_top = 24.0
+margin_right = 410.0
+margin_bottom = 836.0
+
+[node name="ForagePanel" parent="UI" instance=ExtResource( 8 )]
+visible = false
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -1082.0
+margin_top = 24.0
+margin_right = -1082.0
+margin_bottom = 24.0
+
+[node name="KeyPrompt" parent="UI" instance=ExtResource( 9 )]
+visible = false
+margin_left = -271.862
+margin_top = -81.1287
+margin_right = -16.8622
+margin_bottom = -23.1287
+script = ExtResource( 10 )
 
 [connection signal="body_entered" from="Hut/HutArea" to="." method="OnCottageEntered"]

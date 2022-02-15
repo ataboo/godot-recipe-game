@@ -8,8 +8,8 @@ namespace RecipeGame.Inventory
 {
     public class InventoryService
     {
-        public const int PlayerItemSlotCount = 24;
-        public const int StorageItemSlotCount = 96;
+        public const int PlayerItemSlotCount = 32;
+        public const int StorageItemSlotCount = 72;
         
         public const int CauldronVolumeCapacity = 40000;
 

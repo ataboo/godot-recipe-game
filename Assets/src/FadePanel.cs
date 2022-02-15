@@ -1,26 +1,29 @@
 using Godot;
 using System;
 
-public class FadePanel : ColorRect
+public class FadePanel : Node
 {
-    private AnimationPlayer anim;
+    [Export]
+    public NodePath animPlayerPath;
+
+    private AnimationPlayer animPlayer;
 
     public override void _Ready()
     {
-        anim = GetNode<AnimationPlayer>("AnimationPlayer");
+        animPlayer = GetNode<AnimationPlayer>(animPlayerPath);
     }
 
     public SignalAwaiter FadeOutAndWait() 
     {
-        anim.Play("PanelFadeOut");
+        animPlayer.Play("PanelFadeOut");
 
-        return ToSignal(anim, "animation_finished");
+        return ToSignal(animPlayer, "animation_finished");
     }
 
     public SignalAwaiter FadeInAndWait() 
     {
-        anim.Play("PanelFadeIn");
+        animPlayer.Play("PanelFadeIn");
 
-        return ToSignal(anim, "animation_finished");
+        return ToSignal(animPlayer, "animation_finished");
     }
 }

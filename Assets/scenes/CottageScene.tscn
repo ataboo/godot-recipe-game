@@ -1,10 +1,13 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Art/Cottage/CottageBackground.png" type="Texture" id=1]
 [ext_resource path="res://Assets/src/Cottage/CottageSceneControl.cs" type="Script" id=2]
 [ext_resource path="res://Art/Cottage/CottagePlayer.png" type="Texture" id=3]
 [ext_resource path="res://Assets/src/Cottage/CottagePlayerController.cs" type="Script" id=4]
 [ext_resource path="res://Assets/ui/SatchelPanel.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Assets/ui/StoragePanel.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Assets/ui/KeyPrompt.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Assets/src/KeyPromptControl.cs" type="Script" id=8]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 66.8098
@@ -25,6 +28,9 @@ radius = 121.971
 
 [node name="CottageScene" type="Node2D"]
 script = ExtResource( 2 )
+satchelPath = NodePath("UI/SatchelPanel")
+storagePath = NodePath("UI/StoragePanel")
+keyPromptPath = NodePath("UI/KeyPrompt")
 
 [node name="CottageBackground" type="Sprite" parent="."]
 texture = ExtResource( 1 )
@@ -63,7 +69,6 @@ shape = SubResource( 5 )
 [node name="StorageTrigger" type="Area2D" parent="Triggers"]
 position = Vector2( 797.783, 233.935 )
 rotation = -1.9181
-scale = Vector2( 1, 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/StorageTrigger"]
 shape = SubResource( 3 )
@@ -74,10 +79,37 @@ position = Vector2( 1025.94, 535.634 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/Cauldron Trigger"]
 shape = SubResource( 4 )
 
-[node name="SatchelPanel" parent="." instance=ExtResource( 5 )]
-margin_left = 41.1574
-margin_top = 125.992
-margin_right = 41.1574
-margin_bottom = 125.992
+[node name="UI" type="CanvasLayer" parent="."]
+layer = 3
 
+[node name="SatchelPanel" parent="UI" instance=ExtResource( 5 )]
+visible = false
+margin_left = 24.0
+margin_top = 24.0
+margin_right = 410.0
+margin_bottom = 836.0
+
+[node name="StoragePanel" parent="UI" instance=ExtResource( 6 )]
+visible = false
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -1082.0
+margin_top = 24.0
+margin_right = -24.0
+margin_bottom = 668.0
+
+[node name="KeyPrompt" parent="UI" instance=ExtResource( 7 )]
+visible = false
+margin_left = -271.862
+margin_top = -81.1287
+margin_right = -16.8622
+margin_bottom = -23.1287
+script = ExtResource( 8 )
+
+[connection signal="body_entered" from="Triggers/BenchTrigger" to="." method="OnEnterBenchTrigger"]
+[connection signal="body_exited" from="Triggers/BenchTrigger" to="." method="OnExitBenchTrigger"]
 [connection signal="body_entered" from="Triggers/ExitTrigger" to="." method="OnHitExitTrigger"]
+[connection signal="body_entered" from="Triggers/StorageTrigger" to="." method="OnEnterStorageTrigger"]
+[connection signal="body_exited" from="Triggers/StorageTrigger" to="." method="OnExitStorageTrigger"]
+[connection signal="body_entered" from="Triggers/Cauldron Trigger" to="." method="OnEnterCauldronTrigger"]
+[connection signal="body_exited" from="Triggers/Cauldron Trigger" to="." method="OnExitCauldronTrigger"]
