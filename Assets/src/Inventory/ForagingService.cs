@@ -18,15 +18,11 @@ namespace RecipeGame.Inventory
             rand.Randomize();
         }
 
-        public IInventory ForageForItems(BiomeType biome, int forageCount, PlayerInventory playerInventory) 
+        public IEnumerable<InventoryItem> ForageForItems(BiomeType biome, int forageCount, PlayerInventory playerInventory) 
         {
             //TODO look for charm in inventory, use up consumables.
 
-            var items = RollForItemDrops(biome, forageCount, false).AccumulateItemStacks(forageCount);
-            
-            return new StorageInventory {
-                Items = items
-            };
+            return RollForItemDrops(biome, forageCount, false).AccumulateItemStacks(InventoryService.StorageItemSlotCount);
         }
 
         private IEnumerable<InventoryItem> RollForItemDrops(BiomeType biome, int rollCount, bool charmActive) 

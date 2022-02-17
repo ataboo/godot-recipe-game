@@ -1,6 +1,5 @@
 using Godot;
 using RecipeGame.Models;
-using System;
 
 public class InventoryGridControl : PanelContainer
 {
@@ -12,23 +11,39 @@ public class InventoryGridControl : PanelContainer
 
     [Export]
     public NodePath gridContainerPath;
+    [Export]
+    public NodePath sortButtonPath;
 
     private GridContainer gridContainer;
+
+    private Button _sortButton;
+    public Button SortButton => _sortButton ?? (_sortButton = GetNode<Button>(sortButtonPath));
 
     public override void _Ready()
     {
         gridContainer = GetNode<GridContainer>(gridContainerPath);
+
+        foreach(var child in gridContainer.GetChildren())
+        {
+            if(child is InventorySpotControl gridItem)
+            {
+                gridItem.IconControl.Connect(nameof(InventoryIconControl.OnLeftPress), this, nameof(HandleItemLeftClick), new Godot.Collections.Array{gridItem.GetIndex()});
+                gridItem.IconControl.Connect(nameof(InventoryIconControl.OnRightPress), this, nameof(HandleItemRightClick), new Godot.Collections.Array{gridItem.GetIndex()});
+            }
+        }
     }
 
-    public void SetInventoryData(IInventory inventory)
+    public void SetItems(InventoryItem[] items)
     {
-        for(int i=0; i<inventory.Items.Length; i++)
+        var idx = 0;
+        foreach(var child in gridContainer.GetChildren())
         {
-            var gridItem = gridContainer.GetChild<InventorySpotControl>(i);
-            gridItem.SetItem(inventory.Items[i]);
-
-            gridItem.Connect(nameof(InventorySpotControl.OnLeftPress), this, nameof(HandleItemLeftClick));
-            gridItem.Connect(nameof(InventorySpotControl.OnRightPress), this, nameof(HandleItemRightClick));
+            if(child is InventorySpotControl gridItem)
+            {
+                var dataItem = items.Length <= idx ? null : items[idx];
+                gridItem.IconControl.SetItem(dataItem);
+                idx++;
+            }
         }
     }
 

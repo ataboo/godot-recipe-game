@@ -1,6 +1,6 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=24 format=2]
 
-[ext_resource path="res://Art/Cottage/CottageBackground.png" type="Texture" id=1]
+[ext_resource path="res://Art/Map/Hut Interior.png" type="Texture" id=1]
 [ext_resource path="res://Assets/src/Cottage/CottageSceneControl.cs" type="Script" id=2]
 [ext_resource path="res://Art/Cottage/CottagePlayer.png" type="Texture" id=3]
 [ext_resource path="res://Assets/src/Cottage/CottagePlayerController.cs" type="Script" id=4]
@@ -8,9 +8,23 @@
 [ext_resource path="res://Assets/ui/StoragePanel.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Assets/ui/KeyPrompt.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Assets/src/KeyPromptControl.cs" type="Script" id=8]
+[ext_resource path="res://Assets/src/Cottage/CottageSceneItemControl.cs" type="Script" id=9]
+[ext_resource path="res://Art/Map/Cauldron_Birds Eye.png" type="Texture" id=10]
+[ext_resource path="res://Assets/ui/CursorItemIcon.tscn" type="PackedScene" id=11]
+[ext_resource path="res://Art/UI/ScoopIcon.png" type="Texture" id=12]
+[ext_resource path="res://Art/UI/SlottedIcon.png" type="Texture" id=13]
+[ext_resource path="res://Assets/src/Cottage/ToolTableControl.cs" type="Script" id=14]
+[ext_resource path="res://Art/CanvasBackground.png" type="Texture" id=15]
+[ext_resource path="res://Assets/src/Cottage/CauldronVisualsControl.cs" type="Script" id=16]
+
+[sub_resource type="CircleShape2D" id=6]
+radius = 69.253
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 66.8098
+
+[sub_resource type="RectangleShape2D" id=7]
+extents = Vector2( 250.667, 399.333 )
 
 [sub_resource type="CapsuleShape2D" id=2]
 radius = 46.5316
@@ -28,28 +42,137 @@ radius = 121.971
 
 [node name="CottageScene" type="Node2D"]
 script = ExtResource( 2 )
-satchelPath = NodePath("UI/SatchelPanel")
-storagePath = NodePath("UI/StoragePanel")
 keyPromptPath = NodePath("UI/KeyPrompt")
+itemControlPath = NodePath("ItemControl")
+playerControlPath = NodePath("PlayerControl")
 
-[node name="CottageBackground" type="Sprite" parent="."]
+[node name="CottageVisuals" type="Node2D" parent="."]
+
+[node name="Background" type="ColorRect" parent="CottageVisuals"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+mouse_filter = 2
+color = Color( 0.239216, 0.239216, 0.239216, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CottageBackground" type="Sprite" parent="CottageVisuals"]
+position = Vector2( 103.883, 0 )
 texture = ExtResource( 1 )
 centered = false
 
-[node name="WallCollider" type="StaticBody2D" parent="CottageBackground"]
+[node name="Storage" type="ColorRect" parent="CottageVisuals"]
+margin_left = 681.198
+margin_top = 211.261
+margin_right = 881.198
+margin_bottom = 302.261
+rect_rotation = -20.6931
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CottageBackground/WallCollider"]
+[node name="CauldronBirdsEye" type="Sprite" parent="CottageVisuals"]
+position = Vector2( 1017.76, 531.866 )
+scale = Vector2( 0.241106, 0.241106 )
+texture = ExtResource( 10 )
+
+[node name="CottageColliders" type="Node2D" parent="."]
+
+[node name="WallCollider" type="StaticBody2D" parent="CottageColliders"]
+position = Vector2( 103.883, 0 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CottageColliders/WallCollider"]
+position = Vector2( -113.871, -32.9627 )
 polygon = PoolVector2Array( 205.442, 62.3401, 161.715, 909.964, 931.458, 1091.98, 945.442, 971.119, 864.533, 963.128, 687.733, 916.181, 568.867, 853.252, 481.966, 786.327, 414.042, 697.428, 371.091, 586.553, 374.087, 487.665, 424.031, 362.806, 548.89, 242.941, 772.637, 141.057, 960.003, 102.555, 1229.09, 127.221, 1430.9, 201.22, 1577.78, 307.734, 1662.99, 447.883, 1679.81, 540.942, 1655.14, 664.274, 1586.75, 759.575, 1474.63, 857.119, 1326.63, 931.118, 1180.88, 962.512, 1145, 970.36, 1153.21, 1096.98, 1854, 966.971, 1759.61, 48.2668 )
 
-[node name="KinematicBody2D" type="KinematicBody2D" parent="."]
+[node name="CauldronCollider" type="StaticBody2D" parent="CottageColliders"]
+position = Vector2( 1025.13, 534.539 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CottageColliders/CauldronCollider"]
+position = Vector2( 0, 1.57312 )
+shape = SubResource( 6 )
+
+[node name="PlayerControl" type="KinematicBody2D" parent="."]
 position = Vector2( 1040.56, 872.942 )
 script = ExtResource( 4 )
 
-[node name="PlayerSprite" type="Sprite" parent="KinematicBody2D"]
+[node name="PlayerSprite" type="Sprite" parent="PlayerControl"]
 texture = ExtResource( 3 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerControl"]
 shape = SubResource( 1 )
+
+[node name="CauldronVisuals" type="Node2D" parent="."]
+visible = false
+position = Vector2( 7.11914, -2.66968 )
+script = ExtResource( 16 )
+
+[node name="Background" type="ColorRect" parent="CauldronVisuals"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+mouse_filter = 2
+color = Color( 0.239216, 0.239216, 0.239216, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ToolTable" type="Sprite" parent="CauldronVisuals"]
+position = Vector2( 1613.23, 525.119 )
+texture = ExtResource( 15 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 500, 800 )
+script = ExtResource( 14 )
+scoopAreaPath = NodePath("ScoopArea")
+slottedAreaPath = NodePath("SlottedArea")
+tableAreaPath = NodePath("TableArea")
+
+[node name="TableArea" type="Area2D" parent="CauldronVisuals/ToolTable"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CauldronVisuals/ToolTable/TableArea"]
+position = Vector2( -0.751221, -1.89941 )
+shape = SubResource( 7 )
+
+[node name="ScoopArea" type="Area2D" parent="CauldronVisuals/ToolTable"]
+position = Vector2( -32.6666, -288 )
+priority = 1.0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CauldronVisuals/ToolTable/ScoopArea"]
+polygon = PoolVector2Array( 45.1167, 40.6681, 129.117, 68.0015, 159.117, 20.6681, 77.7834, -3.33188, 35.1167, -42.6652, -79.5499, -71.9986, -135.55, -5.99855, -138.883, 20.0014, -89.5499, 50.6681, -11.5499, 55.3348 )
+
+[node name="ScoopIcon" type="Sprite" parent="CauldronVisuals/ToolTable/ScoopArea"]
+position = Vector2( 3.67419, -2.30896 )
+scale = Vector2( 3.55814, 3.55814 )
+texture = ExtResource( 12 )
+
+[node name="SlottedArea" type="Area2D" parent="CauldronVisuals/ToolTable"]
+position = Vector2( -40.6666, -106 )
+priority = 1.0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CauldronVisuals/ToolTable/SlottedArea"]
+position = Vector2( 14.6666, -8 )
+polygon = PoolVector2Array( 156.45, 100.668, 172.45, 68.0015, 34.4501, 22.0015, -16.2166, -33.3319, -84.2166, -70.6652, -132.883, -60.6652, -138.217, 8.00146, -89.5499, 62.0015, 0.450073, 64.6681 )
+
+[node name="SlottedIcon" type="Sprite" parent="CauldronVisuals/ToolTable/SlottedArea"]
+position = Vector2( 41.6125, 7.96814 )
+scale = Vector2( 3.89923, 3.89923 )
+texture = ExtResource( 13 )
+
+[node name="CauldronBirdsEye" type="Sprite" parent="CauldronVisuals"]
+position = Vector2( 882.629, 520.67 )
+texture = ExtResource( 10 )
+
+[node name="ItemControl" type="Node" parent="."]
+script = ExtResource( 9 )
+satchelPath = NodePath("../UI/SatchelPanel")
+storagePath = NodePath("../UI/StoragePanel")
+cursorIconPath = NodePath("../UI/InventoryCursor")
+cauldronPath = NodePath("../CauldronVisuals")
+toolTablePath = NodePath("../CauldronVisuals/ToolTable")
 
 [node name="Triggers" type="Node" parent="."]
 
@@ -57,6 +180,7 @@ shape = SubResource( 1 )
 position = Vector2( 542.384, 519.591 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/BenchTrigger"]
+position = Vector2( -36.9583, -19.9774 )
 shape = SubResource( 2 )
 
 [node name="ExitTrigger" type="Area2D" parent="Triggers"]
@@ -67,7 +191,7 @@ position = Vector2( 4.29956, -4.90186 )
 shape = SubResource( 5 )
 
 [node name="StorageTrigger" type="Area2D" parent="Triggers"]
-position = Vector2( 797.783, 233.935 )
+position = Vector2( 826.118, 268.954 )
 rotation = -1.9181
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/StorageTrigger"]
@@ -93,10 +217,10 @@ margin_bottom = 836.0
 visible = false
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -1082.0
+margin_left = -1326.0
 margin_top = 24.0
-margin_right = -24.0
-margin_bottom = 668.0
+margin_right = -28.0
+margin_bottom = 788.0
 
 [node name="KeyPrompt" parent="UI" instance=ExtResource( 7 )]
 visible = false
@@ -105,6 +229,8 @@ margin_top = -81.1287
 margin_right = -16.8622
 margin_bottom = -23.1287
 script = ExtResource( 8 )
+
+[node name="InventoryCursor" parent="UI" instance=ExtResource( 11 )]
 
 [connection signal="body_entered" from="Triggers/BenchTrigger" to="." method="OnEnterBenchTrigger"]
 [connection signal="body_exited" from="Triggers/BenchTrigger" to="." method="OnExitBenchTrigger"]

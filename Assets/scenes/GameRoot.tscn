@@ -16,7 +16,3 @@ pause_mode = 2
 
 [node name="FadePanel" parent="." instance=ExtResource( 3 )]
 pause_mode = 2
-margin_right = 1920.0
-margin_bottom = 1080.0
-mouse_filter = 2
-color = Color( 0.137255, 0.12549, 0.113725, 1 )

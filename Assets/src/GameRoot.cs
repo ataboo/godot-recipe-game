@@ -51,9 +51,8 @@ public class GameRoot : Node2D
         playerData = new PlayerData();
         _inventoryService.InitNewInventories(playerData);
         
-        // TransitionToCottage();
-
-        TransitionToMap();
+        TransitionToCottage();
+        // TransitionToMap();
     }
 
     void OnContinueButtonPress() 
@@ -89,7 +88,7 @@ public class GameRoot : Node2D
             var outdoorLevel = outdoorSceneRes.Instance<OutdoorSceneControl>();
             outdoorLevel.PlayerData = playerData;
             currentScene = GameScene.Map;
-            
+            outdoorLevel.Connect(nameof(OutdoorSceneControl.OnTransitionToCottage), this, nameof(TransitionToCottage));
             return outdoorLevel;
         });
     }
@@ -100,6 +99,7 @@ public class GameRoot : Node2D
             var cottageLevel = cottageSceneRes.Instance<CottageSceneControl>();
             cottageLevel.PlayerData = playerData;
             currentScene = GameScene.Cottage;
+            cottageLevel.Connect(nameof(CottageSceneControl.OnTransitionToMap), this, nameof(TransitionToMap));
             
             return cottageLevel;
         });

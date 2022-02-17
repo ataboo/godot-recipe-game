@@ -9,7 +9,7 @@ namespace RecipeGame.Helpers
     {
         public static InventoryItem[] AccumulateItemStacks(this IEnumerable<InventoryItem> items, int inventorySize)
         {
-            var combinedItems = items.GroupBy(i => i.Stats.ItemType).ToDictionary(g => g.Key, g => (g.Sum(i => i.StackAmount), g.First().Stats));
+            var combinedItems = items.OfType<InventoryItem>().GroupBy(i => i.Stats.ItemType).ToDictionary(g => g.Key, g => (g.Sum(i => i.StackAmount), g.First().Stats));
             var outputItems = new InventoryItem[inventorySize];
             var inventoryIdx = 0;
 

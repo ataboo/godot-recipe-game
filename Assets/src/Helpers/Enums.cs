@@ -33,5 +33,13 @@ namespace RecipeGame.Helpers
             Map,
             Cottage,
         }
+
+        public enum HeldTool
+        {
+            Empty,
+            Scoop,
+            SlottedSpoon,
+            StirSpoon
+        }
     }
 }

@@ -6,31 +6,30 @@ using static RecipeGame.Helpers.Enums;
 
 public class OutdoorSceneControl : Node2D
 {
-    [Export]
-    public NodePath satchelPath;
-    [Export]
-    public NodePath foragePath;
+    [Signal]
+    public delegate void OnTransitionToCottage();
+
     [Export]
     public NodePath promptPath;
 
-    private GameRoot gameRoot;
     private CauldronService cauldronService;
 
-    private ForagePanelControl foragePanel;
+    private OutdoorSceneItemControl sceneItems;
+
     private KeyPromptControl keyPrompt;
-    private InventoryGridControl satchel;
 
     public PlayerData PlayerData { get; set; }
 
     private Action queuedAction;
 
+    private PlayerMapController player;
+
     public override void _Ready()
     {
         cauldronService = new CauldronService();
-        gameRoot = GetNode<GameRoot>("/root/GameRoot") ?? throw new NullReferenceException();
-        foragePanel = GetNode<ForagePanelControl>(foragePath) ?? throw new NullReferenceException();
-        satchel = GetNode<InventoryGridControl>(satchelPath) ?? throw new NullReferenceException();
         keyPrompt = GetNode<KeyPromptControl>(promptPath) ?? throw new NullReferenceException();
+        sceneItems = GetNode<OutdoorSceneItemControl>("OutdoorSceneItems") ?? throw new NullReferenceException();
+        player = GetNode<PlayerMapController>("Player") ?? throw new NullReferenceException();
 
         var triggers = GetNode<Node>("Triggers");
         var forest = triggers.GetNode<BiomeAreaControl>("ForestArea");
@@ -46,6 +45,8 @@ public class OutdoorSceneControl : Node2D
         shore.Connect(nameof(BiomeAreaControl.OnBiomeAreaEnter), this, nameof(HandleEnterBiomeArea));
         shore.Connect(nameof(BiomeAreaControl.OnBiomeAreaExit), this, nameof(HandleExitBiomeArea));
 
+        sceneItems.Connect(nameof(OutdoorSceneItemControl.OnLeaveForage), this, nameof(HandleLeaveForage));
+        sceneItems.Init(PlayerData);
     }
 
     public override void _Process(float delta)
@@ -69,24 +70,30 @@ public class OutdoorSceneControl : Node2D
     {
         if(node is PlayerMapController player) 
         {
-            gameRoot.TransitionToCottage();
+            EmitSignal(nameof(OnTransitionToCottage));
         }
     }
 
     void HandleEnterBiomeArea(BiomeType biome)
     {
-        GD.Print("Fired enter.");
-
         var biomeName = Enum.GetName(typeof(BiomeType), biome);
 
         keyPrompt.SetText($"E: Enter {biomeName}");
         keyPrompt.Visible = true;
-        queuedAction = () => {GD.Print($"Do {biomeName} thing.");};
+        queuedAction = () => {
+            sceneItems.ShowForageBiome(biome);
+            player.ControlEnabled = false;
+        };
     }
 
     void HandleExitBiomeArea(BiomeType biome)
     {
         keyPrompt.Visible = false;
         queuedAction = null;
+    }
+
+    void HandleLeaveForage()
+    {
+        player.ControlEnabled = true;
     }
 }

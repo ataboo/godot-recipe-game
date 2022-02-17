@@ -1,18 +1,11 @@
 using Godot;
+using RecipeGame.Inventory;
 using RecipeGame.Models;
 using System;
+using static RecipeGame.Helpers.Enums;
 
 public class ForagePanelControl : Control
 {
-    [Signal]
-    public delegate void OnItemLeftClick(int index);
-
-    [Signal]
-    public delegate void OnItemRightClick(int index);
-
-    [Signal]
-    public delegate void OnLeaveClick();
-
     [Export]
     public NodePath inventoryPath;
 
@@ -22,35 +15,31 @@ public class ForagePanelControl : Control
     [Export]
     public NodePath leaveButtonPath;
 
-    private InventoryGridControl inventoryGrid;
+    [Export]
+    public NodePath titlePath;
 
-    private Button forageButton;
+    private Label titleLabel;
 
-    private Button leaveButton;
+    public StorageInventory Inventory { get; private set; }
 
     public override void _Ready()
     {
-        inventoryGrid = GetNode<InventoryGridControl>(inventoryPath) ?? throw new NullReferenceException();
-        forageButton = GetNode<Button>(forageButtonPath) ?? throw new NullReferenceException();
-        leaveButton = GetNode<Button>(leaveButtonPath) ?? throw new NullReferenceException();
-
-        inventoryGrid.Connect(nameof(InventoryGridControl.OnItemLeftPress), this, nameof(HandleItemLeftClick));
-        inventoryGrid.Connect(nameof(InventoryGridControl.OnItemRightPress), this, nameof(HandleItemRightClick));
+        titleLabel = GetNode<Label>(titlePath) ?? throw new NullReferenceException();
     }
 
-    public void SetInventoryData(IInventory inventory)
-    {
-        inventoryGrid.SetInventoryData(inventory);
-    }
+    
+    private InventoryGridControl _inventoryGrid;
+    public InventoryGridControl InventoryGrid => _inventoryGrid ?? (_inventoryGrid = GetNode<InventoryGridControl>(inventoryPath));
+    
+    private Button _leaveButton;
+    public Button LeaveButton => _leaveButton ?? (_leaveButton = GetNode<Button>(leaveButtonPath));
 
-    void HandleItemLeftClick(int index)
-    {
-        EmitSignal(nameof(OnItemLeftClick), index);
-    }
+    private Button _forageButton;
+    public Button ForageButton => _forageButton ?? (_forageButton = GetNode<Button>(forageButtonPath));
 
-    void HandleItemRightClick(int index)
+    public void InitBiome(BiomeType biome)
     {
-        
-        EmitSignal(nameof(OnItemRightClick), index);
+        var biomeName = Enum.GetName(typeof(BiomeType), biome);
+        titleLabel.Text = $"Ingredients From the {biomeName}";
     }
 }

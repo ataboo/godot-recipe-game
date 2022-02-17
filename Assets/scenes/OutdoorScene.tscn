@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Assets/src/Outdoor/PlayerMapController.cs" type="Script" id=1]
 [ext_resource path="res://Art/Map/WitchMap.png" type="Texture" id=2]
@@ -11,6 +11,8 @@
 [ext_resource path="res://Assets/ui/KeyPrompt.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Assets/src/KeyPromptControl.cs" type="Script" id=10]
 [ext_resource path="res://Assets/src/Outdoor/BiomeAreaControl.cs" type="Script" id=11]
+[ext_resource path="res://Assets/ui/CursorItemIcon.tscn" type="PackedScene" id=12]
+[ext_resource path="res://Assets/src/Inventory/OutdoorSceneItemControl.cs" type="Script" id=13]
 
 [sub_resource type="CircleShape2D" id=3]
 radius = 61.0325
@@ -23,8 +25,6 @@ extents = Vector2( 12, 539 )
 
 [node name="OutdoorScene" type="Node2D"]
 script = ExtResource( 6 )
-satchelPath = NodePath("UI/SatchelPanel")
-foragePath = NodePath("UI/ForagePanel")
 promptPath = NodePath("UI/KeyPrompt")
 
 [node name="CanvasBackground" type="Sprite" parent="."]
@@ -201,6 +201,12 @@ position = Vector2( 1944, 24 )
 position = Vector2( -12, 517 )
 shape = SubResource( 2 )
 
+[node name="OutdoorSceneItems" type="Node" parent="."]
+script = ExtResource( 13 )
+satchelPath = NodePath("../UI/SatchelPanel")
+foragePath = NodePath("../UI/ForagePanel")
+cursorIconPath = NodePath("../UI/InventoryCursor")
+
 [node name="UI" type="CanvasLayer" parent="."]
 layer = 3
 
@@ -215,9 +221,9 @@ margin_bottom = 836.0
 visible = false
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -1082.0
+margin_left = -1324.0
 margin_top = 24.0
-margin_right = -1082.0
+margin_right = -1324.0
 margin_bottom = 24.0
 
 [node name="KeyPrompt" parent="UI" instance=ExtResource( 9 )]
@@ -227,5 +233,8 @@ margin_top = -81.1287
 margin_right = -16.8622
 margin_bottom = -23.1287
 script = ExtResource( 10 )
+
+[node name="InventoryCursor" parent="UI" instance=ExtResource( 12 )]
+visible = false
 
 [connection signal="body_entered" from="Hut/HutArea" to="." method="OnCottageEntered"]
