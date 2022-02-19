@@ -11,18 +11,32 @@ namespace RecipeGame.Helpers
 
         public enum ItemType 
         {
-            LakeWater,
-            BogWater,
-
+            FreshWater,
+            SaltWater,
             EyeOfNewt,
-            Toadstool,
-            Slime
+            Truffle,
+            CaveSlime,
+            Oyster,
+            Wood,
+            PeatMoss,
+            BogWater,
+            Salt,
+            Grain,
+            Gruel,
+            Frog,
+            AmphibianCharm,
+            Jellyfish,
+            Guano,
+            Lodestone,
+            OysterSoup,
+            GlowCharm,
+            CharismaCharm,
+            BurntMuck
         }
 
         public enum BiomeType
         {
             Forest,
-            Swamp,
             Lake,
             Cave,
             Shore
@@ -39,7 +53,25 @@ namespace RecipeGame.Helpers
             Empty,
             Scoop,
             SlottedSpoon,
-            StirSpoon
+            StirSpoon,
+            Bowl
+        }
+
+        public enum CauldronState
+        {
+            WaitingToCook,
+            RecipeInProgress,
+            RecipeInterrupted,
+            JustFinishedRecipe,
+            WaitingForProductRemoval,
+            JustStartedRecipe,
+        }
+
+        public enum CauldronLiquidColor
+        {
+            Green,
+            Blue,
+            Dry
         }
     }
 }

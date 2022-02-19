@@ -1,7 +1,7 @@
 namespace RecipeGame.Models
 {
-    public class PrepBench
+    public class PrepBench : IInventory
     {
-        public InventoryItem CurrentItem { get; set; }
+        public InventoryItem[] Items { get; set; }
     }
 }

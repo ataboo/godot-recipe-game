@@ -37,19 +37,29 @@ public class InventoryIconControl : VBoxContainer
     public void SetItem(InventoryItem item)
     {
         var iconName = "Empty";
+        var tooltip = "";
 
         if(item != null)
         {
-            iconName = "Mushroom";
+            iconName = item.Stats.Name;
+            tooltip = item.DisplayName;
         }
-        
+
         var iconPath = $"res://Art/UI/Items/{iconName}.png";
+
+        var checkFile = new Godot.File();
+        if(!checkFile.FileExists(iconPath))
+        {
+            iconPath = $"res://Art/UI/Items/Mushroom.png";
+        }
+
         var icon = GD.Load<Texture>(iconPath);
         if(icon == null) 
         {
             throw new NullReferenceException();
         }
         button.TextureNormal = icon;
+        button.HintTooltip = tooltip;
 
         if(item == null) 
         {

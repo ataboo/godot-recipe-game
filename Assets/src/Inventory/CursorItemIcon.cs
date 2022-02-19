@@ -10,10 +10,13 @@ public class CursorItemIcon : CenterContainer
     [Export]
     public NodePath slottedIconPath;
     [Export]
+    public NodePath bowlIconPath;
+    [Export]
     public NodePath iconPath;
 
     private TextureRect scoopIcon;
     private TextureRect slottedIcon;
+    private TextureRect bowlIcon;
     private InventoryIconControl iconControl; 
 
     public override void _Ready()
@@ -21,6 +24,7 @@ public class CursorItemIcon : CenterContainer
         IgnoreMouseRecurse(this);
         scoopIcon = GetNode<TextureRect>(scoopIconPath);
         slottedIcon = GetNode<TextureRect>(slottedIconPath);
+        bowlIcon = GetNode<TextureRect>(bowlIconPath);
         iconControl = GetNode<InventoryIconControl>(iconPath);
     }
 
@@ -30,6 +34,7 @@ public class CursorItemIcon : CenterContainer
         iconControl.SetItem(item);
         scoopIcon.Visible = tool == HeldTool.Scoop;
         slottedIcon.Visible = tool == HeldTool.SlottedSpoon;
+        bowlIcon.Visible = tool == HeldTool.Bowl;
     }
 
     private void IgnoreMouseRecurse(Control node)

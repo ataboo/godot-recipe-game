@@ -27,6 +27,7 @@ leaveButtonPath = NodePath("StoragePanelGrid/MarginContainer2/VBoxContainer/HBox
 inventoryGridPath = NodePath("StoragePanelGrid")
 
 [node name="StoragePanelGrid" type="PanelContainer" parent="."]
+process_priority = -1
 margin_right = 1298.0
 margin_bottom = 836.0
 script = ExtResource( 4 )

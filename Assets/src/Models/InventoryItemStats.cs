@@ -6,31 +6,31 @@ namespace RecipeGame.Models
     {
         public ItemType ItemType { get; }
 
-        public string Name { get; } = "Ingredient";
+        public string Name { get; }
 
-        public string Description { get; } = "This is the description.";
+        public string ProcessedName { get; }
 
-        public int StackSize { get; } = 1;
+        public int StackSize { get; }
 
         public float BasePrice { get; }
 
         public int UnitVolume { get; }
 
-        public bool Evaporates { get; }
+        public ItemDisplayMode DisplayMode { get; }
 
-        public ItemDisplayMode DisplayMode { get; } = ItemDisplayMode.Single;
+        public bool IsLiquid { get; set; }
 
-        public InventoryItemStats(ItemType type, string name, string desciption, int stackSize, float basePrice, int unitVolume, bool evaporates, ItemDisplayMode displayMode) 
+        public InventoryItemStats(ItemType type, string name, string desciption, int stackSize, float basePrice, int unitVolume, ItemDisplayMode displayMode, bool isLiquid) 
         {
             
             ItemType = type;
             Name = name;
-            Description = desciption;
+            ProcessedName = desciption;
             StackSize = stackSize;
             BasePrice = basePrice;
             UnitVolume = unitVolume;
-            Evaporates = evaporates;
             DisplayMode = displayMode;
+            IsLiquid = isLiquid;
         }
     }
 }

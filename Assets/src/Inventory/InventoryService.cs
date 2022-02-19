@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
@@ -10,6 +11,8 @@ namespace RecipeGame.Inventory
     {
         public const int PlayerItemSlotCount = 32;
         public const int StorageItemSlotCount = 72;
+
+        public const int PrepBenchSlots = 16;
         
         public const int CauldronVolumeCapacity = 40000;
 
@@ -33,14 +36,17 @@ namespace RecipeGame.Inventory
 
             data.Cauldron = new Cauldron() 
             {
-                Items = new Dictionary<ItemType, InventoryItem>(),
+                Ingredients = new Dictionary<ItemType, InventoryItem>(),
                 Temperature = 0f,
-                VolumeCapacity = CauldronVolumeCapacity
+                Products = new List<InventoryItem>(),
+                HeatLevel = 0,
+                CookTimer = 0,
+                CurrentRecipe = null 
             };
 
             data.PrepBench = new PrepBench
             {
-                CurrentItem = null
+                Items = new InventoryItem[PrepBenchSlots]
             };
 
             data.HeldTool = HeldTool.Empty;
@@ -113,68 +119,166 @@ namespace RecipeGame.Inventory
                 return false;
             }
 
-            if(targetItem != null && playerData.HeldItem != null)
+            if(playerData.HeldTool == HeldTool.Empty)
             {
-                if(targetItem.Stats.ItemType != playerData.HeldItem.Stats.ItemType)
+                if(playerData.HeldItem != null)
                 {
-                    // Ignoring since items in both that don't match type.
+                    return PutItemDownInInventory(targetInventory, playerData, index, leftClick);
+                }
+
+                return PickItemUpFromInventory(targetInventory, playerData, index, leftClick);
+            }
+
+            return MoveItemWithTool(targetInventory, playerData, index, leftClick);
+        }
+
+        private bool MoveItemWithTool(IInventory targetInventory, PlayerData playerData, int index, bool leftClick)
+        {
+            InventoryItem targetItem = targetInventory.Items[index];
+            var moveAmount = playerData.HeldTool == HeldTool.Scoop ? 1 : 1000;
+            if(leftClick)
+            {
+                if(targetItem == null || targetItem.StackAmount < moveAmount)
+                {
                     return false;
                 }
 
-                var amount = leftClick ? playerData.HeldItem.StackAmount : playerData.HeldItem.StackAmount / 2;
-
-                amount = Mathf.Min(targetItem.Stats.StackSize - targetItem.StackAmount, amount);
-                if(playerData.HeldItem.StackAmount > amount)
+                if(playerData.HeldItem == null)
                 {
-                    playerData.HeldItem.StackAmount -= amount;
-                } 
+                    playerData.HeldItem = targetItem.Clone();
+                    playerData.HeldItem.StackAmount = 0;
+                }
                 else
+                {
+                    if(playerData.HeldItem.Stats.ItemType != targetItem.Stats.ItemType || playerData.HeldItem.Stats.StackSize - playerData.HeldItem.StackAmount < moveAmount)
+                    {
+                        return false;
+                    }
+                }
+
+                targetItem.StackAmount -= moveAmount;
+                playerData.HeldItem.StackAmount += moveAmount;
+                if(targetItem.StackAmount == 0)
+                {
+                    targetInventory.Items[index] = null;
+                }
+            }
+            else
+            {
+                if(playerData.HeldItem == null || playerData.HeldItem.StackAmount < moveAmount)
+                {
+                    return false;
+                }
+
+                if(targetItem == null)
+                {
+                    targetItem = playerData.HeldItem.Clone();
+                    targetItem.StackAmount = 0;
+                    targetInventory.Items[index] = targetItem;
+                }
+                else
+                {
+                    if(targetItem.Stats.ItemType != playerData.HeldItem.Stats.ItemType || targetItem.Stats.StackSize - targetItem.StackAmount < moveAmount)
+                    {
+                        return false;
+                    }
+                }
+
+                playerData.HeldItem.StackAmount -= moveAmount;
+                targetItem.StackAmount += moveAmount;
+                if(playerData.HeldItem.StackAmount == 0)
                 {
                     playerData.HeldItem = null;
                 }
-
-                targetItem.StackAmount += amount;
-
-                // Attempted to move max amount of whatever was in hand (or half on right click) to stack.
-                return amount > 0;
             }
 
-            if(leftClick)
-            {
-                targetItem = playerData.HeldItem;
-                playerData.HeldItem = targetInventory.Items[index];
-                targetInventory.Items[index] = targetItem;
+            return true;
+        }
 
-                // Swap full item stacks
-                return true;
-            }
-
+        private bool PutItemDownInInventory(IInventory targetInventory, PlayerData playerData, int index, bool leftClick)
+        {
             if(playerData.HeldItem == null)
             {
-                if(targetItem.StackAmount <= 1)
+                return false;
+            }
+
+            var targetItem = targetInventory.Items[index];
+            var dropAmount = leftClick ? playerData.HeldItem.StackAmount : playerData.HeldItem.StackAmount / 2;
+
+            if(targetItem == null)
+            {
+                targetItem = playerData.HeldItem.Clone();
+                targetItem.StackAmount = 0;
+                targetInventory.Items[index] = targetItem;
+            }
+            else
+            {
+                if(targetItem.Stats.ItemType != playerData.HeldItem.Stats.ItemType)
                 {
                     return false;
                 }
 
-                playerData.HeldItem = targetInventory.Items[index].Clone();
-                playerData.HeldItem.StackAmount /= 2;
-                targetInventory.Items[index].StackAmount -= playerData.HeldItem.StackAmount;
-                
-                // Take half of inventory stack in hand.
-                return true;
+                dropAmount = Mathf.Min(targetItem.Stats.StackSize - targetItem.StackAmount, dropAmount);
             }
 
-            if(playerData.HeldItem.StackAmount <= 1)
+            playerData.HeldItem.StackAmount -= dropAmount;
+            if(playerData.HeldItem.StackAmount == 0)
+            {
+                playerData.HeldItem = null;
+            }
+            targetItem.StackAmount += dropAmount;
+
+            return dropAmount > 0;
+        }
+
+        private bool PickItemUpFromInventory(IInventory targetInventory, PlayerData playerData, int index, bool leftClick)
+        {
+            var targetItem = targetInventory.Items[index];
+            if(targetItem == null)
             {
                 return false;
             }
-            targetInventory.Items[index] = playerData.HeldItem.Clone();
-            targetInventory.Items[index].StackAmount /= 2;
-            playerData.HeldItem.StackAmount -= targetInventory.Items[index].StackAmount;
 
-            // Put half of hand in inventory.
-            return true;
+            var pickupAmount = leftClick ? targetItem.StackAmount : targetItem.StackAmount / 2;
+
+            if(playerData.HeldItem == null)
+            {
+                playerData.HeldItem = targetItem.Clone();
+                playerData.HeldItem.StackAmount = 0;
+            }
+            else 
+            {
+                if(targetItem.Stats.ItemType != playerData.HeldItem.Stats.ItemType)
+                {
+                    return false;
+                }
+                pickupAmount = Mathf.Min(pickupAmount, playerData.HeldItem.Stats.StackSize - playerData.HeldItem.StackAmount);
+            }
+
+            targetItem.StackAmount -= pickupAmount;
+            if(targetItem.StackAmount == 0)
+            {
+                targetInventory.Items[index] = null;
+            }
+            playerData.HeldItem.StackAmount += pickupAmount;
+
+            return pickupAmount > 0;
         }
+
+        // private (bool success, int amount) GetPickupAmountWithTool(PlayerData playerData, bool leftClick, InventoryItem item)
+        // {
+        //     switch(playerData.HeldTool)
+        //     {
+        //         case HeldTool.Empty:
+        //             return 
+        //         case HeldTool.Bowl:
+        //             return item.Stats.IsLiquid && item.StackAmount >= 1000 ? (true, 1000) : (false, 0);
+        //         case HeldTool.Scoop:
+        //             return !item.Stats.IsLiquid ? (true, 1) : (false, 0);
+        //         default:
+        //             return (false, 0);
+        //     }
+        // }
 
         public void EmptyPlayerHand(PlayerData playerData)
         {
@@ -214,27 +318,39 @@ namespace RecipeGame.Inventory
             }
         }
 
-        public void MoveStack(IInventory sourceInventory, IInventory destInventory, int sourceIdx) 
+        public bool MoveStack(IInventory sourceInventory, IInventory destInventory, int sourceIdx) 
         {
+            if(sourceInventory == null || destInventory == null)
+            {
+                return false;
+            }
+
+            var movedPartialStack = false;
             var sourceItem = sourceInventory.Items[sourceIdx];
             if(sourceItem == null) 
             {
                 GD.PushError("Failed to move a null item.");
-                return;
+                return false;
             }
 
-            var matchingDestItems = destInventory.Items.Where(i => i.Stats.ItemType == sourceItem.Stats.ItemType);
+            var matchingDestItems = destInventory.Items.OfType<InventoryItem>().Where(i => i.Stats.ItemType == sourceItem.Stats.ItemType);
 
             foreach(var destItem in matchingDestItems)
             {
                 var transferAmount = Mathf.Min(destItem.Stats.StackSize - destItem.StackAmount, sourceItem.StackAmount);
+                if(transferAmount == 0)
+                {
+                    continue;
+                }
+
+                movedPartialStack = true;
                 sourceItem.StackAmount -= transferAmount;
                 destItem.StackAmount += transferAmount;
 
                 if(sourceItem.StackAmount == 0) 
                 {
                     sourceInventory.Items[sourceIdx] = null;
-                    return;
+                    return true;
                 }
             }
 
@@ -244,9 +360,11 @@ namespace RecipeGame.Inventory
                 {
                     sourceInventory.Items[sourceIdx] = null;
                     destInventory.Items[i] = sourceItem;
-                    return;
+                    return true;
                 }
             }
+
+            return movedPartialStack;
         }
 
         public void AddToCauldron(IInventory inventory, int itemIdx, int amount, Cauldron cauldron) 
@@ -261,7 +379,7 @@ namespace RecipeGame.Inventory
             amount = Mathf.Min(item.StackAmount, amount);
 
             var incomingVolume = item.Stats.UnitVolume * amount;
-            var remainingCapacity = cauldron.VolumeCapacity - cauldron.Items.Values.Sum(i => i.Volume);
+            var remainingCapacity = CauldronVolumeCapacity - cauldron.IngredientVolume;
             if(remainingCapacity < incomingVolume) 
             {
                 // Reduce amount so it will fit in cauldron
@@ -279,7 +397,7 @@ namespace RecipeGame.Inventory
                 item.StackAmount -= amount;
             }
 
-            if(cauldron.Items.TryGetValue(item.Stats.ItemType, out var mergeItem)) 
+            if(cauldron.Ingredients.TryGetValue(item.Stats.ItemType, out var mergeItem)) 
             {
                 // Item type already exists in cauldron, add to stack.
                 mergeItem.StackAmount += amount;
@@ -287,14 +405,14 @@ namespace RecipeGame.Inventory
             else 
             {
                 // New type in cauldron.
-                cauldron.Items[item.Stats.ItemType] = item.Clone();
-                cauldron.Items[item.Stats.ItemType].StackAmount = amount;
+                cauldron.Ingredients[item.Stats.ItemType] = item.Clone();
+                cauldron.Ingredients[item.Stats.ItemType].StackAmount = amount;
             }
         }
 
         public void DumpCauldron(Cauldron cauldron) 
         {
-            cauldron.Items.Clear();
+            cauldron.Ingredients.Clear();
         }
 
         public void RemoveProductFromCauldron()

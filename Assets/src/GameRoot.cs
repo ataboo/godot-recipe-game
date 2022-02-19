@@ -12,8 +12,6 @@ public class GameRoot : Node2D
 
     private FadePanel fadePanel;
 
-    private GameScene currentScene = GameScene.Map;
-
     private bool transitioning = false;
 
     private Node level;
@@ -79,7 +77,10 @@ public class GameRoot : Node2D
         {
             return;
         }
-        throw new NotSupportedException();
+        
+        //TODO: Save
+
+        GetTree().Quit();
     }
 
     public void TransitionToMap() 
@@ -87,7 +88,6 @@ public class GameRoot : Node2D
         DoTransition(() => {
             var outdoorLevel = outdoorSceneRes.Instance<OutdoorSceneControl>();
             outdoorLevel.PlayerData = playerData;
-            currentScene = GameScene.Map;
             outdoorLevel.Connect(nameof(OutdoorSceneControl.OnTransitionToCottage), this, nameof(TransitionToCottage));
             return outdoorLevel;
         });
@@ -98,7 +98,6 @@ public class GameRoot : Node2D
         DoTransition(() => {
             var cottageLevel = cottageSceneRes.Instance<CottageSceneControl>();
             cottageLevel.PlayerData = playerData;
-            currentScene = GameScene.Cottage;
             cottageLevel.Connect(nameof(CottageSceneControl.OnTransitionToMap), this, nameof(TransitionToMap));
             
             return cottageLevel;

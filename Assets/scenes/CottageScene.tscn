@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=47 format=2]
 
 [ext_resource path="res://Art/Map/Hut Interior.png" type="Texture" id=1]
 [ext_resource path="res://Assets/src/Cottage/CottageSceneControl.cs" type="Script" id=2]
@@ -9,29 +9,44 @@
 [ext_resource path="res://Assets/ui/KeyPrompt.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Assets/src/KeyPromptControl.cs" type="Script" id=8]
 [ext_resource path="res://Assets/src/Cottage/CottageSceneItemControl.cs" type="Script" id=9]
-[ext_resource path="res://Art/Map/Cauldron_Birds Eye.png" type="Texture" id=10]
+[ext_resource path="res://Art/Map/Cauldron Empty.png" type="Texture" id=10]
 [ext_resource path="res://Assets/ui/CursorItemIcon.tscn" type="PackedScene" id=11]
-[ext_resource path="res://Art/UI/ScoopIcon.png" type="Texture" id=12]
+[ext_resource path="res://Art/Map/TableTop.png" type="Texture" id=12]
 [ext_resource path="res://Art/UI/SlottedIcon.png" type="Texture" id=13]
 [ext_resource path="res://Assets/src/Cottage/ToolTableControl.cs" type="Script" id=14]
-[ext_resource path="res://Art/CanvasBackground.png" type="Texture" id=15]
-[ext_resource path="res://Assets/src/Cottage/CauldronVisualsControl.cs" type="Script" id=16]
-
-[sub_resource type="CircleShape2D" id=6]
-radius = 69.253
+[ext_resource path="res://Art/Map/Scoop.png" type="Texture" id=15]
+[ext_resource path="res://Assets/src/Cottage/CauldronPanelControl.cs" type="Script" id=16]
+[ext_resource path="res://Assets/ui/InventorySpotForeground.tscn" type="PackedScene" id=17]
+[ext_resource path="res://Assets/src/Inventory/CauldronInventoryControl.cs" type="Script" id=18]
+[ext_resource path="res://Assets/src/Cottage/GarbageAreaControl.cs" type="Script" id=19]
+[ext_resource path="res://Assets/fonts/Deutsch.ttf" type="DynamicFontData" id=20]
+[ext_resource path="res://Art/Cauldron/CauldronDry.png" type="Texture" id=21]
+[ext_resource path="res://Art/Cauldron/Blue50.png" type="Texture" id=22]
+[ext_resource path="res://Art/Cauldron/Green75.png" type="Texture" id=23]
+[ext_resource path="res://Art/Cauldron/Blue75.png" type="Texture" id=24]
+[ext_resource path="res://Art/Cauldron/Green100.png" type="Texture" id=25]
+[ext_resource path="res://Art/Cauldron/Blue25.png" type="Texture" id=26]
+[ext_resource path="res://Art/Cauldron/Green50.png" type="Texture" id=27]
+[ext_resource path="res://Art/Cauldron/Blue100.png" type="Texture" id=28]
+[ext_resource path="res://Art/Cauldron/Green25.png" type="Texture" id=29]
+[ext_resource path="res://Assets/ui/FlameParticles.tscn" type="PackedScene" id=30]
+[ext_resource path="res://Assets/ui/BubbleParticles.tscn" type="PackedScene" id=31]
+[ext_resource path="res://Art/Cauldron/ChestBirdsEye.png" type="Texture" id=32]
+[ext_resource path="res://Art/Cauldron/CauldronCottage.png" type="Texture" id=33]
+[ext_resource path="res://Art/Cauldron/Jug.png" type="Texture" id=34]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 66.8098
 
-[sub_resource type="RectangleShape2D" id=7]
-extents = Vector2( 250.667, 399.333 )
+[sub_resource type="CircleShape2D" id=6]
+radius = 69.253
 
-[sub_resource type="CapsuleShape2D" id=2]
+[sub_resource type="CapsuleShape2D" id=10]
 radius = 46.5316
 height = 96.7493
 
 [sub_resource type="RectangleShape2D" id=5]
-extents = Vector2( 100.365, 26.4285 )
+extents = Vector2( 100.365, 45.4084 )
 
 [sub_resource type="CapsuleShape2D" id=3]
 radius = 46.5316
@@ -39,6 +54,27 @@ height = 83.1889
 
 [sub_resource type="CircleShape2D" id=4]
 radius = 121.971
+
+[sub_resource type="CircleShape2D" id=8]
+radius = 124.185
+
+[sub_resource type="DynamicFont" id=11]
+size = 40
+font_data = ExtResource( 20 )
+
+[sub_resource type="DynamicFont" id=12]
+size = 24
+font_data = ExtResource( 20 )
+
+[sub_resource type="RectangleShape2D" id=7]
+extents = Vector2( 250.667, 399.333 )
+
+[sub_resource type="CircleShape2D" id=9]
+radius = 287.866
+
+[sub_resource type="DynamicFont" id=2]
+size = 40
+font_data = ExtResource( 20 )
 
 [node name="CottageScene" type="Node2D"]
 script = ExtResource( 2 )
@@ -64,36 +100,27 @@ position = Vector2( 103.883, 0 )
 texture = ExtResource( 1 )
 centered = false
 
-[node name="Storage" type="ColorRect" parent="CottageVisuals"]
-margin_left = 681.198
-margin_top = 211.261
-margin_right = 881.198
-margin_bottom = 302.261
-rect_rotation = -20.6931
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="CauldronBirdsEye" type="Sprite" parent="CottageVisuals"]
-position = Vector2( 1017.76, 531.866 )
-scale = Vector2( 0.241106, 0.241106 )
-texture = ExtResource( 10 )
+position = Vector2( 1022.55, 537.605 )
+texture = ExtResource( 33 )
 
-[node name="CottageColliders" type="Node2D" parent="."]
+[node name="ChestBirdsEye" type="Sprite" parent="CottageVisuals"]
+position = Vector2( 710.052, 253.348 )
+texture = ExtResource( 32 )
 
-[node name="WallCollider" type="StaticBody2D" parent="CottageColliders"]
-position = Vector2( 103.883, 0 )
+[node name="TableTop" type="Sprite" parent="CottageVisuals"]
+position = Vector2( 1157.7, 537.347 )
+scale = Vector2( 0.185609, 0.185609 )
+texture = ExtResource( 12 )
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CottageColliders/WallCollider"]
-position = Vector2( -113.871, -32.9627 )
-polygon = PoolVector2Array( 205.442, 62.3401, 161.715, 909.964, 931.458, 1091.98, 945.442, 971.119, 864.533, 963.128, 687.733, 916.181, 568.867, 853.252, 481.966, 786.327, 414.042, 697.428, 371.091, 586.553, 374.087, 487.665, 424.031, 362.806, 548.89, 242.941, 772.637, 141.057, 960.003, 102.555, 1229.09, 127.221, 1430.9, 201.22, 1577.78, 307.734, 1662.99, 447.883, 1679.81, 540.942, 1655.14, 664.274, 1586.75, 759.575, 1474.63, 857.119, 1326.63, 931.118, 1180.88, 962.512, 1145, 970.36, 1153.21, 1096.98, 1854, 966.971, 1759.61, 48.2668 )
+[node name="Scoop" type="Sprite" parent="CottageVisuals/TableTop"]
+position = Vector2( 17.124, -249.995 )
+scale = Vector2( 0.336178, 0.336178 )
+texture = ExtResource( 15 )
 
-[node name="CauldronCollider" type="StaticBody2D" parent="CottageColliders"]
-position = Vector2( 1025.13, 534.539 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CottageColliders/CauldronCollider"]
-position = Vector2( 0, 1.57312 )
-shape = SubResource( 6 )
+[node name="Jug" type="Sprite" parent="CottageVisuals/TableTop"]
+position = Vector2( 14.5425, 193.387 )
+texture = ExtResource( 34 )
 
 [node name="PlayerControl" type="KinematicBody2D" parent="."]
 position = Vector2( 1040.56, 872.942 )
@@ -105,12 +132,58 @@ texture = ExtResource( 3 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerControl"]
 shape = SubResource( 1 )
 
-[node name="CauldronVisuals" type="Node2D" parent="."]
+[node name="CottageColliders" type="Node2D" parent="."]
+
+[node name="WallCollider" type="StaticBody2D" parent="CottageColliders"]
+position = Vector2( 103.883, 0 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CottageColliders/WallCollider"]
+position = Vector2( -113.871, -32.9627 )
+polygon = PoolVector2Array( 205.442, 62.3401, 161.715, 909.964, 820.016, 1249.36, 1222.76, 1264.42, 1237.82, 1054.33, 1164.89, 1056.71, 1152.2, 1156.6, 934.973, 1151.05, 931.458, 1091.98, 945.442, 971.119, 864.533, 963.128, 687.733, 916.181, 568.867, 853.252, 481.966, 786.327, 414.042, 697.428, 371.091, 586.553, 374.087, 487.665, 424.031, 362.806, 548.89, 242.941, 772.637, 141.057, 960.003, 102.555, 1229.09, 127.221, 1430.9, 201.22, 1577.78, 307.734, 1662.99, 447.883, 1679.81, 540.942, 1655.14, 664.274, 1586.75, 759.575, 1474.63, 857.119, 1326.63, 931.118, 1180.88, 962.512, 1145, 970.36, 1153.21, 1096.98, 1854, 966.971, 1759.61, 48.2668 )
+
+[node name="CauldronCollider" type="StaticBody2D" parent="CottageColliders"]
+position = Vector2( 1025.13, 534.539 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CottageColliders/CauldronCollider"]
+position = Vector2( 0, 6.28717 )
+shape = SubResource( 6 )
+
+[node name="Triggers" type="Node2D" parent="."]
+
+[node name="BenchTrigger" type="Area2D" parent="Triggers"]
+position = Vector2( 542.384, 519.591 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/BenchTrigger"]
+position = Vector2( -36.9583, -19.9774 )
+shape = SubResource( 10 )
+
+[node name="ExitTrigger" type="Area2D" parent="Triggers"]
+position = Vector2( 1041.29, 1052.94 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/ExitTrigger"]
+position = Vector2( -5.21411, 15.5247 )
+shape = SubResource( 5 )
+
+[node name="StorageTrigger" type="Area2D" parent="Triggers"]
+position = Vector2( 760.602, 321.031 )
+rotation = -2.17468
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/StorageTrigger"]
+shape = SubResource( 3 )
+
+[node name="Cauldron Trigger" type="Area2D" parent="Triggers"]
+position = Vector2( 1021.23, 567.69 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/Cauldron Trigger"]
+shape = SubResource( 4 )
+
+[node name="CauldronPanel" type="Node2D" parent="."]
 visible = false
 position = Vector2( 7.11914, -2.66968 )
 script = ExtResource( 16 )
+leaveButtonPath = NodePath("LeaveButton")
 
-[node name="Background" type="ColorRect" parent="CauldronVisuals"]
+[node name="Background" type="ColorRect" parent="CauldronPanel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = 1920.0
@@ -121,87 +194,207 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ToolTable" type="Sprite" parent="CauldronVisuals"]
+[node name="GarbageArea" type="Area2D" parent="CauldronPanel"]
+position = Vector2( 653.479, 211.667 )
+priority = 1.0
+script = ExtResource( 19 )
+confirmPanelPath = NodePath("ConfirmTrashPanel")
+confirmYesButtonPath = NodePath("ConfirmTrashPanel/VBoxContainer/HBoxContainer/YesButton")
+confirmNoButtonPath = NodePath("ConfirmTrashPanel/VBoxContainer/HBoxContainer/NoButton")
+confirmTitlePath = NodePath("ConfirmTrashPanel/VBoxContainer/Label")
+
+[node name="GarbageBucket" type="Sprite" parent="CauldronPanel/GarbageArea"]
+position = Vector2( 15.119, -5.03967 )
+scale = Vector2( 0.44, 0.44 )
+texture = ExtResource( 10 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CauldronPanel/GarbageArea"]
+visible = false
+shape = SubResource( 8 )
+
+[node name="ConfirmTrashPanel" type="PanelContainer" parent="CauldronPanel/GarbageArea"]
+visible = false
+margin_left = -108.639
+margin_top = -51.7741
+margin_right = 113.361
+margin_bottom = 43.2259
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CauldronPanel/GarbageArea/ConfirmTrashPanel"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 215.0
+margin_bottom = 88.0
+size_flags_horizontal = 5
+size_flags_vertical = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="CauldronPanel/GarbageArea/ConfirmTrashPanel/VBoxContainer"]
+margin_right = 208.0
+margin_bottom = 44.0
+custom_fonts/font = SubResource( 11 )
+text = "Destroy Item?"
+align = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CauldronPanel/GarbageArea/ConfirmTrashPanel/VBoxContainer"]
+margin_left = 60.0
+margin_top = 48.0
+margin_right = 147.0
+margin_bottom = 81.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="NoButton" type="Button" parent="CauldronPanel/GarbageArea/ConfirmTrashPanel/VBoxContainer/HBoxContainer"]
+margin_right = 38.0
+margin_bottom = 33.0
+custom_fonts/font = SubResource( 12 )
+text = "No"
+
+[node name="YesButton" type="Button" parent="CauldronPanel/GarbageArea/ConfirmTrashPanel/VBoxContainer/HBoxContainer"]
+margin_left = 42.0
+margin_right = 87.0
+margin_bottom = 33.0
+custom_fonts/font = SubResource( 12 )
+text = "Yes"
+
+[node name="ToolTable" type="Sprite" parent="CauldronPanel"]
 position = Vector2( 1613.23, 525.119 )
-texture = ExtResource( 15 )
-region_enabled = true
-region_rect = Rect2( 0, 0, 500, 800 )
+texture = ExtResource( 12 )
+region_rect = Rect2( 60.1954, 55.0933, 495.318, 862.813 )
 script = ExtResource( 14 )
 scoopAreaPath = NodePath("ScoopArea")
 slottedAreaPath = NodePath("SlottedArea")
 tableAreaPath = NodePath("TableArea")
+bowlPath = NodePath("PitcherArea")
 
-[node name="TableArea" type="Area2D" parent="CauldronVisuals/ToolTable"]
+[node name="TableArea" type="Area2D" parent="CauldronPanel/ToolTable"]
+monitoring = false
+monitorable = false
+priority = 1.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CauldronVisuals/ToolTable/TableArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CauldronPanel/ToolTable/TableArea"]
 position = Vector2( -0.751221, -1.89941 )
 shape = SubResource( 7 )
 
-[node name="ScoopArea" type="Area2D" parent="CauldronVisuals/ToolTable"]
+[node name="ScoopArea" type="Area2D" parent="CauldronPanel/ToolTable"]
 position = Vector2( -32.6666, -288 )
-priority = 1.0
+priority = 2.0
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CauldronVisuals/ToolTable/ScoopArea"]
-polygon = PoolVector2Array( 45.1167, 40.6681, 129.117, 68.0015, 159.117, 20.6681, 77.7834, -3.33188, 35.1167, -42.6652, -79.5499, -71.9986, -135.55, -5.99855, -138.883, 20.0014, -89.5499, 50.6681, -11.5499, 55.3348 )
+[node name="ScoopIcon" type="Sprite" parent="CauldronPanel/ToolTable/ScoopArea"]
+position = Vector2( 6.34668, -9.13919 )
+scale = Vector2( 0.39814, 0.39814 )
+texture = ExtResource( 15 )
 
-[node name="ScoopIcon" type="Sprite" parent="CauldronVisuals/ToolTable/ScoopArea"]
-position = Vector2( 3.67419, -2.30896 )
-scale = Vector2( 3.55814, 3.55814 )
-texture = ExtResource( 12 )
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CauldronPanel/ToolTable/ScoopArea"]
+position = Vector2( -1.78186, -2.07875 )
+polygon = PoolVector2Array( 49.002, 44.8101, 129.117, 68.0015, 176.994, 49.2646, 151.752, 17.7862, 77.7834, -3.33188, 35.1167, -42.6652, -25.2395, -65.6613, -92.9479, -73.6794, -152.935, -10.4256, -154.42, 17.1923, -93.5417, 51.0464, -10.9851, 59.3615 )
 
-[node name="SlottedArea" type="Area2D" parent="CauldronVisuals/ToolTable"]
+[node name="PitcherArea" type="Area2D" parent="CauldronPanel/ToolTable"]
+position = Vector2( -20.6937, 149.76 )
+priority = 2.0
+
+[node name="Pitcher" type="Sprite" parent="CauldronPanel/ToolTable/PitcherArea"]
+position = Vector2( -12.0042, 2.88904 )
+scale = Vector2( 1.33323, 1.33323 )
+texture = ExtResource( 34 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CauldronPanel/ToolTable/PitcherArea"]
+position = Vector2( 39.2834, -28.7429 )
+polygon = PoolVector2Array( 49.3945, 34.8667, 26.7279, -15.1333, 29.0612, -60.8, -1.93884, -86.4667, -86.2721, -95.8, -109.939, -66.4667, -105.272, -34.1333, -135.605, 28.8667, -127.264, 112.357, -69.2721, 166.533, -4.60547, 158.2, 31.3945, 113.867 )
+
+[node name="SlottedArea" type="Area2D" parent="CauldronPanel/ToolTable"]
 position = Vector2( -40.6666, -106 )
-priority = 1.0
+priority = 2.0
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CauldronVisuals/ToolTable/SlottedArea"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CauldronPanel/ToolTable/SlottedArea"]
 position = Vector2( 14.6666, -8 )
 polygon = PoolVector2Array( 156.45, 100.668, 172.45, 68.0015, 34.4501, 22.0015, -16.2166, -33.3319, -84.2166, -70.6652, -132.883, -60.6652, -138.217, 8.00146, -89.5499, 62.0015, 0.450073, 64.6681 )
 
-[node name="SlottedIcon" type="Sprite" parent="CauldronVisuals/ToolTable/SlottedArea"]
+[node name="SlottedIcon" type="Sprite" parent="CauldronPanel/ToolTable/SlottedArea"]
 position = Vector2( 41.6125, 7.96814 )
 scale = Vector2( 3.89923, 3.89923 )
 texture = ExtResource( 13 )
 
-[node name="CauldronBirdsEye" type="Sprite" parent="CauldronVisuals"]
-position = Vector2( 882.629, 520.67 )
+[node name="CauldronInventory" type="Area2D" parent="CauldronPanel"]
+position = Vector2( 974.297, 660.008 )
+priority = 1.0
+script = ExtResource( 18 )
+gridItemPrefab = ExtResource( 17 )
+blueLiquidPrefabs = [ ExtResource( 26 ), ExtResource( 22 ), ExtResource( 24 ), ExtResource( 28 ) ]
+greenLiquidPrefabs = [ ExtResource( 29 ), ExtResource( 27 ), ExtResource( 23 ), ExtResource( 25 ) ]
+dryLiquidPrefab = ExtResource( 21 )
+liquidSpritePath = NodePath("LiquidSprite")
+itemGridPath = NodePath("ProductGrid")
+flameControlPath = NodePath("../FlameSprite")
+bubbleControlPath = NodePath("../Bubbles")
+
+[node name="CauldronBirdsEye" type="Sprite" parent="CauldronPanel/CauldronInventory"]
+position = Vector2( 42.0963, -26.019 )
 texture = ExtResource( 10 )
+
+[node name="LiquidSprite" type="Sprite" parent="CauldronPanel/CauldronInventory"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CauldronPanel/CauldronInventory"]
+position = Vector2( 4.23303, -7.40784 )
+shape = SubResource( 9 )
+
+[node name="ProductGrid" type="GridContainer" parent="CauldronPanel/CauldronInventory"]
+margin_left = -132.708
+margin_top = -152.66
+margin_right = 135.292
+margin_bottom = 113.34
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+columns = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LeaveButton" type="Button" parent="CauldronPanel"]
+margin_left = 1766.55
+margin_top = 992.403
+margin_right = 1877.55
+margin_bottom = 1042.4
+custom_fonts/font = SubResource( 2 )
+text = "Leave"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FlameSprite" parent="CauldronPanel" instance=ExtResource( 30 )]
+position = Vector2( 977.279, 652.034 )
+emitting = false
+amount = 20
+lifetime = 0.7
+emission_points = PoolVector2Array( 0, 350, -17.1737, 349.578, -34.306, 348.315, -51.3557, 346.212, -68.2816, 343.275, -85.0431, 339.511, -101.6, 334.929, -117.911, 329.54, -133.939, 323.358, -149.644, 316.396, -164.989, 308.672, -179.936, 300.205, -194.45, 291.014, -208.495, 281.123, -222.038, 270.554, -235.046, 259.333, -247.487, 247.487, -259.333, 235.046, -270.554, 222.038, -281.123, 208.495, -291.014, 194.45, -300.205, 179.936, -308.672, 164.989, -316.396, 149.644, -323.358, 133.939, -329.54, 117.911, -334.929, 101.6, -339.511, 85.043, -343.275, 68.2816, -346.212, 51.3557, -348.315, 34.306, -349.578, 17.1737, -350, -1.5299e-05, -349.578, -17.1737, -348.315, -34.306, -346.212, -51.3557, -343.275, -68.2816, -339.511, -85.0431, -334.929, -101.6, -329.54, -117.911, -323.358, -133.939, -316.396, -149.644, -308.672, -164.989, -300.205, -179.936, -291.014, -194.45, -281.123, -208.495, -270.554, -222.038, -259.333, -235.046, -247.487, -247.487, -235.046, -259.333, -222.038, -270.554, -208.495, -281.123, -194.45, -291.014, -179.936, -300.205, -164.989, -308.672, -149.644, -316.396, -133.939, -323.358, -117.911, -329.54, -101.6, -334.929, -85.043, -339.511, -68.2816, -343.275, -51.3556, -346.212, -34.306, -348.315, -17.1736, -349.578, 3.0598e-05, -350, 17.1737, -349.578, 34.306, -348.315, 51.3557, -346.212, 68.2817, -343.275, 85.0431, -339.511, 101.6, -334.929, 117.911, -329.54, 133.939, -323.358, 149.644, -316.396, 164.989, -308.672, 179.936, -300.205, 194.45, -291.014, 208.495, -281.123, 222.038, -270.554, 235.046, -259.333, 247.487, -247.487, 259.333, -235.046, 270.554, -222.038, 281.123, -208.495, 291.014, -194.45, 300.205, -179.936, 308.672, -164.989, 316.396, -149.644, 323.358, -133.939, 329.54, -117.911, 334.929, -101.6, 339.511, -85.043, 343.275, -68.2816, 346.212, -51.3556, 348.315, -34.3059, 349.578, -17.1736, 350, 4.17371e-06, 349.578, 17.1737, 348.315, 34.3061, 346.212, 51.3556, 343.275, 68.2816, 339.511, 85.0431, 334.929, 101.6, 329.54, 117.911, 323.358, 133.939, 316.396, 149.644, 308.672, 164.989, 300.205, 179.936, 291.014, 194.45, 281.123, 208.495, 270.554, 222.038, 259.333, 235.046, 247.487, 247.487, 235.046, 259.333, 222.038, 270.554, 208.495, 281.123, 194.45, 291.014, 179.936, 300.205, 164.989, 308.672, 149.644, 316.396, 133.939, 323.358, 117.911, 329.54, 101.6, 334.929, 85.0431, 339.511, 68.2816, 343.275, 51.3556, 346.212, 34.3059, 348.315, 17.1737, 349.578 )
+emission_normals = PoolVector2Array( 1, 0, 0.998795, 0.0490677, 0.995185, 0.0980171, 0.989177, 0.14673, 0.980785, 0.19509, 0.970031, 0.24298, 0.95694, 0.290285, 0.941544, 0.33689, 0.92388, 0.382683, 0.903989, 0.427555, 0.881921, 0.471397, 0.857729, 0.514103, 0.83147, 0.55557, 0.803208, 0.595699, 0.77301, 0.634393, 0.740951, 0.671559, 0.707107, 0.707107, 0.671559, 0.740951, 0.634393, 0.77301, 0.595699, 0.803208, 0.55557, 0.83147, 0.514103, 0.857729, 0.471397, 0.881921, 0.427555, 0.903989, 0.382683, 0.92388, 0.33689, 0.941544, 0.290285, 0.95694, 0.24298, 0.970031, 0.19509, 0.980785, 0.14673, 0.989177, 0.0980171, 0.995185, 0.0490676, 0.998795, -4.37114e-08, 1, -0.0490677, 0.998795, -0.0980172, 0.995185, -0.146731, 0.989177, -0.19509, 0.980785, -0.24298, 0.970031, -0.290285, 0.95694, -0.33689, 0.941544, -0.382684, 0.92388, -0.427555, 0.903989, -0.471397, 0.881921, -0.514103, 0.857729, -0.55557, 0.83147, -0.595699, 0.803208, -0.634393, 0.77301, -0.671559, 0.740951, -0.707107, 0.707107, -0.740951, 0.671559, -0.77301, 0.634393, -0.803208, 0.595699, -0.83147, 0.55557, -0.857729, 0.514103, -0.881921, 0.471397, -0.903989, 0.427555, -0.92388, 0.382683, -0.941544, 0.33689, -0.95694, 0.290285, -0.970031, 0.24298, -0.980785, 0.19509, -0.989177, 0.14673, -0.995185, 0.0980171, -0.998795, 0.0490675, -1, -8.74228e-08, -0.998795, -0.0490677, -0.995185, -0.0980173, -0.989177, -0.14673, -0.980785, -0.19509, -0.970031, -0.24298, -0.95694, -0.290285, -0.941544, -0.33689, -0.92388, -0.382683, -0.903989, -0.427555, -0.881921, -0.471397, -0.857729, -0.514103, -0.83147, -0.55557, -0.803208, -0.595699, -0.77301, -0.634393, -0.740951, -0.671559, -0.707107, -0.707107, -0.671559, -0.740951, -0.634393, -0.77301, -0.595699, -0.803208, -0.55557, -0.83147, -0.514103, -0.857729, -0.471397, -0.881921, -0.427555, -0.903989, -0.382683, -0.92388, -0.33689, -0.941544, -0.290285, -0.95694, -0.24298, -0.970031, -0.19509, -0.980785, -0.14673, -0.989177, -0.0980169, -0.995185, -0.0490673, -0.998795, 1.19249e-08, -1, 0.0490678, -0.998795, 0.0980174, -0.995185, 0.14673, -0.989177, 0.19509, -0.980785, 0.24298, -0.970031, 0.290285, -0.95694, 0.33689, -0.941544, 0.382684, -0.923879, 0.427555, -0.903989, 0.471397, -0.881921, 0.514103, -0.857729, 0.55557, -0.831469, 0.595699, -0.803208, 0.634393, -0.77301, 0.671559, -0.740951, 0.707107, -0.707107, 0.740951, -0.671559, 0.773011, -0.634393, 0.803208, -0.595699, 0.83147, -0.55557, 0.857729, -0.514103, 0.881921, -0.471397, 0.903989, -0.427555, 0.92388, -0.382683, 0.941544, -0.33689, 0.95694, -0.290284, 0.970031, -0.24298, 0.980785, -0.19509, 0.989177, -0.14673, 0.995185, -0.0980168, 0.998795, -0.0490676 )
+scale_amount = 1.5
+scale_amount_random = 0.5
+
+[node name="Bubbles" parent="CauldronPanel" instance=ExtResource( 31 )]
+position = Vector2( 979.808, 653.122 )
+scale = Vector2( 1, 1 )
+emitting = false
+amount = 40
+emission_sphere_radius = 256.0
+scale_amount = 0.2
 
 [node name="ItemControl" type="Node" parent="."]
 script = ExtResource( 9 )
 satchelPath = NodePath("../UI/SatchelPanel")
 storagePath = NodePath("../UI/StoragePanel")
 cursorIconPath = NodePath("../UI/InventoryCursor")
-cauldronPath = NodePath("../CauldronVisuals")
-toolTablePath = NodePath("../CauldronVisuals/ToolTable")
-
-[node name="Triggers" type="Node" parent="."]
-
-[node name="BenchTrigger" type="Area2D" parent="Triggers"]
-position = Vector2( 542.384, 519.591 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/BenchTrigger"]
-position = Vector2( -36.9583, -19.9774 )
-shape = SubResource( 2 )
-
-[node name="ExitTrigger" type="Area2D" parent="Triggers"]
-position = Vector2( 1041.29, 1052.94 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/ExitTrigger"]
-position = Vector2( 4.29956, -4.90186 )
-shape = SubResource( 5 )
-
-[node name="StorageTrigger" type="Area2D" parent="Triggers"]
-position = Vector2( 826.118, 268.954 )
-rotation = -1.9181
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/StorageTrigger"]
-shape = SubResource( 3 )
-
-[node name="Cauldron Trigger" type="Area2D" parent="Triggers"]
-position = Vector2( 1025.94, 535.634 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/Cauldron Trigger"]
-shape = SubResource( 4 )
+cauldronPanelPath = NodePath("../CauldronPanel")
+toolTablePath = NodePath("../CauldronPanel/ToolTable")
+cauldronInventoryPath = NodePath("../CauldronPanel/CauldronInventory")
+garbageControlPath = NodePath("../CauldronPanel/GarbageArea")
 
 [node name="UI" type="CanvasLayer" parent="."]
 layer = 3

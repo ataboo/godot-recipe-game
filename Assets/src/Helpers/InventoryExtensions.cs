@@ -7,12 +7,9 @@ namespace RecipeGame.Helpers
 {
     public static class InventoryExtensions 
     {
-        public static InventoryItem[] AccumulateItemStacks(this IEnumerable<InventoryItem> items, int inventorySize)
+        public static IEnumerable<InventoryItem> AccumulateItemStacks(this IEnumerable<InventoryItem> items)
         {
             var combinedItems = items.OfType<InventoryItem>().GroupBy(i => i.Stats.ItemType).ToDictionary(g => g.Key, g => (g.Sum(i => i.StackAmount), g.First().Stats));
-            var outputItems = new InventoryItem[inventorySize];
-            var inventoryIdx = 0;
-
             foreach(var itemKVP in combinedItems) 
             {
                 var stackRemaining = itemKVP.Value.Item1;
@@ -24,22 +21,33 @@ namespace RecipeGame.Helpers
                 }
                 while(stackRemaining > 0) 
                 {
-                    if(inventoryIdx >= inventorySize) 
-                    {
-                        throw new System.IndexOutOfRangeException("Inventory size not large enough to accumulate.");
-                    }
-
                     var itemAmount = Mathf.Min(stats.StackSize, stackRemaining);
                     stackRemaining -= itemAmount;
-                    outputItems[inventoryIdx++] = new InventoryItem() 
+                    yield return new InventoryItem() 
                     {
                         StackAmount = itemAmount,
                         Stats = stats
                     };
                 }
             }
+        }
 
-            return outputItems.ToArray();
+        public static InventoryItem[] AccumulateItemStacks(this IEnumerable<InventoryItem> items, int inventorySize)
+        {
+            var output = new InventoryItem[inventorySize];
+            var idx = 0;
+            foreach(var item in AccumulateItemStacks(items))
+            {
+                output[idx++] = item;
+
+                if(idx >= inventorySize)
+                {
+                    GD.PushError("Accumulate array overflowed inventory of fixed size.");
+                    break;
+                }
+            }
+
+            return output;
         }
     }
 }

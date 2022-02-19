@@ -44,7 +44,7 @@ namespace RecipeGame.Inventory
 
             foreach(var dropRateKVP in baseDropRates) 
             {
-                var weightedCount = dropRateKVP.Value.BaseDropRate * (charmActive ? dropRateKVP.Value.CharmedDropRate : 1);
+                var weightedCount = dropRateKVP.Value.BaseDropRate;
                 for(int i=0; i<weightedCount; i++) 
                 {
                     yield return (dropRateKVP.Key, dropRateKVP.Value, StatsDefinitions.MappedItemStats.Value[dropRateKVP.Key]);

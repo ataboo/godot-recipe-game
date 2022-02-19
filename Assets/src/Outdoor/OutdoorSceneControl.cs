@@ -11,6 +11,16 @@ public class OutdoorSceneControl : Node2D
 
     [Export]
     public NodePath promptPath;
+    [Export]
+    public NodePath caveAreaPath;
+    [Export]
+    public NodePath shoreAreaPath;
+    [Export]
+    public NodePath forestAreaPath;
+    [Export]
+    public NodePath lakeAreaPath;
+    [Export]
+    public NodePath townAreaPath;
 
     private CauldronService cauldronService;
 
@@ -31,19 +41,19 @@ public class OutdoorSceneControl : Node2D
         sceneItems = GetNode<OutdoorSceneItemControl>("OutdoorSceneItems") ?? throw new NullReferenceException();
         player = GetNode<PlayerMapController>("Player") ?? throw new NullReferenceException();
 
-        var triggers = GetNode<Node>("Triggers");
-        var forest = triggers.GetNode<BiomeAreaControl>("ForestArea");
+        var forest = GetNode<BiomeAreaControl>(forestAreaPath) ?? throw new NullReferenceException();
         forest.Connect(nameof(BiomeAreaControl.OnBiomeAreaEnter), this, nameof(HandleEnterBiomeArea));
         forest.Connect(nameof(BiomeAreaControl.OnBiomeAreaExit), this, nameof(HandleExitBiomeArea));
-        var cave = triggers.GetNode<BiomeAreaControl>("CaveArea");
+        var cave = GetNode<BiomeAreaControl>(caveAreaPath) ?? throw new NullReferenceException();
         cave.Connect(nameof(BiomeAreaControl.OnBiomeAreaEnter), this, nameof(HandleEnterBiomeArea));
         cave.Connect(nameof(BiomeAreaControl.OnBiomeAreaExit), this, nameof(HandleExitBiomeArea));
-        var swamp = triggers.GetNode<BiomeAreaControl>("SwampArea");
-        swamp.Connect(nameof(BiomeAreaControl.OnBiomeAreaEnter), this, nameof(HandleEnterBiomeArea));
-        swamp.Connect(nameof(BiomeAreaControl.OnBiomeAreaExit), this, nameof(HandleExitBiomeArea));
-        var shore = triggers.GetNode<BiomeAreaControl>("ShoreArea");
+        var lake = GetNode<BiomeAreaControl>(lakeAreaPath) ?? throw new NullReferenceException();
+        lake.Connect(nameof(BiomeAreaControl.OnBiomeAreaEnter), this, nameof(HandleEnterBiomeArea));
+        lake.Connect(nameof(BiomeAreaControl.OnBiomeAreaExit), this, nameof(HandleExitBiomeArea));
+        var shore = GetNode<BiomeAreaControl>(shoreAreaPath) ?? throw new NullReferenceException();
         shore.Connect(nameof(BiomeAreaControl.OnBiomeAreaEnter), this, nameof(HandleEnterBiomeArea));
         shore.Connect(nameof(BiomeAreaControl.OnBiomeAreaExit), this, nameof(HandleExitBiomeArea));
+        // var town = GetNode<Foo>(townAreaPath) ?? throw new NullReferenceException();
 
         sceneItems.Connect(nameof(OutdoorSceneItemControl.OnLeaveForage), this, nameof(HandleLeaveForage));
         sceneItems.Init(PlayerData);

@@ -77,28 +77,38 @@ public class OutdoorSceneItemControl : Node
 
     void HandleInventoryItemClick(int index, string panelName, bool leftClick)
     {
-        IInventory targetInventory;
+        IInventory sourceInventory;
+        IInventory destInventory;
         switch(panelName)
         {
             case "forage":
-                targetInventory = playerData.ForageStorage;
+                sourceInventory = playerData.ForageStorage;
+                destInventory = playerData.Inventory;
                 break;
             case "satchel":
-                targetInventory = playerData.Inventory;
+                sourceInventory = playerData.Inventory;
+                destInventory = playerData.ForageStorage;
                 break;
             default:
                 throw new NotSupportedException();
         }
 
-        var stacksChanged = inventoryService.ClickedOnInventoryItem(targetInventory, playerData, index, leftClick);
+        var stacksChanged = false;
+        if(Input.IsKeyPressed((int)KeyList.Control))
+        {
+            stacksChanged = inventoryService.MoveStack(sourceInventory, destInventory, index);
+        } 
+        else
+        {
+            stacksChanged = inventoryService.ClickedOnInventoryItem(sourceInventory, playerData, index, leftClick);
+        }
+
         if(stacksChanged)
         {
             foragePanel.InventoryGrid.SetItems(playerData.ForageStorage.Items);
             satchel.SetItems(playerData.Inventory.Items);
             cursorIcon.SetHeldItem(playerData.HeldItem, playerData.HeldTool);
         }
-
-        GD.Print($"Got Click {index}, {panelName}, {leftClick}");
     }
 
     void HandleForageLeaveClick()

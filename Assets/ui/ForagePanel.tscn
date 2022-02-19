@@ -19,6 +19,8 @@ size = 40
 font_data = ExtResource( 4 )
 
 [node name="ForagePanel" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -29,8 +31,9 @@ leaveButtonPath = NodePath("InventoryPanel/MarginContainer2/VBoxContainer/HBoxCo
 titlePath = NodePath("InventoryPanel/MarginContainer2/VBoxContainer/PanelContainer/Title")
 
 [node name="InventoryPanel" type="PanelContainer" parent="."]
-margin_right = 1058.0
-margin_bottom = 644.0
+process_priority = -1
+margin_right = 1298.0
+margin_bottom = 836.0
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -39,6 +42,7 @@ gridContainerPath = NodePath("MarginContainer2/VBoxContainer/GridContainer")
 sortButtonPath = NodePath("MarginContainer2/VBoxContainer/PanelContainer/SortButton")
 
 [node name="MarginContainer2" type="MarginContainer" parent="InventoryPanel"]
+process_priority = 1
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 1291.0
@@ -488,15 +492,17 @@ margin_right = 1244.0
 margin_bottom = 620.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="InventoryPanel/MarginContainer2/VBoxContainer"]
+margin_left = 1029.0
 margin_top = 720.0
 margin_right = 1244.0
 margin_bottom = 782.0
+size_flags_horizontal = 8
+size_flags_vertical = 0
 custom_constants/separation = 10
 alignment = 2
 
 [node name="MarginContainer2" type="MarginContainer" parent="InventoryPanel/MarginContainer2/VBoxContainer/HBoxContainer"]
-margin_left = 1029.0
-margin_right = 1140.0
+margin_right = 111.0
 margin_bottom = 62.0
 custom_constants/margin_top = 6
 custom_constants/margin_bottom = 6
@@ -509,8 +515,8 @@ custom_fonts/font = SubResource( 2 )
 text = "Forage"
 
 [node name="MarginContainer" type="MarginContainer" parent="InventoryPanel/MarginContainer2/VBoxContainer/HBoxContainer"]
-margin_left = 1150.0
-margin_right = 1244.0
+margin_left = 121.0
+margin_right = 215.0
 margin_bottom = 62.0
 custom_constants/margin_top = 6
 custom_constants/margin_bottom = 6
