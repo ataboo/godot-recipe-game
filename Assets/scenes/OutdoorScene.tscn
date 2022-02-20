@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://Assets/src/Outdoor/PlayerMapController.cs" type="Script" id=1]
 [ext_resource path="res://Art/Map/Witch.png" type="Texture" id=2]
@@ -26,6 +26,8 @@
 [ext_resource path="res://Assets/fonts/Deutsch.ttf" type="DynamicFontData" id=24]
 [ext_resource path="res://Assets/src/Outdoor/VictoryPanelControl.cs" type="Script" id=25]
 [ext_resource path="res://Assets/fonts/MainFont40.tres" type="DynamicFont" id=26]
+[ext_resource path="res://Assets/ui/AudioLibraryPlayer.tscn" type="PackedScene" id=27]
+[ext_resource path="res://Assets/audio/footsounds.wav" type="AudioStream" id=28]
 
 [sub_resource type="CircleShape2D" id=3]
 radius = 90.9415
@@ -249,6 +251,7 @@ polygon = PoolVector2Array( -263.726, -100.712, -288.083, -112.891, -330.707, -1
 position = Vector2( 993.762, 503.721 )
 scale = Vector2( 0.340521, 0.340521 )
 script = ExtResource( 1 )
+footAudioPath = NodePath("FootAudio")
 
 [node name="PlayerSprite" type="Sprite" parent="Player"]
 position = Vector2( -0.108398, 26.3008 )
@@ -257,6 +260,10 @@ texture = ExtResource( 2 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Player"]
 polygon = PoolVector2Array( 43.6194, 115.303, 19.6678, 118.805, -7.70532, 118.725, -29.0309, 115.781, -34.4419, 106.55, -29.5879, 97.3995, -13.912, 90.2379, 9.8009, 87.8507, 28.5236, 89.6724, 43.9377, 95.1715, 46.8022, 107.187 )
+
+[node name="FootAudio" type="AudioStreamPlayer2D" parent="Player"]
+stream = ExtResource( 28 )
+bus = "Footfall"
 
 [node name="Walls" type="Node2D" parent="."]
 
@@ -287,13 +294,16 @@ position = Vector2( 1944, 24 )
 position = Vector2( -12, 517 )
 shape = SubResource( 2 )
 
-[node name="OutdoorSceneItems" type="Node" parent="."]
+[node name="OutdoorSceneItems" type="Node2D" parent="."]
 script = ExtResource( 13 )
 satchelPath = NodePath("../UI/SatchelPanel")
 foragePath = NodePath("../UI/ForagePanel")
 cursorIconPath = NodePath("../UI/InventoryCursor")
 marketPanelPath = NodePath("../UI/MarketPanel")
 victoryPanelPath = NodePath("../UI/VictoryPanel")
+audioLibraryPath = NodePath("AudioLibraryPlayer")
+
+[node name="AudioLibraryPlayer" parent="OutdoorSceneItems" instance=ExtResource( 27 )]
 
 [node name="UI" type="CanvasLayer" parent="."]
 layer = 3
@@ -364,7 +374,7 @@ __meta__ = {
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 807.0
-margin_bottom = 494.0
+margin_bottom = 560.0
 mouse_filter = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -383,7 +393,7 @@ text = "Victory!"
 [node name="RichTextLabel" type="RichTextLabel" parent="UI/VictoryPanel/CenterContainer/PanelContainer/VBoxContainer"]
 margin_top = 70.0
 margin_right = 800.0
-margin_bottom = 433.0
+margin_bottom = 499.0
 rect_min_size = Vector2( 800, 0 )
 custom_fonts/bold_font = ExtResource( 22 )
 custom_fonts/normal_font = ExtResource( 23 )
@@ -396,7 +406,9 @@ A feast of Oyster Soup is prepared in your honour.  You may choose to go back to
 
 Thanks for playing!
 
-[b][url]ataboo.itch.io/[/url][/b] and [b]Heather Camp[/b]"
+- [b][url]ataboo.itch.io[/url][/b] and [b][url]hkrampers.itch.io[/url][/b]
+
+Sound effects obtained from https://zapsplat.com, freesound.org"
 text = "As you enter the town, you are mobbed by a crowd trying to bask in your charismatic aura.  The Mayor embraces you, blubbering through tears.
 
 \"How could we have let you go?\"
@@ -405,14 +417,16 @@ A feast of Oyster Soup is prepared in your honour.  You may choose to go back to
 
 Thanks for playing!
 
-ataboo.itch.io/ and Heather Camp"
+- ataboo.itch.io and hkrampers.itch.io
+
+Sound effects obtained from https://zapsplat.com, freesound.org"
 fit_content_height = true
 
 [node name="Button" type="Button" parent="UI/VictoryPanel/CenterContainer/PanelContainer/VBoxContainer"]
 margin_left = 710.0
-margin_top = 437.0
+margin_top = 503.0
 margin_right = 800.0
-margin_bottom = 487.0
+margin_bottom = 553.0
 size_flags_horizontal = 8
 size_flags_vertical = 4
 custom_fonts/font = ExtResource( 26 )

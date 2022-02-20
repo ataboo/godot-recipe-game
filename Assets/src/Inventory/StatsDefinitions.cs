@@ -19,33 +19,33 @@ namespace RecipeGame.Inventory
             // Forest
             new IS(ItemType.Wood, "Wood", "Wood Chips", 64, 1, 1, ItemDisplayMode.Discrete, false),
             new IS(ItemType.Grain, "Grain", "Crushed Grain", 64, 2, 1, ItemDisplayMode.Discrete, false),
-            new IS(ItemType.Truffle, "Truffle", "Shaved Truffle", 1, 10, 1, ItemDisplayMode.Single, false),
+            new IS(ItemType.Truffle, "Truffle", "Shaved Truffle", 1, 40, 1, ItemDisplayMode.Single, false),
 
             // Lake
             new IS(ItemType.FreshWater, "Fresh Water", null, 10000, 1, 1, ItemDisplayMode.Bar, true),
             new IS(ItemType.PeatMoss, "Peat Moss", "Shredded Peat Moss", 64, 2, 1, ItemDisplayMode.Discrete, false),
             new IS(ItemType.EyeOfNewt, "Eye of Newt", "Jellied Eye of Newt", 64, 2, 1, ItemDisplayMode.Discrete, false),
-            new IS(ItemType.Frog, "Frog", "Diced Frog", 1, 10, 1, ItemDisplayMode.Single, false),
+            new IS(ItemType.Frog, "Frog", "Diced Frog", 1, 40, 1, ItemDisplayMode.Single, false),
 
             // Shore
             new IS(ItemType.SaltWater, "Salt Water", null, 10000, 1, 1, ItemDisplayMode.Bar, true),
             new IS(ItemType.Oyster, "Oyster", "Shucked Oyster", 64, 8, 1, ItemDisplayMode.Discrete, false),
-            new IS(ItemType.Jellyfish, "Jellyfish", "Pureed Jellyfish", 1, 40, 1, ItemDisplayMode.Single, false),
+            new IS(ItemType.Jellyfish, "Jellyfish", "Pureed Jellyfish", 1, 100, 1, ItemDisplayMode.Single, false),
             
             // Cave
             new IS(ItemType.CaveSlime, "Cave Slime", null, 10000, 8, 1, ItemDisplayMode.Bar, true),
             new IS(ItemType.Guano, "Guano", "Sifted Guano", 64, 16, 1, ItemDisplayMode.Discrete, false),
-            new IS(ItemType.Lodestone, "Lodestone", "Crushed Lodestone", 1, 80, 1, ItemDisplayMode.Single, false),
+            new IS(ItemType.Lodestone, "Lodestone", "Crushed Lodestone", 1, 200, 1, ItemDisplayMode.Single, false),
 
             // Recipe
-            new IS(ItemType.Gruel, "Gruel", null, 64, 5, 1, ItemDisplayMode.Discrete, false),
+            new IS(ItemType.Gruel, "Gruel", null, 64, 20, 1, ItemDisplayMode.Discrete, false),
             new IS(ItemType.BogWater, "Bog Water", null, 10000, 40, 1, ItemDisplayMode.Bar, true),
             new IS(ItemType.AmphibianCharm, "Amphibian Charm", "Cubed Amphibian Charm", 1, 300, 1, ItemDisplayMode.Single, false),
             new IS(ItemType.Salt, "Salt", null, 64, 20, 1, ItemDisplayMode.Discrete, false),
-            new IS(ItemType.OysterSoup, "Oyster Soup", null, 64, 200, 1, ItemDisplayMode.Discrete, false),
+            new IS(ItemType.OysterSoup, "Oyster Soup", null, 64, 500, 1, ItemDisplayMode.Discrete, false),
             new IS(ItemType.GlowCharm, "Glow Charm", "Mashed Glow Charm", 1, 1600, 1, ItemDisplayMode.Single, false),
             new IS(ItemType.CharismaCharm, "Charisma Charm", null, 1, 4000, 1, ItemDisplayMode.Single, false),
-            new IS(ItemType.BurntMuck, "Burnt Much", "Squished Burnt Muck", 64, 1, 1, ItemDisplayMode.Discrete, false),
+            new IS(ItemType.BurntMuck, "Burnt Muck", "Squished Burnt Muck", 64, 1, 1, ItemDisplayMode.Discrete, false),
         };
 
         public static Lazy<Dictionary<ItemType, IS>> MappedItemStats = new Lazy<Dictionary<ItemType, IS>>(() => {
@@ -165,7 +165,7 @@ namespace RecipeGame.Inventory
                     new RI(ItemType.Truffle, new Vector2(1, 1), true)
                 },
                 Products = new RP[]{
-                    new RP(ItemType.OysterSoup, 1, 1, 100)
+                    new RP(ItemType.OysterSoup, 4, 4, 100)
                 },
             },
             new RS()
@@ -215,7 +215,7 @@ namespace RecipeGame.Inventory
                     new RI(ItemType.SaltWater, new Vector2(750, 1250), false),
                     new RI(ItemType.FreshWater, new Vector2(750, 1250), false),
                     new RI(ItemType.BogWater, new Vector2(750, 1250), false),
-                    new RI(ItemType.CaveSlime, new Vector2(750, 1250), true),
+                    new RI(ItemType.CaveSlime, new Vector2(750, 1250), false),
                     new RI(ItemType.Guano, new Vector2(6, 12), true),
                     new RI(ItemType.Lodestone, new Vector2(1, 1), true),
                     new RI(ItemType.AmphibianCharm, new Vector2(1, 1), true),

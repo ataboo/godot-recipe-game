@@ -13,7 +13,7 @@ public class SpeedClockControl : Label
 
     public override void _Process(float delta)
     {
-        if(running)
+        if(running && !GetTree().Paused)
         {
             elapsedTime += delta;
         }

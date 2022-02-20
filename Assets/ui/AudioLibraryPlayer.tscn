@@ -1,0 +1,95 @@
+[gd_scene load_steps=19 format=2]
+
+[ext_resource path="res://Assets/src/AudioLibraryPlayer.cs" type="Script" id=1]
+[ext_resource path="res://Assets/audio/jugdrop.wav" type="AudioStream" id=2]
+[ext_resource path="res://Assets/audio/firewhoosh.wav" type="AudioStream" id=3]
+[ext_resource path="res://Assets/audio/cauldronplop.wav" type="AudioStream" id=4]
+[ext_resource path="res://Assets/audio/fingersaw.wav" type="AudioStream" id=5]
+[ext_resource path="res://Assets/audio/click1.wav" type="AudioStream" id=6]
+[ext_resource path="res://Assets/audio/shoresounds.wav" type="AudioStream" id=7]
+[ext_resource path="res://Assets/audio/jugpickup.wav" type="AudioStream" id=8]
+[ext_resource path="res://Assets/audio/crowdsounds.wav" type="AudioStream" id=9]
+[ext_resource path="res://Assets/audio/lakesounds.wav" type="AudioStream" id=10]
+[ext_resource path="res://Assets/audio/forestsounds.wav" type="AudioStream" id=11]
+[ext_resource path="res://Assets/audio/chop.wav" type="AudioStream" id=12]
+[ext_resource path="res://Assets/audio/cavesound.wav" type="AudioStream" id=13]
+[ext_resource path="res://Assets/audio/bush_rustle.wav" type="AudioStream" id=14]
+[ext_resource path="res://Assets/audio/coin.wav" type="AudioStream" id=15]
+[ext_resource path="res://Assets/audio/victory.wav" type="AudioStream" id=16]
+[ext_resource path="res://Assets/audio/potionbloop.wav" type="AudioStream" id=17]
+[ext_resource path="res://Assets/audio/achievementget.wav" type="AudioStream" id=18]
+
+[node name="AudioLibraryPlayer" type="Node2D"]
+position = Vector2( 960, 540 )
+script = ExtResource( 1 )
+
+[node name="chop1" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 12 )
+bus = "UISounds"
+
+[node name="click1" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 6 )
+bus = "UISounds"
+
+[node name="fingersaw" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 5 )
+bus = "UISounds"
+
+[node name="jugdrop" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 2 )
+volume_db = -10.0
+bus = "UISounds"
+
+[node name="jugpickup" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 8 )
+volume_db = -10.0
+bus = "UISounds"
+
+[node name="firewhoosh" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 3 )
+volume_db = -10.687
+bus = "UISounds"
+
+[node name="cauldronplop" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 4 )
+bus = "UISounds"
+
+[node name="crowdsounds" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 9 )
+bus = "UISounds"
+
+[node name="forestsounds" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 11 )
+bus = "UISounds"
+
+[node name="lakesounds" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 10 )
+bus = "UISounds"
+
+[node name="shoresounds" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 7 )
+bus = "UISounds"
+
+[node name="cavesounds" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 13 )
+bus = "UISounds"
+
+[node name="bushrustle" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 14 )
+bus = "UISounds"
+
+[node name="coin" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 15 )
+bus = "UISounds"
+
+[node name="victory" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 16 )
+bus = "UISounds"
+
+[node name="potionbloop" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 17 )
+bus = "UISounds"
+
+[node name="decisionsound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 18 )
+bus = "UISounds"

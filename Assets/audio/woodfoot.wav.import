@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/woodfoot.wav-d5711a67306cf56cc734791014946a8a.sample"
+
+[deps]
+
+source_file="res://Assets/audio/woodfoot.wav"
+dest_files=[ "res://.import/woodfoot.wav-d5711a67306cf56cc734791014946a8a.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

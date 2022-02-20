@@ -17,10 +17,14 @@ public class ForagePanelControl : Control
 
     [Export]
     public NodePath titlePath;
+    [Export]
+    public NodePath takeAllButtonPath;
 
     private Label titleLabel;
 
     public StorageInventory Inventory { get; private set; }
+
+    public BiomeType LastBiome {get; private set;}
 
     public override void _Ready()
     {
@@ -37,9 +41,13 @@ public class ForagePanelControl : Control
     private Button _forageButton;
     public Button ForageButton => _forageButton ?? (_forageButton = GetNode<Button>(forageButtonPath));
 
+    private Button _takeAllButton;
+    public Button TakeAllButton => _takeAllButton ?? (_takeAllButton = GetNode<Button>(takeAllButtonPath));
+
     public void InitBiome(BiomeType biome)
     {
         var biomeName = Enum.GetName(typeof(BiomeType), biome);
         titleLabel.Text = $"Ingredients From the {biomeName}";
+        LastBiome = biome;
     }
 }

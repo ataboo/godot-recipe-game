@@ -21,6 +21,8 @@ font_data = ExtResource( 4 )
 [node name="ForagePanel" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_top = -0.748352
+margin_bottom = -0.748291
 script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -29,6 +31,7 @@ inventoryPath = NodePath("InventoryPanel")
 forageButtonPath = NodePath("InventoryPanel/MarginContainer2/VBoxContainer/HBoxContainer/MarginContainer2/ForageButton")
 leaveButtonPath = NodePath("InventoryPanel/MarginContainer2/VBoxContainer/HBoxContainer/MarginContainer/LeaveButton")
 titlePath = NodePath("InventoryPanel/MarginContainer2/VBoxContainer/PanelContainer/Title")
+takeAllButtonPath = NodePath("InventoryPanel/MarginContainer2/VBoxContainer/HBoxContainer/MarginContainer3/TakeAllButton")
 
 [node name="InventoryPanel" type="PanelContainer" parent="."]
 process_priority = -1
@@ -492,7 +495,7 @@ margin_right = 1244.0
 margin_bottom = 620.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="InventoryPanel/MarginContainer2/VBoxContainer"]
-margin_left = 883.0
+margin_left = 649.0
 margin_top = 720.0
 margin_right = 1244.0
 margin_bottom = 782.0
@@ -514,9 +517,23 @@ margin_bottom = 56.0
 custom_fonts/font = SubResource( 2 )
 text = "Forage (F)"
 
-[node name="MarginContainer" type="MarginContainer" parent="InventoryPanel/MarginContainer2/VBoxContainer/HBoxContainer"]
+[node name="MarginContainer3" type="MarginContainer" parent="InventoryPanel/MarginContainer2/VBoxContainer/HBoxContainer"]
 margin_left = 193.0
-margin_right = 361.0
+margin_right = 417.0
+margin_bottom = 62.0
+custom_constants/margin_top = 6
+custom_constants/margin_bottom = 6
+
+[node name="TakeAllButton" type="Button" parent="InventoryPanel/MarginContainer2/VBoxContainer/HBoxContainer/MarginContainer3"]
+margin_top = 6.0
+margin_right = 224.0
+margin_bottom = 56.0
+custom_fonts/font = SubResource( 2 )
+text = "Take All (R)"
+
+[node name="MarginContainer" type="MarginContainer" parent="InventoryPanel/MarginContainer2/VBoxContainer/HBoxContainer"]
+margin_left = 427.0
+margin_right = 595.0
 margin_bottom = 62.0
 custom_constants/margin_top = 6
 custom_constants/margin_bottom = 6

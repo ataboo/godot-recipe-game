@@ -6,6 +6,8 @@ namespace RecipeGame.Models
 {
     public class PlayerData
     {
+        public bool victoryShown;
+
         public PlayerInventory Inventory { get; set; }
 
         public StorageInventory Storage { get; set; }

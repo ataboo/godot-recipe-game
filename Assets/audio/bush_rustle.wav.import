@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/bush_rustle.wav-ac1ca0f272d82572460747f25f440989.sample"
+
+[deps]
+
+source_file="res://Assets/audio/bush_rustle.wav"
+dest_files=[ "res://.import/bush_rustle.wav-ac1ca0f272d82572460747f25f440989.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

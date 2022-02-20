@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/chop.wav-ae1f57d4b52594bf3c5bd7398a1cb09b.sample"
+
+[deps]
+
+source_file="res://Assets/audio/chop.wav"
+dest_files=[ "res://.import/chop.wav-ae1f57d4b52594bf3c5bd7398a1cb09b.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

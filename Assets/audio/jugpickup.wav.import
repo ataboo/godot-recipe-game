@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/jugpickup.wav-e2560081ddf3e1f78c082033a3203324.sample"
+
+[deps]
+
+source_file="res://Assets/audio/jugpickup.wav"
+dest_files=[ "res://.import/jugpickup.wav-e2560081ddf3e1f78c082033a3203324.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

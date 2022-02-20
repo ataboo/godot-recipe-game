@@ -38,7 +38,7 @@ public class RecipeCardControl : MarginContainer
     {
         // if(Engine.EditorHint)
         // {
-            SetLabelValues();
+            // SetLabelValues();
         // }
     }
 

@@ -18,6 +18,8 @@ namespace RecipeGame.Inventory
 
         public void InitNewInventories(PlayerData data) 
         {
+            data.victoryShown = false;
+
             data.Inventory = new PlayerInventory() 
             {
                 Items = new InventoryItem[PlayerItemSlotCount],
@@ -70,6 +72,19 @@ namespace RecipeGame.Inventory
             //     StackAmount = 1,
             //     Stats = StatsDefinitions.MappedItemStats.Value[ItemType.GlowCharm]
             // };
+            // data.Inventory.Items[1] = new InventoryItem
+            // {
+            //     Processed = false,
+            //     StackAmount = 1,
+            //     Stats = StatsDefinitions.MappedItemStats.Value[ItemType.AmphibianCharm]
+            // };
+            // data.Inventory.Items[2] = new InventoryItem
+            // {
+            //     Processed = false,
+            //     StackAmount = 1,
+            //     Stats = StatsDefinitions.MappedItemStats.Value[ItemType.CharismaCharm]
+            // };
+            // data.CoinBalance = 100000;
         }
 
         public void MoveItem(IInventory sourceInventory, IInventory destInventory, int sourceIdx, int destIdx, int amount) 
@@ -127,14 +142,14 @@ namespace RecipeGame.Inventory
             sourceInventory.Items[sourceIdx] = destItem;
         }
 
-        public bool ClickedOnInventoryItem(IInventory targetInventory, PlayerData playerData, int index, bool leftClick)
+        public int ClickedOnInventoryItem(IInventory targetInventory, PlayerData playerData, int index, bool leftClick)
         {
             InventoryItem targetItem = targetInventory.Items[index];
 
             if(targetItem == null && playerData.HeldItem == null)
             {
                 //No change since both are null.
-                return false;
+                return 0;
             }
 
             if(playerData.HeldTool == HeldTool.Empty)
@@ -163,7 +178,7 @@ namespace RecipeGame.Inventory
             }
         }
 
-        private bool MoveItemWithTool(IInventory targetInventory, PlayerData playerData, int index, bool leftClick)
+        private int MoveItemWithTool(IInventory targetInventory, PlayerData playerData, int index, bool leftClick)
         {
             InventoryItem targetItem = targetInventory.Items[index];
             var moveAmount = playerData.HeldTool == HeldTool.Scoop ? 1 : 1000;
@@ -171,7 +186,7 @@ namespace RecipeGame.Inventory
             {
                 if(targetItem == null || targetItem.StackAmount < moveAmount)
                 {
-                    return false;
+                    return 0;
                 }
 
                 if(playerData.HeldItem == null)
@@ -185,7 +200,7 @@ namespace RecipeGame.Inventory
                         playerData.HeldItem.Processed != targetItem.Processed
                     )
                     {
-                        return false;
+                        return 0;
                     }
                 }
 
@@ -200,7 +215,7 @@ namespace RecipeGame.Inventory
             {
                 if(playerData.HeldItem == null || playerData.HeldItem.StackAmount < moveAmount)
                 {
-                    return false;
+                    return 0;
                 }
 
                 if(targetItem == null)
@@ -216,7 +231,7 @@ namespace RecipeGame.Inventory
                         targetItem.Processed != playerData.HeldItem.Processed
                     )
                     {
-                        return false;
+                        return 0;
                     }
                 }
 
@@ -228,14 +243,14 @@ namespace RecipeGame.Inventory
                 }
             }
 
-            return true;
+            return leftClick ? 1 : -1;
         }
 
-        private bool PutItemDownInInventory(IInventory targetInventory, PlayerData playerData, int index, bool leftClick)
+        private int PutItemDownInInventory(IInventory targetInventory, PlayerData playerData, int index, bool leftClick)
         {
             if(playerData.HeldItem == null)
             {
-                return false;
+                return 0;
             }
 
             var targetItem = targetInventory.Items[index];
@@ -250,7 +265,7 @@ namespace RecipeGame.Inventory
             {
                 if(targetItem.Stats.ItemType != playerData.HeldItem.Stats.ItemType || targetItem.Processed != playerData.HeldItem.Processed)
                 {
-                    return false;
+                    return 0;
                 }
 
                 dropAmount = Mathf.Min(targetItem.Stats.StackSize - targetItem.StackAmount, dropAmount);
@@ -263,15 +278,15 @@ namespace RecipeGame.Inventory
             }
             targetItem.StackAmount += dropAmount;
 
-            return dropAmount > 0;
+            return -dropAmount;
         }
 
-        private bool PickItemUpFromInventory(IInventory targetInventory, PlayerData playerData, int index, bool leftClick)
+        private int PickItemUpFromInventory(IInventory targetInventory, PlayerData playerData, int index, bool leftClick)
         {
             var targetItem = targetInventory.Items[index];
             if(targetItem == null)
             {
-                return false;
+                return 0;
             }
 
             var pickupAmount = leftClick ? targetItem.StackAmount : targetItem.StackAmount / 2;
@@ -284,7 +299,7 @@ namespace RecipeGame.Inventory
             {
                 if(targetItem.Stats.ItemType != playerData.HeldItem.Stats.ItemType || targetItem.Processed != playerData.HeldItem.Processed)
                 {
-                    return false;
+                    return 0;
                 }
                 pickupAmount = Mathf.Min(pickupAmount, playerData.HeldItem.Stats.StackSize - playerData.HeldItem.StackAmount);
             }
@@ -296,7 +311,18 @@ namespace RecipeGame.Inventory
             }
             playerData.HeldItem.StackAmount += pickupAmount;
 
-            return pickupAmount > 0;
+            return pickupAmount;
+        }
+
+        public void TakeAllItems(IInventory sourceInventory, IInventory destInventory)
+        {
+            for(int i=0; i<sourceInventory.Items.Length; i++)
+            {
+                if(sourceInventory.Items[i] != null)
+                {
+                    MoveStack(sourceInventory, destInventory, i);
+                }
+            }
         }
 
         public void EmptyPlayerHand(PlayerData playerData)
@@ -420,19 +446,18 @@ namespace RecipeGame.Inventory
             return true;
         }
 
-        public bool MoveStack(IInventory sourceInventory, IInventory destInventory, int sourceIdx) 
+        public int MoveStack(IInventory sourceInventory, IInventory destInventory, int sourceIdx) 
         {
             if(sourceInventory == null || destInventory == null)
             {
-                return false;
+                return 0;
             }
 
             var movedPartialStack = false;
             var sourceItem = sourceInventory.Items[sourceIdx];
             if(sourceItem == null) 
             {
-                GD.PushError("Failed to move a null item.");
-                return false;
+                return 0;
             }
 
             var matchingDestItems = destInventory.Items
@@ -454,7 +479,7 @@ namespace RecipeGame.Inventory
                 if(sourceItem.StackAmount == 0) 
                 {
                     sourceInventory.Items[sourceIdx] = null;
-                    return true;
+                    return 1;
                 }
             }
 
@@ -464,11 +489,11 @@ namespace RecipeGame.Inventory
                 {
                     sourceInventory.Items[sourceIdx] = null;
                     destInventory.Items[i] = sourceItem;
-                    return true;
+                    return 1;
                 }
             }
 
-            return movedPartialStack;
+            return movedPartialStack ? 1 : 0;
         }
 
         public void AddToCauldron(IInventory inventory, int itemIdx, int amount, Cauldron cauldron) 

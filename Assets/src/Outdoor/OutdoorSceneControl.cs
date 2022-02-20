@@ -173,7 +173,7 @@ public class OutdoorSceneControl : Node2D
         keyPrompt.Text = $"E: Enter Town Market";
         keyPrompt.Visible = true;
         queuedAction = () => {
-            if(PlayerData.Inventory.Items.OfType<InventoryItem>().Any(i => i.Stats.ItemType == ItemType.CharismaCharm && !i.Processed))
+            if(!PlayerData.victoryShown && PlayerData.Inventory.Items.OfType<InventoryItem>().Any(i => i.Stats.ItemType == ItemType.CharismaCharm && !i.Processed))
             {
                 EmitSignal(nameof(OnGameVictory));
                 sceneItems.ShowVictoryPanel();

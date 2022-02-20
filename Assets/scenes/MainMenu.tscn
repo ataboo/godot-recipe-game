@@ -1,13 +1,12 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Assets/src/MainMenuControl.cs" type="Script" id=1]
 [ext_resource path="res://Art/UI/MenuIcon.png" type="Texture" id=2]
 [ext_resource path="res://Assets/fonts/Deutsch.ttf" type="DynamicFontData" id=3]
-[ext_resource path="res://Assets/fonts/AlmendriaNormal24.tres" type="DynamicFont" id=4]
+[ext_resource path="res://Art/UI/Banner Image Transparent.png" type="Texture" id=4]
 [ext_resource path="res://Assets/fonts/MainFont40.tres" type="DynamicFont" id=5]
 [ext_resource path="res://Assets/fonts/AlmendriaBold24.tres" type="DynamicFont" id=6]
 [ext_resource path="res://Assets/fonts/MainFont32.tres" type="DynamicFont" id=7]
-[ext_resource path="res://Assets/fonts/MainFont.tres" type="DynamicFont" id=8]
 [ext_resource path="res://Assets/fonts/MainFont24.tres" type="DynamicFont" id=9]
 [ext_resource path="res://Assets/src/SpeedClockControl.cs" type="Script" id=10]
 
@@ -18,6 +17,13 @@
 [sub_resource type="DynamicFont" id=4]
 size = 40
 font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFontData" id=5]
+font_path = "res://Assets/fonts/Almendra-Regular.ttf"
+
+[sub_resource type="DynamicFont" id=6]
+size = 20
+font_data = SubResource( 5 )
 
 [node name="Main Menu" type="CanvasLayer"]
 layer = 4
@@ -44,18 +50,18 @@ __meta__ = {
 }
 
 [node name="MenuButtons" type="PanelContainer" parent="Panel"]
-margin_left = 713.0
-margin_top = 378.0
-margin_right = 1206.0
-margin_bottom = 701.0
+margin_left = 463.0
+margin_top = 230.0
+margin_right = 1457.0
+margin_bottom = 849.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="VBoxContainer2" type="MarginContainer" parent="Panel/MenuButtons"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 486.0
-margin_bottom = 316.0
+margin_right = 987.0
+margin_bottom = 612.0
 custom_constants/margin_right = 10
 custom_constants/margin_top = 10
 custom_constants/margin_left = 10
@@ -64,8 +70,8 @@ custom_constants/margin_bottom = 10
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel/MenuButtons/VBoxContainer2"]
 margin_left = 10.0
 margin_top = 10.0
-margin_right = 469.0
-margin_bottom = 299.0
+margin_right = 970.0
+margin_bottom = 595.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_constants/separation = 10
@@ -73,26 +79,23 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Title" type="Label" parent="Panel/MenuButtons/VBoxContainer2/VBoxContainer"]
-margin_right = 459.0
-margin_bottom = 66.0
-custom_fonts/font = ExtResource( 8 )
-text = "Hot Gruel Summer"
-align = 1
+[node name="TextureRect" type="TextureRect" parent="Panel/MenuButtons/VBoxContainer2/VBoxContainer"]
+margin_right = 960.0
+margin_bottom = 400.0
+texture = ExtResource( 4 )
 
 [node name="Title2" type="Label" parent="Panel/MenuButtons/VBoxContainer2/VBoxContainer"]
-margin_top = 76.0
-margin_right = 459.0
-margin_bottom = 149.0
+margin_top = 410.0
+margin_right = 960.0
+margin_bottom = 445.0
 custom_fonts/font = ExtResource( 7 )
-text = "Created by ataboo and Heather Camp
-for Godot Wild Jam #42"
+text = "Created by ataboo and hkrampers"
 align = 1
 
 [node name="NewGame" type="Button" parent="Panel/MenuButtons/VBoxContainer2/VBoxContainer"]
-margin_top = 159.0
-margin_right = 459.0
-margin_bottom = 219.0
+margin_top = 455.0
+margin_right = 960.0
+margin_bottom = 515.0
 rect_min_size = Vector2( 300, 60 )
 rect_pivot_offset = Vector2( 128, 0 )
 theme = SubResource( 3 )
@@ -136,9 +139,9 @@ custom_fonts/font = ExtResource( 7 )
 text = "Yes"
 
 [node name="Instructions" type="Button" parent="Panel/MenuButtons/VBoxContainer2/VBoxContainer"]
-margin_top = 229.0
-margin_right = 459.0
-margin_bottom = 289.0
+margin_top = 525.0
+margin_right = 960.0
+margin_bottom = 585.0
 rect_min_size = Vector2( 300, 60 )
 custom_fonts/font = SubResource( 4 )
 text = "Instructions"
@@ -164,8 +167,8 @@ mouse_filter = 2
 [node name="MarginContainer" type="MarginContainer" parent="Panel/Instructions/PanelContainer"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 847.0
-margin_bottom = 1007.0
+margin_right = 1047.0
+margin_bottom = 1013.0
 mouse_filter = 2
 custom_constants/margin_right = 20
 custom_constants/margin_top = 20
@@ -175,12 +178,12 @@ custom_constants/margin_bottom = 20
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel/Instructions/PanelContainer/MarginContainer"]
 margin_left = 20.0
 margin_top = 20.0
-margin_right = 820.0
-margin_bottom = 980.0
+margin_right = 1020.0
+margin_bottom = 986.0
 
 [node name="Label" type="Label" parent="Panel/Instructions/PanelContainer/MarginContainer/VBoxContainer"]
-margin_left = 317.0
-margin_right = 483.0
+margin_left = 417.0
+margin_right = 583.0
 margin_bottom = 44.0
 size_flags_horizontal = 4
 custom_fonts/font = ExtResource( 5 )
@@ -191,11 +194,11 @@ __meta__ = {
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Panel/Instructions/PanelContainer/MarginContainer/VBoxContainer"]
 margin_top = 48.0
-margin_right = 800.0
-margin_bottom = 906.0
-rect_min_size = Vector2( 800, 0 )
+margin_right = 1000.0
+margin_bottom = 912.0
+rect_min_size = Vector2( 1000, 0 )
 custom_fonts/bold_font = ExtResource( 6 )
-custom_fonts/normal_font = ExtResource( 4 )
+custom_fonts/normal_font = SubResource( 6 )
 bbcode_enabled = true
 bbcode_text = "You are a hermit that forages ingredients from a number of biomes, cooks them following recipes and sells the product in town.
 
@@ -215,9 +218,15 @@ Click on the paper at the bottom of the screen to bring up notes and recipes for
 [b]Flagon Left Click[/b] - Pick up pint of liquid ingredient
 [b]Flagon Right Click[/b] - Drop pint of liquid ingredient
 
-Use the flagon to measure individual pints from your inventory to the cauldron.  Add ingredients according to the recipe and add wood to the cauldron to control the temperature.  When the recipe is in progress, the water will change colours, then eventually your products will appear.
+Use the [b]flagon jug[/b] to measure individual cups from your inventory to the cauldron.  
 
-Some ingredients need to be processed at the prep table to the left of the cauldron."
+Add ingredients according to the recipe and [b]add wood to the cauldron[/b] to control the temperature.  
+
+When the recipe is in progress, the water will change colours, then eventually your products will appear.  
+
+Recipes can be [b]doubled[/b] multiple times as long as the ratios are the same and there is room in the cauldron.
+
+Some ingredients need to be [b]processed at the prep table[/b] to the left of the cauldron."
 text = "You are a hermit that forages ingredients from a number of biomes, cooks them following recipes and sells the product in town.
 
 Click on the paper at the bottom of the screen to bring up notes and recipes for more information.
@@ -236,16 +245,22 @@ Scoop Right Click - Drop single solid ingredient
 Flagon Left Click - Pick up pint of liquid ingredient
 Flagon Right Click - Drop pint of liquid ingredient
 
-Use the flagon to measure individual pints from your inventory to the cauldron.  Add ingredients according to the recipe and add wood to the cauldron to control the temperature.  When the recipe is in progress, the water will change colours, then eventually your products will appear.
+Use the flagon jug to measure individual cups from your inventory to the cauldron.  
+
+Add ingredients according to the recipe and add wood to the cauldron to control the temperature.  
+
+When the recipe is in progress, the water will change colours, then eventually your products will appear.  
+
+Recipes can be doubled multiple times as long as the ratios are the same and there is room in the cauldron.
 
 Some ingredients need to be processed at the prep table to the left of the cauldron."
 fit_content_height = true
 
 [node name="InstructionsClose" type="Button" parent="Panel/Instructions/PanelContainer/MarginContainer/VBoxContainer"]
-margin_left = 710.0
-margin_top = 910.0
-margin_right = 800.0
-margin_bottom = 960.0
+margin_left = 910.0
+margin_top = 916.0
+margin_right = 1000.0
+margin_bottom = 966.0
 size_flags_horizontal = 8
 size_flags_vertical = 5
 custom_fonts/font = ExtResource( 5 )
@@ -286,8 +301,8 @@ margin_top = 54.0
 margin_right = 120.0
 margin_bottom = 86.0
 grow_horizontal = 0
+grow_vertical = 2
 rect_min_size = Vector2( 120, 0 )
 custom_fonts/font = ExtResource( 6 )
 text = "123:45.678"
-align = 1
 script = ExtResource( 10 )

@@ -24,9 +24,11 @@ public class OutdoorSceneItemControl : Node
     public NodePath marketPanelPath;
     [Export]
     public NodePath victoryPanelPath;
+    [Export]
+    public NodePath audioLibraryPath;
 
     private InventoryGridControl satchel;
-    
+
     private ForagePanelControl foragePanel;
 
     private CursorItemIcon cursorIcon;
@@ -41,6 +43,7 @@ public class OutdoorSceneItemControl : Node
 
     private MarketPanelControl marketPanel;
     private VictoryPanelControl victoryPanel;
+    private AudioLibraryPlayer audioLibrary;
 
     public override void _Ready()
     {
@@ -52,19 +55,21 @@ public class OutdoorSceneItemControl : Node
         cursorIcon = GetNode<CursorItemIcon>(cursorIconPath) ?? throw new NullReferenceException();
         marketPanel = GetNode<MarketPanelControl>(marketPanelPath) ?? throw new NullReferenceException();
         victoryPanel = this.MustGetNode<VictoryPanelControl>(victoryPanelPath);
+        audioLibrary = this.MustGetNode<AudioLibraryPlayer>(audioLibraryPath);
 
-        foragePanel.InventoryGrid.Connect(nameof(InventoryGridControl.OnItemLeftPress), this, nameof(HandleInventoryItemClick), new Godot.Collections.Array{"forage", true});
-        foragePanel.InventoryGrid.Connect(nameof(InventoryGridControl.OnItemRightPress), this, nameof(HandleInventoryItemClick), new Godot.Collections.Array{"forage", false});
+        foragePanel.InventoryGrid.Connect(nameof(InventoryGridControl.OnItemLeftPress), this, nameof(HandleInventoryItemClick), new Godot.Collections.Array { "forage", true });
+        foragePanel.InventoryGrid.Connect(nameof(InventoryGridControl.OnItemRightPress), this, nameof(HandleInventoryItemClick), new Godot.Collections.Array { "forage", false });
 
-        satchel.Connect(nameof(InventoryGridControl.OnItemLeftPress), this, nameof(HandleInventoryItemClick), new Godot.Collections.Array{"satchel", true});
-        satchel.Connect(nameof(InventoryGridControl.OnItemRightPress), this, nameof(HandleInventoryItemClick), new Godot.Collections.Array{"satchel", false});
+        satchel.Connect(nameof(InventoryGridControl.OnItemLeftPress), this, nameof(HandleInventoryItemClick), new Godot.Collections.Array { "satchel", true });
+        satchel.Connect(nameof(InventoryGridControl.OnItemRightPress), this, nameof(HandleInventoryItemClick), new Godot.Collections.Array { "satchel", false });
 
-        marketPanel.MarketSellGrid.Connect(nameof(InventoryGridControl.OnItemLeftPress), this, nameof(HandleInventoryItemClick), new Godot.Collections.Array{"market", true});
-        marketPanel.MarketSellGrid.Connect(nameof(InventoryGridControl.OnItemRightPress), this, nameof(HandleInventoryItemClick), new Godot.Collections.Array{"market", false});
+        marketPanel.MarketSellGrid.Connect(nameof(InventoryGridControl.OnItemLeftPress), this, nameof(HandleInventoryItemClick), new Godot.Collections.Array { "market", true });
+        marketPanel.MarketSellGrid.Connect(nameof(InventoryGridControl.OnItemRightPress), this, nameof(HandleInventoryItemClick), new Godot.Collections.Array { "market", false });
 
         foragePanel.LeaveButton.Connect("pressed", this, nameof(HandleForageLeaveClick));
         foragePanel.InventoryGrid.SortButton.Connect("pressed", this, nameof(HandleForageSort));
         foragePanel.ForageButton.Connect("pressed", this, nameof(HandleForageButtonClick));
+        foragePanel.TakeAllButton.Connect("pressed", this, nameof(HandleForageTakeAll));
 
         satchel.SortButton.Connect("pressed", this, nameof(HandleSatchelSort));
 
@@ -81,8 +86,13 @@ public class OutdoorSceneItemControl : Node
     }
 
     public void ShowVictoryPanel()
-    {
-
+    {   
+        if(!playerData.victoryShown)
+        {
+            victoryPanel.Visible = true;
+            audioLibrary.PlaySound("victory");
+            playerData.victoryShown = true;
+        }
     }
 
     public void ShowMarketPanel()
@@ -93,25 +103,32 @@ public class OutdoorSceneItemControl : Node
         satchel.Visible = true;
         cursorIcon.Visible = true;
         marketPanel.Visible = true;
+
+        audioLibrary.PlaySound("crowdsounds");
     }
 
-    override public void  _Process(float delta)
+    override public void _Process(float delta)
     {
-        if(Input.IsActionJustPressed("close_panel"))
+        if (Input.IsActionJustPressed("close_panel"))
         {
-            if(marketPanel.Visible)
+            if (marketPanel.Visible)
             {
                 HandleMarketLeaveClick();
             }
-            else if(foragePanel.Visible)
+            else if (foragePanel.Visible)
             {
                 HandleForageLeaveClick();
             }
         }
 
-        if(foragePanel.Visible && Input.IsActionJustPressed("alternate_action"))
+        if (foragePanel.Visible && Input.IsActionJustPressed("alternate_action"))
         {
             HandleForageButtonClick();
+        }
+
+        if(foragePanel.Visible && Input.IsActionJustPressed("take_all"))
+        {
+            HandleForageTakeAll();
         }
     }
 
@@ -127,6 +144,25 @@ public class OutdoorSceneItemControl : Node
         RefreshSatchelAndCursorVisuals();
         satchel.Visible = true;
         cursorIcon.Visible = true;
+
+        audioLibrary.PlaySound(NoiseForBiome(biome));
+    }
+
+    private string NoiseForBiome(BiomeType biome)
+    {
+        switch (biome)
+        {
+            case BiomeType.Cave:
+                return "cavesounds";
+            case BiomeType.Forest:
+                return "forestsounds";
+            case BiomeType.Lake:
+                return "lakesounds";
+            case BiomeType.Shore:
+                return "shoresounds";
+            default:
+                throw new NotSupportedException();
+        }
     }
 
     private void RefreshSatchelAndCursorVisuals()
@@ -139,7 +175,7 @@ public class OutdoorSceneItemControl : Node
     {
         IInventory sourceInventory;
         IInventory destInventory;
-        switch(panelName)
+        switch (panelName)
         {
             case "forage":
                 sourceInventory = playerData.ForageStorage;
@@ -157,28 +193,29 @@ public class OutdoorSceneItemControl : Node
                 throw new NotSupportedException();
         }
 
-        var stacksChanged = false;
-        if(Input.IsKeyPressed((int)KeyList.Control))
+        int moveAmount = 0;
+        if (Input.IsKeyPressed((int)KeyList.Control))
         {
-            if(destInventory == null)
+            if (destInventory == null)
             {
                 return;
             }
 
-            stacksChanged = inventoryService.MoveStack(sourceInventory, destInventory, index);
-        } 
+            moveAmount = inventoryService.MoveStack(sourceInventory, destInventory, index);
+        }
         else
         {
-            stacksChanged = inventoryService.ClickedOnInventoryItem(sourceInventory, playerData, index, leftClick);
+            moveAmount = inventoryService.ClickedOnInventoryItem(sourceInventory, playerData, index, leftClick);
         }
 
-        if(stacksChanged)
+        if (moveAmount != 0)
         {
-            if(foragePanel.Visible)
+            audioLibrary.PlaySound(moveAmount > 0 ? "jugpickup" : "jugdrop");
+            if (foragePanel.Visible)
             {
                 foragePanel.InventoryGrid.SetItems(playerData.ForageStorage.Items);
             }
-            if(marketPanel.Visible)
+            if (marketPanel.Visible)
             {
                 RefreshMarketVisuals();
             }
@@ -195,6 +232,8 @@ public class OutdoorSceneItemControl : Node
         cursorIcon.SetHeldItem(playerData.HeldItem, playerData.HeldTool);
 
         EmitSignal(nameof(OnLeavePanel));
+
+        audioLibrary.StopIfPlaying("crowdsounds");
     }
 
     void HandleVictoryLeaveClick()
@@ -205,10 +244,16 @@ public class OutdoorSceneItemControl : Node
 
     void HandleMarketBoughtRecipe(ItemType itemType)
     {
-        if(inventoryService.BuyRecipe(playerData, itemType))
+        if (inventoryService.BuyRecipe(playerData, itemType))
         {
             RefreshMarketVisuals();
             EmitSignal(nameof(OnPurchasedRecipe));
+
+            audioLibrary.PlaySound("coin");
+        }
+        else
+        {
+            audioLibrary.PlaySound("fingersaw");
         }
     }
 
@@ -216,6 +261,7 @@ public class OutdoorSceneItemControl : Node
     {
         inventoryService.SellMarketItems(playerData);
         RefreshMarketVisuals();
+        audioLibrary.PlaySound("coin");
     }
 
     private void RefreshMarketVisuals()
@@ -227,6 +273,7 @@ public class OutdoorSceneItemControl : Node
 
     void HandleForageLeaveClick()
     {
+        audioLibrary.StopIfPlaying(NoiseForBiome(foragePanel.LastBiome));
         foragePanel.Visible = false;
         satchel.Visible = false;
         cursorIcon.Visible = false;
@@ -239,19 +286,29 @@ public class OutdoorSceneItemControl : Node
     void HandleForageButtonClick()
     {
         playerData.ForageStorage.Items = forageService.ForageForItems(biome, 8, playerData.Inventory).ToArray();
-
         foragePanel.InventoryGrid.SetItems(playerData.ForageStorage.Items);
+        audioLibrary.PlaySound("bushrustle");
     }
 
     void HandleForageSort()
     {
         playerData.ForageStorage.Items = playerData.ForageStorage.Items.AccumulateItemStacks(72);
         foragePanel.InventoryGrid.SetItems(playerData.ForageStorage.Items);
+        audioLibrary.PlaySound("click1");
     }
 
     void HandleSatchelSort()
     {
         playerData.Inventory.Items = playerData.Inventory.Items.AccumulateItemStacks(32);
         satchel.SetItems(playerData.Inventory.Items);
+        audioLibrary.PlaySound("click1");
+    }
+
+    void HandleForageTakeAll()
+    {
+        inventoryService.TakeAllItems(playerData.ForageStorage, playerData.Inventory);
+        satchel.SetItems(playerData.Inventory.Items);
+        foragePanel.InventoryGrid.SetItems(playerData.ForageStorage.Items);
+        audioLibrary.PlaySound("jugpickup");
     }
 }

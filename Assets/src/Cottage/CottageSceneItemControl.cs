@@ -1,4 +1,5 @@
 using Godot;
+using RecipeGame.Helpers;
 using RecipeGame.Inventory;
 using RecipeGame.Models;
 using System;
@@ -26,6 +27,12 @@ public class CottageSceneItemControl : Node
     public NodePath garbageControlPath;
     [Export]
     public NodePath prepBenchPanelPath;
+    [Export]
+    public NodePath audioLibraryPlayerPath;
+    [Export]
+    public NodePath cauldronNoisesPath;
+    [Export]
+    public NodePath decisionAchievementPath;
 
     private InventoryGridControl satchel;
     private StoragePanelControl storagePanel;
@@ -38,6 +45,9 @@ public class CottageSceneItemControl : Node
     private CauldronInventoryControl cauldronInventory;
     private GarbageAreaControl garbageControl;
     private PrepTablePanel prepBenchPanel;
+    private AudioLibraryPlayer audioPlayer;
+    private CauldronNoisesControl cauldronNoises;
+    private TextureRect decisionAchievement;
 
     public override void _Ready()
     {
@@ -52,6 +62,9 @@ public class CottageSceneItemControl : Node
         cauldronInventory = GetNode<CauldronInventoryControl>(cauldronInventoryPath) ?? throw new NullReferenceException();
         garbageControl = GetNode<GarbageAreaControl>(garbageControlPath) ?? throw new NullReferenceException();
         prepBenchPanel = GetNode<PrepTablePanel>(prepBenchPanelPath) ?? throw new NullReferenceException();
+        audioPlayer = this.MustGetNode<AudioLibraryPlayer>(audioLibraryPlayerPath);
+        cauldronNoises = this.MustGetNode<CauldronNoisesControl>(cauldronNoisesPath);
+        decisionAchievement = this.MustGetNode<TextureRect>(decisionAchievementPath);
 
         storagePanel.InventoryGrid.Connect(nameof(InventoryGridControl.OnItemLeftPress), this, nameof(HandleInventoryItemClick), new Godot.Collections.Array{nameof(StorageInventory), true});
         storagePanel.InventoryGrid.Connect(nameof(InventoryGridControl.OnItemRightPress), this, nameof(HandleInventoryItemClick), new Godot.Collections.Array{nameof(StorageInventory), false});
@@ -75,6 +88,7 @@ public class CottageSceneItemControl : Node
 
         prepBenchPanel.LeaveButton.Connect("pressed", this, nameof(HandlePrepBenchLeaveClick));
         prepBenchPanel.ProcessButton.Connect("pressed", this, nameof(HandlePrepBenchProcess));
+        prepBenchPanel.TakeAllButton.Connect("pressed", this, nameof(HandlePrepBenchTakeAll));
 
         prepBenchPanel.InputSpot.IconControl.Connect(
             nameof(InventoryIconControl.OnLeftPress), 
@@ -102,6 +116,15 @@ public class CottageSceneItemControl : Node
         );
     }
 
+    private async void ShowDecisionAchievement()
+    {
+        audioPlayer.PlaySound("decisionsound");
+        decisionAchievement.Visible = true;
+        await ToSignal(GetTree().CreateTimer(3), "timeout");
+
+        decisionAchievement.Visible = false;
+    }
+
     public override void _Process(float delta)
     {
         if(playerData?.Cauldron == null) {
@@ -113,6 +136,7 @@ public class CottageSceneItemControl : Node
         switch(updateResult)
         {
             case CauldronState.JustFinishedRecipe:
+                audioPlayer.PlaySound("potionbloop");
                 cauldronInventory.UpdateOutputItems(playerData.Cauldron);
                 break;
             case CauldronState.JustStartedRecipe:
@@ -122,6 +146,8 @@ public class CottageSceneItemControl : Node
             case CauldronState.WaitingToCook:
                 break;
         }
+
+        cauldronNoises.UpdateCauldron(playerData.Cauldron);
 
         if(cauldronPanel.Visible)
         {
@@ -147,6 +173,11 @@ public class CottageSceneItemControl : Node
         if(prepBenchPanel.Visible && Input.IsActionJustPressed("alternate_action"))
         {
             HandlePrepBenchProcess();
+        }
+
+        if(prepBenchPanel.Visible && Input.IsActionJustPressed("take_all"))
+        {
+            HandlePrepBenchTakeAll();
         }
     }
 
@@ -219,7 +250,7 @@ public class CottageSceneItemControl : Node
                 throw new NotSupportedException();
         }
 
-        bool stacksChanged = false;
+        int moveAmount = 0;
         if(Input.IsKeyPressed((int)KeyList.Control))
         {
             if(destInventory == null)
@@ -227,15 +258,16 @@ public class CottageSceneItemControl : Node
                 return;
             }
 
-            stacksChanged = inventoryService.MoveStack(sourceInventory, destInventory, index);
+            moveAmount = inventoryService.MoveStack(sourceInventory, destInventory, index);
         }
         else 
         {
-            stacksChanged = inventoryService.ClickedOnInventoryItem(sourceInventory, playerData, index, leftClick);
+            moveAmount = inventoryService.ClickedOnInventoryItem(sourceInventory, playerData, index, leftClick);
         }
 
-        if(stacksChanged)
+        if(moveAmount != 0)
         {
+            audioPlayer.PlaySound(moveAmount > 0 ? "jugpickup" : "jugdrop");
             if(storagePanel.Visible)
             {
                 storagePanel.InventoryGrid.SetItems(playerData.Storage.Items);
@@ -260,6 +292,7 @@ public class CottageSceneItemControl : Node
             return;
         }
 
+        audioPlayer.PlaySound(playerData.HeldTool == HeldTool.Empty ? "jugpickup" : "jugdrop");
         playerData.HeldTool = playerData.HeldTool == HeldTool.Empty ? tool : HeldTool.Empty;
         toolTable.SetHeldTool(playerData.HeldTool);
         cursorIcon.SetHeldItem(playerData.HeldItem, playerData.HeldTool);
@@ -267,7 +300,19 @@ public class CottageSceneItemControl : Node
 
     void HandleClickCauldron(bool leftClick)
     {
-        if(cauldronService.ClickedOnFire(playerData) || cauldronService.ClickedOnCauldron(playerData, leftClick))
+        var movedItems = false;
+        if(cauldronService.ClickedOnFire(playerData))
+        {
+            movedItems = true;
+            audioPlayer.PlaySound("firewhoosh");
+        }  
+        else if (cauldronService.ClickedOnCauldron(playerData, leftClick))
+        {
+            movedItems = true;
+            audioPlayer.PlaySound("cauldronplop");
+        }
+
+        if(movedItems)
         {
             cursorIcon.SetHeldItem(playerData.HeldItem, playerData.HeldTool);
         }
@@ -289,6 +334,8 @@ public class CottageSceneItemControl : Node
         {
             cursorIcon.SetHeldItem(playerData.HeldItem, playerData.HeldTool);
             cauldronInventory.UpdateOutputItems(playerData.Cauldron);
+            
+            audioPlayer.PlaySound("jugpickup");
         }
     }
 
@@ -306,6 +353,9 @@ public class CottageSceneItemControl : Node
         }
 
         garbageControl.ShowConfirm(true, "Destroy Item?");
+
+        
+        audioPlayer.PlaySound("click1");
     }
 
     void HandleConfirmGarbage(bool yes)
@@ -324,6 +374,7 @@ public class CottageSceneItemControl : Node
             }
         }
         
+        audioPlayer.PlaySound("click1");
         garbageControl.ShowConfirm(false, "");
     }
 
@@ -351,8 +402,25 @@ public class CottageSceneItemControl : Node
     {
         if(inventoryService.ProcessPrepBench(playerData.PrepBench))
         {
+            if(playerData.PrepBench.OutputItem?.Stats.ItemType == ItemType.AmphibianCharm || playerData.PrepBench.OutputItem?.Stats.ItemType == ItemType.GlowCharm)
+            {
+                ShowDecisionAchievement();
+            }
             prepBenchPanel.SetItems(playerData.PrepBench.InputItem, playerData.PrepBench.OutputItem, inventoryService.PrepBenchCanProcess(playerData.PrepBench));
+            audioPlayer.PlaySound("chop1");
         }
+        else
+        {
+            audioPlayer.PlaySound("fingersaw");
+        }
+    }
+
+    void HandlePrepBenchTakeAll()
+    {
+        inventoryService.TakeAllItems(playerData.PrepBench.OutputItems, playerData.Inventory);
+        satchel.SetItems(playerData.Inventory.Items);
+        prepBenchPanel.SetItems(playerData.PrepBench.InputItem, playerData.PrepBench.OutputItem, inventoryService.PrepBenchCanProcess(playerData.PrepBench));
+        audioPlayer.PlaySound("jugpickup");
     }
 
     void HandleStorageSort()

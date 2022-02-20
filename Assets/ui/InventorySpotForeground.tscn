@@ -26,7 +26,7 @@
 [ext_resource path="res://Art/UI/Items/Oyster Soup.png" type="Texture" id=24]
 [ext_resource path="res://Art/UI/Items/Gruel.png" type="Texture" id=25]
 [ext_resource path="res://Art/UI/Items/GlowCharm.png" type="Texture" id=26]
-[ext_resource path="res://Art/UI/Items/CharismaCharm.png" type="Texture" id=27]
+[ext_resource path="res://Art/UI/Items/UltimateCutenessLashesSmall.png" type="Texture" id=27]
 
 [sub_resource type="DynamicFont" id=3]
 font_data = ExtResource( 2 )

@@ -29,6 +29,8 @@ public class CauldronInventoryControl : Area2D
     public NodePath flameControlPath;
     [Export]
     public NodePath bubbleControlPath;
+    [Export]
+    public NodePath thermometerPath;
 
     private GridContainer itemGrid;
 
@@ -43,6 +45,7 @@ public class CauldronInventoryControl : Area2D
     private CauldronFlameControl flameControl;
 
     private float updateClock = 1e7f;
+    private ProgressBar thermometer;
 
     public override void _Ready()
     {
@@ -51,6 +54,7 @@ public class CauldronInventoryControl : Area2D
         liquidSprite = GetNode<Sprite>(liquidSpritePath) ?? throw new NullReferenceException();
         flameControl = GetNode<CauldronFlameControl>(flameControlPath) ?? throw new NullReferenceException();
         bubbleControl = GetNode<CauldronBubbleControl>(bubbleControlPath) ?? throw new NullReferenceException();
+        thermometer = this.MustGetNode<ProgressBar>(thermometerPath);
 
         if(blueLiquidPrefabs.Length != 4)
         {
@@ -73,6 +77,8 @@ public class CauldronInventoryControl : Area2D
 
         var fillLevel = 0;
         var liquidColor = CauldronLiquidColor.Dry;
+
+        thermometer.Value = cauldron.Temperature;
 
         if(cauldron.Products.Count == 0)
         {

@@ -83,15 +83,14 @@ margin_bottom = 970.0
 itemType = 19
 title = "Charm of Charisma"
 subtitle = "The bearer of this charm is beloved by all"
-bodyContent = "- Three flagons of brackish-boggy water
-- One jar of [b]Cave Slime[/b]
-- Seven and two more helpings of [b]Guano[/b]
-- One medium sized [b]Lodestone[/b], crushed
+bodyContent = "- Three cups of brackish-boggy water
+- One cup of [b]Cave Slime[/b]
+- Nine helpings of [b]Sifted Guano[/b]
+- One medium sized [b]Crushed Lodestone[/b]
 - A single [b]Amphibian Charm[/b], cubed
 - One [b]Glow Charm[/b], gently mashed
 
-Boil gently until eyes dry out from admiring the charm absentmindedly.
-"
+Boil gently until eyes dry out from admiring the charm absentmindedly."
 
 [node name="GlowCharm" parent="HBoxContainer/RecipePanelCenter/RecipeHolder" instance=ExtResource( 5 )]
 margin_right = 650.0
@@ -99,7 +98,7 @@ margin_bottom = 970.0
 itemType = 18
 title = "Charm of Luminance"
 subtitle = "A flameless torch harnessing the glow of the jellyfish"
-bodyContent = "- One flagon of [b]Salt Water[/b] made brackish by equal part fresh.
+bodyContent = "- One cup of [b]Salt Water[/b] made brackish by equal part fresh.
 - Six scoops of [b]Wood Chips[/b]
 - Four bowls of [b]Oyster Soup[/b]
 - Two globs of [b]Pureed Jellyfish[/b]
@@ -113,7 +112,7 @@ margin_bottom = 970.0
 itemType = 9
 title = "Salt"
 subtitle = "Where does the water hide it?"
-bodyContent = "- One Flagon of [b]Sea Water[/b]
+bodyContent = "- One cup of [b]Sea Water[/b]
 
 Boil until water goes somewhere, leaving salt in its stead."
 
@@ -121,6 +120,13 @@ Boil until water goes somewhere, leaving salt in its stead."
 margin_right = 650.0
 margin_bottom = 970.0
 title = "Charm of the Amphibian"
+bodyContent = "- Six bowls of [b]Gruel[/b]
+- One cup of [b]Bog Water[/b]
+- A whole [b]Frog[/b], diced
+- One shaved [b]Forest Truffle[/b]
+- Jellied [b]Eye of Newt[/b] five to ten pairs
+
+Heat bog water to a medium boil.  Add gruel, frog, and truffle.  Season with eye of newt to taste.  "
 
 [node name="OysterSoup" parent="HBoxContainer/RecipePanelCenter/RecipeHolder" instance=ExtResource( 5 )]
 margin_right = 650.0
@@ -129,7 +135,7 @@ itemType = 17
 title = "Oyster Soup"
 subtitle = "A delightful treat for a rainy day"
 bodyContent = "- Hay dozen [b]Oysters[/b], shucked
-- One flagon of [b]Fresh Water[/b]
+- One cup of [b]Fresh Water[/b]
 - One whole [b]Shaved Truffle[/b]
 - Two pinches of [b]Salt[/b]
 
@@ -143,7 +149,7 @@ itemType = 8
 title = "Bog Water"
 subtitle = "Dark, bold, and musky staple for all thing swamp"
 bodyContent = "- Ten sprigs of [b]Peat Moss[/b], shredded
-- One flagon of [b]Fresh Water[/b]
+- One cup of [b]Fresh Water[/b]
 
 Bring ingredients to a medium boil until mixture is sufficiently boggy."
 
@@ -166,6 +172,12 @@ title = "Gruel Shmool"
 subtitle = ""
 bodyContent = "Gruel shmool for cruel fools.  I made it for years before I found the way out.  Spat in every batch along the way.
 
+Make sure you remember to [b]process ingredients at the prep bench[/b] if the recipe calls for it.  Grain needs to be crushed before it's boiled or it's just grain soup!
+
+Don't let them work you too hard.  You can keep [b]doubling up recipes[/b] as long as there's room in the cauldron.  Just make sure the ratio is the same!
+
+Use the [b]flagon jug[/b] to measure out individual [b]cups[/b] of liquids and the [b]scoop[/b] for single solids. 
+
 When you're in town, drop by the Scrollmart and they'll set you up with some recipes that are a bit more exciting.  Play your cards right and you may even charm your way out of this shack!"
 backgroundTexture = ExtResource( 4 )
 
@@ -187,15 +199,15 @@ margin_bottom = 965.0
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/RecipePanelCenter/RecipeHolder/NoteAboutGruel/VBoxContainer"]
 margin_left = 233.0
 margin_right = 406.0
-margin_bottom = 231.0
+margin_bottom = 91.0
 size_flags_horizontal = 4
 size_flags_vertical = 0
-custom_constants/margin_top = 180
+custom_constants/margin_top = 40
 
 [node name="TitleLabel" type="Label" parent="HBoxContainer/RecipePanelCenter/RecipeHolder/NoteAboutGruel/VBoxContainer/MarginContainer"]
-margin_top = 180.0
+margin_top = 40.0
 margin_right = 173.0
-margin_bottom = 231.0
+margin_bottom = 91.0
 size_flags_horizontal = 4
 size_flags_vertical = 0
 custom_colors/font_color = Color( 0.2, 0.2, 0.184314, 1 )
@@ -208,9 +220,9 @@ __meta__ = {
 
 [node name="MarginContainer3" type="MarginContainer" parent="HBoxContainer/RecipePanelCenter/RecipeHolder/NoteAboutGruel/VBoxContainer"]
 margin_left = 95.0
-margin_top = 235.0
+margin_top = 95.0
 margin_right = 545.0
-margin_bottom = 267.0
+margin_bottom = 127.0
 size_flags_horizontal = 4
 size_flags_vertical = 0
 custom_constants/margin_top = 0
@@ -230,7 +242,7 @@ __meta__ = {
 }
 
 [node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer/RecipePanelCenter/RecipeHolder/NoteAboutGruel/VBoxContainer"]
-margin_top = 271.0
+margin_top = 131.0
 margin_right = 640.0
 margin_bottom = 960.0
 size_flags_horizontal = 3
@@ -242,7 +254,7 @@ custom_constants/margin_bottom = 0
 margin_left = 70.0
 margin_top = 50.0
 margin_right = 570.0
-margin_bottom = 689.0
+margin_bottom = 829.0
 grow_horizontal = 2
 grow_vertical = 2
 rect_min_size = Vector2( 500, 0 )
@@ -255,8 +267,20 @@ custom_fonts/normal_font = ExtResource( 8 )
 bbcode_enabled = true
 bbcode_text = "Gruel shmool for cruel fools.  I made it for years before I found the way out.  Spat in every batch along the way.
 
+Make sure you remember to [b]process ingredients at the prep bench[/b] if the recipe calls for it.  Grain needs to be crushed before it's boiled or it's just grain soup!
+
+Don't let them work you too hard.  You can keep [b]doubling up recipes[/b] as long as there's room in the cauldron.  Just make sure the ratio is the same!
+
+Use the [b]flagon jug[/b] to measure out individual [b]cups[/b] of liquids and the [b]scoop[/b] for single solids. 
+
 When you're in town, drop by the Scrollmart and they'll set you up with some recipes that are a bit more exciting.  Play your cards right and you may even charm your way out of this shack!"
 text = "Gruel shmool for cruel fools.  I made it for years before I found the way out.  Spat in every batch along the way.
+
+Make sure you remember to process ingredients at the prep bench if the recipe calls for it.  Grain needs to be crushed before it's boiled or it's just grain soup!
+
+Don't let them work you too hard.  You can keep doubling up recipes as long as there's room in the cauldron.  Just make sure the ratio is the same!
+
+Use the flagon jug to measure out individual cups of liquids and the scoop for single solids. 
 
 When you're in town, drop by the Scrollmart and they'll set you up with some recipes that are a bit more exciting.  Play your cards right and you may even charm your way out of this shack!"
 scroll_active = false
@@ -272,7 +296,7 @@ itemType = 11
 title = "Gruel"
 subtitle = "A humble peasant feed, guaranteed to keep passions tempered"
 bodyContent = "- Four scoops of [b]Crushed Grain[/b]
-- One flagon of [b]Fresh Water[/b]
+- One cup of [b]Fresh Water[/b]
 
 Apply wood to fire, fire to cauldron, and cauldron to contents.  Stir until mush becomes featureless.
 
@@ -280,7 +304,6 @@ Best embibed with generous helpings of piety."
 backgroundTexture = ExtResource( 2 )
 
 [node name="Welcome" parent="HBoxContainer/RecipePanelCenter/RecipeHolder" instance=ExtResource( 5 )]
-visible = false
 margin_right = 650.0
 margin_bottom = 970.0
 Purchasable = false
