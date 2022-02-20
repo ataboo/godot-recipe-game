@@ -1,0 +1,139 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Assets/fonts/AlmendriaNormal24.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Assets/fonts/AlmendriaBold24.tres" type="DynamicFont" id=2]
+[ext_resource path="res://Assets/fonts/AlmendriaBold40.tres" type="DynamicFont" id=3]
+[ext_resource path="res://Assets/src/RecipeCardControl.cs" type="Script" id=4]
+[ext_resource path="res://Art/UI/RaggedSheetBlank.png" type="Texture" id=5]
+
+[node name="RecipeCard" type="MarginContainer"]
+margin_right = 640.0
+margin_bottom = 960.0
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+Purchasable = true
+itemType = 13
+titlePath = NodePath("VBoxContainer/MarginContainer/TitleLabel")
+subtitlePath = NodePath("VBoxContainer/MarginContainer3/SubtitleLabel")
+contentPath = NodePath("VBoxContainer/MarginContainer2/ContentText")
+backgroundPath = NodePath("BackgroundTexture")
+title = "Charm of the Amphibiano"
+subtitle = "Grants the bearer the ability to transit the three seas unabetted"
+bodyContent = "- One plus one half rations of [b]Gruel[/b]
+- One flagon of [b]Bog Water[/b]
+- A whole [b]Frog[/b], diced
+- One shaved [b]Forest Truffle[/b]
+- Jellied [b]Eye of Newt[/b] five to ten pairs
+
+Heat bog water to a medium boil.  Add gruel, frog, and truffle.  Season with eye of newt to taste.  "
+backgroundTexture = ExtResource( 5 )
+
+[node name="BackgroundTexture" type="TextureRect" parent="."]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 645.0
+margin_bottom = 965.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource( 5 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 645.0
+margin_bottom = 965.0
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+margin_left = 104.0
+margin_right = 535.0
+margin_bottom = 233.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
+custom_constants/margin_top = 180
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer/MarginContainer"]
+margin_top = 180.0
+margin_right = 431.0
+margin_bottom = 233.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
+custom_colors/font_color = Color( 0.2, 0.2, 0.184314, 1 )
+custom_fonts/font = ExtResource( 3 )
+text = "Charm of the Amphibian"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer"]
+margin_left = 95.0
+margin_top = 237.0
+margin_right = 545.0
+margin_bottom = 304.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
+custom_constants/margin_top = 0
+
+[node name="SubtitleLabel" type="Label" parent="VBoxContainer/MarginContainer3"]
+margin_right = 450.0
+margin_bottom = 67.0
+rect_min_size = Vector2( 450, 0 )
+size_flags_horizontal = 4
+size_flags_vertical = 0
+custom_colors/font_color = Color( 0.2, 0.2, 0.184314, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "Grants the bearer the ability to transit the three seas unabetted"
+align = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer"]
+margin_top = 308.0
+margin_right = 640.0
+margin_bottom = 960.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_top = 50
+custom_constants/margin_bottom = 0
+
+[node name="ContentText" type="RichTextLabel" parent="VBoxContainer/MarginContainer2"]
+margin_left = 70.0
+margin_top = 50.0
+margin_right = 570.0
+margin_bottom = 652.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_min_size = Vector2( 500, 0 )
+rect_clip_content = false
+size_flags_horizontal = 4
+size_flags_vertical = 5
+custom_colors/default_color = Color( 0.2, 0.2, 0.184314, 1 )
+custom_fonts/bold_font = ExtResource( 2 )
+custom_fonts/normal_font = ExtResource( 1 )
+bbcode_enabled = true
+bbcode_text = "- One plus one half rations of [b]Gruel[/b]
+- One flagon of [b]Bog Water[/b]
+- A whole [b]Frog[/b], diced
+- One shaved [b]Forest Truffle[/b]
+- Jellied [b]Eye of Newt[/b] five to ten pairs
+
+Heat bog water to a medium boil.  Add gruel, frog, and truffle.  Season with eye of newt to taste.  "
+text = "- One plus one half rations of Gruel
+- One flagon of Bog Water
+- A whole Frog, diced
+- One shaved Forest Truffle
+- Jellied Eye of Newt five to ten pairs
+
+Heat bog water to a medium boil.  Add gruel, frog, and truffle.  Season with eye of newt to taste.  "
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}

@@ -1,13 +1,19 @@
 using Godot;
+using RecipeGame.Helpers;
 using RecipeGame.Inventory;
 using RecipeGame.Models;
 using System;
+using System.Linq;
 using static RecipeGame.Helpers.Enums;
 
 public class OutdoorSceneControl : Node2D
 {
     [Signal]
+    public delegate void OnGameVictory();
+    [Signal]
     public delegate void OnTransitionToCottage();
+    [Signal]
+    public delegate void OnPurchasedRecipe();
 
     [Export]
     public NodePath promptPath;
@@ -21,6 +27,10 @@ public class OutdoorSceneControl : Node2D
     public NodePath lakeAreaPath;
     [Export]
     public NodePath townAreaPath;
+    [Export]
+    public NodePath caveWarningPanelPath;
+    [Export]
+    public NodePath shoreWarningPanelPath;
 
     private CauldronService cauldronService;
 
@@ -34,12 +44,21 @@ public class OutdoorSceneControl : Node2D
 
     private PlayerMapController player;
 
+    private Panel caveWarningPanel;
+    private Panel shoreWarningPanel;
+
+    private InventoryService inventoryService;
+
     public override void _Ready()
     {
         cauldronService = new CauldronService();
         keyPrompt = GetNode<KeyPromptControl>(promptPath) ?? throw new NullReferenceException();
         sceneItems = GetNode<OutdoorSceneItemControl>("OutdoorSceneItems") ?? throw new NullReferenceException();
         player = GetNode<PlayerMapController>("Player") ?? throw new NullReferenceException();
+        caveWarningPanel = this.MustGetNode<Panel>(caveWarningPanelPath);
+        shoreWarningPanel = this.MustGetNode<Panel>(shoreWarningPanelPath);
+
+        keyPrompt.Connect("pressed", this, nameof(HandlePromptPress));
 
         var forest = GetNode<BiomeAreaControl>(forestAreaPath) ?? throw new NullReferenceException();
         forest.Connect(nameof(BiomeAreaControl.OnBiomeAreaEnter), this, nameof(HandleEnterBiomeArea));
@@ -53,10 +72,16 @@ public class OutdoorSceneControl : Node2D
         var shore = GetNode<BiomeAreaControl>(shoreAreaPath) ?? throw new NullReferenceException();
         shore.Connect(nameof(BiomeAreaControl.OnBiomeAreaEnter), this, nameof(HandleEnterBiomeArea));
         shore.Connect(nameof(BiomeAreaControl.OnBiomeAreaExit), this, nameof(HandleExitBiomeArea));
-        // var town = GetNode<Foo>(townAreaPath) ?? throw new NullReferenceException();
+        var town = GetNode<BiomeAreaControl>(townAreaPath) ?? throw new NullReferenceException();
+        town.Connect(nameof(BiomeAreaControl.OnBiomeAreaEnter), this, nameof(HandleEnterMarketArea));
+        town.Connect(nameof(BiomeAreaControl.OnBiomeAreaExit), this, nameof(HandleExitBiomeArea));
 
-        sceneItems.Connect(nameof(OutdoorSceneItemControl.OnLeaveForage), this, nameof(HandleLeaveForage));
+        sceneItems.Connect(nameof(OutdoorSceneItemControl.OnLeavePanel), this, nameof(HandleLeavePanel));
+        sceneItems.Connect(nameof(OutdoorSceneItemControl.OnPurchasedRecipe), this, nameof(HandlePurchasedRecipe));
+        
         sceneItems.Init(PlayerData);
+
+        inventoryService = new InventoryService();
     }
 
     public override void _Process(float delta)
@@ -68,7 +93,15 @@ public class OutdoorSceneControl : Node2D
 
         cauldronService.Update(PlayerData.Cauldron, delta);
 
-        if(queuedAction != null && Input.IsActionJustPressed("perform_action"))
+        if(Input.IsActionJustPressed("perform_action"))
+        {
+            HandlePromptPress();
+        }
+    }
+
+    private void HandlePromptPress()
+    {
+        if(queuedAction != null)
         {
             queuedAction();
             queuedAction = null;
@@ -88,7 +121,21 @@ public class OutdoorSceneControl : Node2D
     {
         var biomeName = Enum.GetName(typeof(BiomeType), biome);
 
-        keyPrompt.SetText($"E: Enter {biomeName}");
+        if(!inventoryService.CanEnterBiome(PlayerData, biome))
+        {
+            if(biome == BiomeType.Cave)
+            {
+                caveWarningPanel.Visible = true;
+            }
+            else if(biome == BiomeType.Shore)
+            {
+                shoreWarningPanel.Visible = true;
+            }
+
+            return;
+        }
+
+        keyPrompt.Text = $"Enter {biomeName} (E)";
         keyPrompt.Visible = true;
         queuedAction = () => {
             sceneItems.ShowForageBiome(biome);
@@ -98,12 +145,51 @@ public class OutdoorSceneControl : Node2D
 
     void HandleExitBiomeArea(BiomeType biome)
     {
+        if(biome == BiomeType.Cave)
+        {
+            caveWarningPanel.Visible = false;
+        }
+        else if(biome == BiomeType.Shore)
+        {
+            shoreWarningPanel.Visible = false;
+        }
+
         keyPrompt.Visible = false;
         queuedAction = null;
     }
 
-    void HandleLeaveForage()
+    void HandleLeavePanel()
     {
         player.ControlEnabled = true;
+    }
+
+    void HandlePurchasedRecipe()
+    {
+        EmitSignal(nameof(OnPurchasedRecipe));
+    }
+
+    void HandleEnterMarketArea(BiomeType _)
+    {
+        keyPrompt.Text = $"E: Enter Town Market";
+        keyPrompt.Visible = true;
+        queuedAction = () => {
+            if(PlayerData.Inventory.Items.OfType<InventoryItem>().Any(i => i.Stats.ItemType == ItemType.CharismaCharm && !i.Processed))
+            {
+                EmitSignal(nameof(OnGameVictory));
+                sceneItems.ShowVictoryPanel();
+            }
+            else
+            {
+                sceneItems.ShowMarketPanel();
+            }
+
+            player.ControlEnabled = false;
+        };
+    }
+
+    void HandleLeaveMarketArea()
+    {
+        keyPrompt.Visible = false;
+        queuedAction = null;
     }
 }

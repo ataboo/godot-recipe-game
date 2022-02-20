@@ -492,7 +492,7 @@ margin_right = 1244.0
 margin_bottom = 620.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="InventoryPanel/MarginContainer2/VBoxContainer"]
-margin_left = 1029.0
+margin_left = 883.0
 margin_top = 720.0
 margin_right = 1244.0
 margin_bottom = 782.0
@@ -502,28 +502,28 @@ custom_constants/separation = 10
 alignment = 2
 
 [node name="MarginContainer2" type="MarginContainer" parent="InventoryPanel/MarginContainer2/VBoxContainer/HBoxContainer"]
-margin_right = 111.0
+margin_right = 183.0
 margin_bottom = 62.0
 custom_constants/margin_top = 6
 custom_constants/margin_bottom = 6
 
 [node name="ForageButton" type="Button" parent="InventoryPanel/MarginContainer2/VBoxContainer/HBoxContainer/MarginContainer2"]
 margin_top = 6.0
-margin_right = 111.0
+margin_right = 183.0
 margin_bottom = 56.0
 custom_fonts/font = SubResource( 2 )
-text = "Forage"
+text = "Forage (F)"
 
 [node name="MarginContainer" type="MarginContainer" parent="InventoryPanel/MarginContainer2/VBoxContainer/HBoxContainer"]
-margin_left = 121.0
-margin_right = 215.0
+margin_left = 193.0
+margin_right = 361.0
 margin_bottom = 62.0
 custom_constants/margin_top = 6
 custom_constants/margin_bottom = 6
 
 [node name="LeaveButton" type="Button" parent="InventoryPanel/MarginContainer2/VBoxContainer/HBoxContainer/MarginContainer"]
 margin_top = 6.0
-margin_right = 94.0
+margin_right = 168.0
 margin_bottom = 56.0
 custom_fonts/font = SubResource( 3 )
-text = "Leave"
+text = "Leave (Q)"

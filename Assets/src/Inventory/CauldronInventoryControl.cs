@@ -77,13 +77,20 @@ public class CauldronInventoryControl : Area2D
         if(cauldron.Products.Count == 0)
         {
             fillLevel = Mathf.Clamp((int)Mathf.Ceil((float)cauldron.IngredientVolume * 4 / InventoryService.CauldronVolumeCapacity), 0, 4);
-            if(cauldron.CurrentRecipe != null)
+            if(cauldron.HasAnyLiquids())
             {
-                liquidColor = CauldronLiquidColor.Green;
-            }
+                if(cauldron.CurrentRecipe != null)
+                {
+                    liquidColor = CauldronLiquidColor.Green;
+                }
+                else
+                {
+                    liquidColor = CauldronLiquidColor.Blue; 
+                }
+            } 
             else
             {
-                liquidColor = CauldronLiquidColor.Blue; 
+                liquidColor = CauldronLiquidColor.Dry;
             }
         }
 
@@ -99,11 +106,11 @@ public class CauldronInventoryControl : Area2D
             }
             else if(liquidColor == CauldronLiquidColor.Blue)
             {
-                liquidSprite.Texture = blueLiquidPrefabs[fillLevel];
+                liquidSprite.Texture = blueLiquidPrefabs[fillLevel - 1];
             }
             else
             {
-                liquidSprite.Texture = greenLiquidPrefabs[fillLevel];
+                liquidSprite.Texture = greenLiquidPrefabs[fillLevel - 1];
             }
 
             lastLiquidColor = liquidColor;

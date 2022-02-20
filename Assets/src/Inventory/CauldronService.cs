@@ -115,7 +115,22 @@ namespace RecipeGame.Inventory
                 return false;
             }
 
-            if(leftClick || playerData.HeldItem.StackAmount <= 1)
+            int amount;
+            if(playerData.HeldTool == HeldTool.Empty)
+            {
+                amount = leftClick ? playerData.HeldItem.StackAmount : playerData.HeldItem.StackAmount / 2;
+            }
+            else
+            {
+                amount = playerData.HeldTool == HeldTool.Scoop ? 1 : 1000;
+
+                if(leftClick || playerData.HeldItem.StackAmount < amount)
+                {
+                    return false;
+                }
+            }
+
+            if(amount == playerData.HeldItem.StackAmount)
             {
                 if(PushIngredient(playerData, playerData.HeldItem))
                 {
@@ -125,7 +140,6 @@ namespace RecipeGame.Inventory
                 return false;
             }
 
-            var amount = playerData.HeldItem.StackAmount / 2;
             var addition = playerData.HeldItem.Clone();
             addition.StackAmount = amount;
             if(PushIngredient(playerData, addition))
@@ -176,13 +190,13 @@ namespace RecipeGame.Inventory
                 return false;
             }
 
-            if(playerData.Cauldron.Ingredients.ContainsKey(item.Stats.ItemType))
+            if(playerData.Cauldron.Ingredients.ContainsKey((item.Stats.ItemType, item.Processed)))
             {
-                playerData.Cauldron.Ingredients[item.Stats.ItemType].StackAmount += item.StackAmount;
+                playerData.Cauldron.Ingredients[(item.Stats.ItemType, item.Processed)].StackAmount += item.StackAmount;
             }
             else 
             {
-                playerData.Cauldron.Ingredients[item.Stats.ItemType] = item;
+                playerData.Cauldron.Ingredients[(item.Stats.ItemType, item.Processed)] = item;
             }
 
             playerData.Cauldron.CurrentRecipe = null;
@@ -210,8 +224,8 @@ namespace RecipeGame.Inventory
             
             for(int batch = 0; batch < MaxBatchCount; batch++)
             {
-                var shortIngredients = recipe.Ingredients.Where(i => i.Range.x * batch > cauldron.Ingredients[i.ItemType].StackAmount);
-                var overIngredients = recipe.Ingredients.Where(i => i.Range.y * batch < cauldron.Ingredients[i.ItemType].StackAmount);
+                var shortIngredients = recipe.Ingredients.Where(i => i.Range.x * batch > cauldron.Ingredients[(i.ItemType, i.Processed)].StackAmount);
+                var overIngredients = recipe.Ingredients.Where(i => i.Range.y * batch < cauldron.Ingredients[(i.ItemType, i.Processed)].StackAmount);
 
                 if(shortIngredients.Any())
                 {
@@ -230,7 +244,7 @@ namespace RecipeGame.Inventory
         private bool IngredientTypesMatchRecipe(RecipeStats recipe, Cauldron cauldron)
         {
             return recipe.Ingredients.Length == cauldron.Ingredients.Count
-                && recipe.Ingredients.Select(i => i.ItemType).ToHashSet().SetEquals(cauldron.Ingredients.Keys);
+                && recipe.Ingredients.Select(i => (i.ItemType, i.Processed)).ToHashSet().SetEquals(cauldron.Ingredients.Keys);
         }
 
 

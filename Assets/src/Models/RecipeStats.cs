@@ -1,10 +1,13 @@
 using Godot;
+using static RecipeGame.Helpers.Enums;
 
 namespace RecipeGame.Models
 {
     public class RecipeStats
     {
-        public string Name { get; set; }
+        public ItemType ItemType { get; set; }
+
+        public int? Price { get; set; }
 
         public RecipeIngredient[] Ingredients { get; set; }
 

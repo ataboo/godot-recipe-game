@@ -27,13 +27,23 @@ public class CottageSceneControl : Node2D
         itemControl = GetNode<CottageSceneItemControl>(itemControlPath) ?? throw new NullReferenceException();
         playerControl = GetNode<CottagePlayerController>(playerControlPath) ?? throw new NullReferenceException();
 
+        keyPromptContainer.Connect("pressed", this, nameof(HandleKeyPromptPressed));
+
         itemControl.Init(PlayerData);
         itemControl.Connect(nameof(CottageSceneItemControl.OnLeaveUIPanels), this, nameof(HandleLeaveUIPanels));
     }
 
     public override void _Process(float delta)
     {
-        if(queuedPromptAction != null && Input.IsActionJustPressed("perform_action"))
+        if (Input.IsActionJustPressed("perform_action"))
+        {
+            HandleKeyPromptPressed();
+        }
+    }
+
+    void HandleKeyPromptPressed()
+    {
+        if (queuedPromptAction != null)
         {
             queuedPromptAction();
             ClearKeyPromptAction();
@@ -42,7 +52,7 @@ public class CottageSceneControl : Node2D
 
     void OnHitExitTrigger(Node other)
     {
-        if(other is CottagePlayerController) 
+        if (other is CottagePlayerController)
         {
             EmitSignal(nameof(OnTransitionToMap));
         }
@@ -55,43 +65,67 @@ public class CottageSceneControl : Node2D
 
     void OnEnterBenchTrigger(Node other)
     {
-        QueueKeyPromptAction("Use Prep Bench", () => {GD.Print("Did bench thing!");});
+        if (other is CottagePlayerController)
+        {
+            QueueKeyPromptAction("Use Prep Bench", () =>
+            {
+                itemControl.ShowPrepBench();
+                playerControl.ControlEnabled = false;
+            });
+        }
     }
 
     void OnExitBenchTrigger(Node other)
     {
-        ClearKeyPromptAction();
+        if (other is CottagePlayerController)
+        {
+            ClearKeyPromptAction();
+        }
     }
 
     void OnEnterStorageTrigger(Node other)
     {
-        QueueKeyPromptAction("Open Storage", () => {
-            itemControl.ShowStoragePanel();
-            playerControl.ControlEnabled = false;
-        });
+        if (other is CottagePlayerController)
+        {
+            QueueKeyPromptAction("Open Storage", () =>
+            {
+                itemControl.ShowStoragePanel();
+                playerControl.ControlEnabled = false;
+            });
+        }
     }
 
     void OnExitStorageTrigger(Node other)
     {
-        ClearKeyPromptAction();
+        if (other is CottagePlayerController)
+        {
+            ClearKeyPromptAction();
+        }
     }
 
     void OnEnterCauldronTrigger(Node other)
     {
-        QueueKeyPromptAction("Use Cauldron", () => {
-            itemControl.ShowCauldron();
-            playerControl.ControlEnabled = false;
-        });
+        if (other is CottagePlayerController)
+        {
+            QueueKeyPromptAction("Use Cauldron", () =>
+            {
+                itemControl.ShowCauldron();
+                playerControl.ControlEnabled = false;
+            });
+        }
     }
 
     void OnExitCauldronTrigger(Node other)
     {
-        ClearKeyPromptAction();
+        if (other is CottagePlayerController)
+        {
+            ClearKeyPromptAction();
+        }
     }
 
     private void QueueKeyPromptAction(string prompt, Action action)
     {
-        keyPromptContainer.SetText($"E - {prompt}");
+        keyPromptContainer.Text = $"E - {prompt}";
         keyPromptContainer.Visible = true;
         queuedPromptAction = action;
     }

@@ -1,8 +1,32 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://Art/UI/Items/Mushroom.png" type="Texture" id=1]
 [ext_resource path="res://Assets/fonts/Deutsch.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://Assets/src/InventoryIconControl.cs" type="Script" id=3]
+[ext_resource path="res://Art/UI/ChoppedIcon.png" type="Texture" id=4]
+[ext_resource path="res://Assets/src/ItemTextureDictionary.cs" type="Script" id=5]
+[ext_resource path="res://Art/UI/Items/Bog Water.png" type="Texture" id=6]
+[ext_resource path="res://Art/UI/Items/Berry.png" type="Texture" id=7]
+[ext_resource path="res://Art/UI/Items/Frog.png" type="Texture" id=8]
+[ext_resource path="res://Art/UI/Items/Grain.png" type="Texture" id=9]
+[ext_resource path="res://Art/UI/Items/Guano2.png" type="Texture" id=10]
+[ext_resource path="res://Art/UI/Items/Salt Water.png" type="Texture" id=11]
+[ext_resource path="res://Art/UI/Items/Lodestone.png" type="Texture" id=12]
+[ext_resource path="res://Art/UI/Items/Oyster.png" type="Texture" id=13]
+[ext_resource path="res://Art/UI/Items/Peat Moss.png" type="Texture" id=14]
+[ext_resource path="res://Art/UI/Items/Jellyfish.png" type="Texture" id=15]
+[ext_resource path="res://Art/UI/Items/Wood.png" type="Texture" id=16]
+[ext_resource path="res://Art/UI/Items/Cave Slime.png" type="Texture" id=17]
+[ext_resource path="res://Art/UI/Items/Eye of Newt.png" type="Texture" id=18]
+[ext_resource path="res://Art/UI/Items/Fresh Water.png" type="Texture" id=19]
+[ext_resource path="res://Art/UI/Items/Burnt Muck.png" type="Texture" id=20]
+[ext_resource path="res://Art/UI/Items/Truffle.png" type="Texture" id=21]
+[ext_resource path="res://Art/UI/Items/AmphibianCharmCropped.png" type="Texture" id=22]
+[ext_resource path="res://Art/UI/Items/Salt.png" type="Texture" id=23]
+[ext_resource path="res://Art/UI/Items/Oyster Soup.png" type="Texture" id=24]
+[ext_resource path="res://Art/UI/Items/Gruel.png" type="Texture" id=25]
+[ext_resource path="res://Art/UI/Items/GlowCharm.png" type="Texture" id=26]
+[ext_resource path="res://Art/UI/Items/CharismaCharm.png" type="Texture" id=27]
 
 [sub_resource type="DynamicFont" id=3]
 font_data = ExtResource( 2 )
@@ -23,7 +47,9 @@ __meta__ = {
 }
 countLabelPath = NodePath("Label")
 progressBarPath = NodePath("MarginContainer/Bar")
+choppedLabelPath = NodePath("TextureButton/ChoppedLabel")
 buttonPath = NodePath("TextureButton")
+textureDictionaryPath = NodePath("TextureDictionary")
 
 [node name="TextureButton" type="TextureButton" parent="."]
 margin_right = 64.0
@@ -32,6 +58,18 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 button_mask = 3
 texture_normal = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ChoppedLabel" type="TextureRect" parent="TextureButton"]
+margin_left = 36.0
+margin_top = 36.0
+margin_right = 60.0
+margin_bottom = 60.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -66,3 +104,29 @@ percent_visible = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="TextureDictionary" type="Node" parent="."]
+script = ExtResource( 5 )
+amphibianCharmTexture = ExtResource( 22 )
+berryTexture = ExtResource( 7 )
+bogWaterTexture = ExtResource( 6 )
+burntMuckTexture = ExtResource( 20 )
+caveSlimeTexture = ExtResource( 17 )
+charismaCharmTexture = ExtResource( 27 )
+eyeOfNewtTexture = ExtResource( 18 )
+freshWaterTexture = ExtResource( 19 )
+frogTexture = ExtResource( 8 )
+glowCharmTexture = ExtResource( 26 )
+grainTexture = ExtResource( 9 )
+gruelTexture = ExtResource( 25 )
+guanoTexture = ExtResource( 10 )
+jellyfishTexture = ExtResource( 15 )
+lodestoneTexture = ExtResource( 12 )
+mushroomTexture = ExtResource( 1 )
+oysterTexture = ExtResource( 13 )
+oysterSoupTexture = ExtResource( 24 )
+peatMossTexture = ExtResource( 14 )
+saltTexture = ExtResource( 23 )
+saltWaterTexture = ExtResource( 11 )
+truffleTexture = ExtResource( 21 )
+woodTexture = ExtResource( 16 )

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Godot;
 using RecipeGame.Models;
 using static RecipeGame.Helpers.Enums;
@@ -20,34 +19,25 @@ namespace RecipeGame.Inventory
 
         public IEnumerable<InventoryItem> ForageForItems(BiomeType biome, int forageCount, PlayerInventory playerInventory) 
         {
-            //TODO look for charm in inventory, use up consumables.
-
             return RollForItemDrops(biome, forageCount, false).AccumulateItemStacks(InventoryService.StorageItemSlotCount);
         }
 
         private IEnumerable<InventoryItem> RollForItemDrops(BiomeType biome, int rollCount, bool charmActive) 
         {
-            var weightedDropRates = ExpandWeightedDropRates(biome, false).ToArray();
+            var dropRates = StatsDefinitions.MappedBiomeStats.Value[biome].DropRate;
 
-            
-            return Enumerable.Range(0, rollCount)
-                .Select(i => weightedDropRates[rand.RandiRange(0, weightedDropRates.Length-1)])
-                .Select(d => new InventoryItem(){
-                    StackAmount = rand.RandiRange(d.probability.StackSizeMin, d.probability.StackSizeMax),
-                    Stats = d.stats
-                });
-        }
-
-        private IEnumerable<(ItemType type, ForageProbability probability, InventoryItemStats stats)> ExpandWeightedDropRates(BiomeType biomeType, bool charmActive)
-        {
-            var baseDropRates = StatsDefinitions.MappedBiomeStats.Value[biomeType].DropRate;
-
-            foreach(var dropRateKVP in baseDropRates) 
+            foreach(var dropKVP in dropRates)
             {
-                var weightedCount = dropRateKVP.Value.BaseDropRate;
-                for(int i=0; i<weightedCount; i++) 
+                if(rand.RandiRange(0, 100) <= dropKVP.Value.BaseDropRate)
                 {
-                    yield return (dropRateKVP.Key, dropRateKVP.Value, StatsDefinitions.MappedItemStats.Value[dropRateKVP.Key]);
+                    var count = rand.RandiRange(dropKVP.Value.StackSizeMin, dropKVP.Value.StackSizeMax);
+                    var stats = StatsDefinitions.MappedItemStats.Value[dropKVP.Key];
+                    yield return new InventoryItem
+                    {
+                        Processed = false,
+                        StackAmount = count,
+                        Stats = stats
+                    };
                 }
             }
         }

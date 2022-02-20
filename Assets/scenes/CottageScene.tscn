@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=2]
+[gd_scene load_steps=51 format=2]
 
 [ext_resource path="res://Art/Map/Hut Interior.png" type="Texture" id=1]
 [ext_resource path="res://Assets/src/Cottage/CottageSceneControl.cs" type="Script" id=2]
@@ -12,7 +12,6 @@
 [ext_resource path="res://Art/Map/Cauldron Empty.png" type="Texture" id=10]
 [ext_resource path="res://Assets/ui/CursorItemIcon.tscn" type="PackedScene" id=11]
 [ext_resource path="res://Art/Map/TableTop.png" type="Texture" id=12]
-[ext_resource path="res://Art/UI/SlottedIcon.png" type="Texture" id=13]
 [ext_resource path="res://Assets/src/Cottage/ToolTableControl.cs" type="Script" id=14]
 [ext_resource path="res://Art/Map/Scoop.png" type="Texture" id=15]
 [ext_resource path="res://Assets/src/Cottage/CauldronPanelControl.cs" type="Script" id=16]
@@ -34,9 +33,13 @@
 [ext_resource path="res://Art/Cauldron/ChestBirdsEye.png" type="Texture" id=32]
 [ext_resource path="res://Art/Cauldron/CauldronCottage.png" type="Texture" id=33]
 [ext_resource path="res://Art/Cauldron/Jug.png" type="Texture" id=34]
+[ext_resource path="res://Art/Cottage/PrepTable.png" type="Texture" id=35]
+[ext_resource path="res://Assets/src/Cottage/PrepTablePanel.cs" type="Script" id=36]
+[ext_resource path="res://Assets/ui/InventorySpot.tscn" type="PackedScene" id=37]
+[ext_resource path="res://Art/Cottage/ProcessArrow.png" type="Texture" id=38]
 
 [sub_resource type="CircleShape2D" id=1]
-radius = 66.8098
+radius = 65.5341
 
 [sub_resource type="CircleShape2D" id=6]
 radius = 69.253
@@ -54,6 +57,10 @@ height = 83.1889
 
 [sub_resource type="CircleShape2D" id=4]
 radius = 121.971
+
+[sub_resource type="DynamicFont" id=13]
+size = 40
+font_data = ExtResource( 20 )
 
 [sub_resource type="CircleShape2D" id=8]
 radius = 124.185
@@ -96,20 +103,20 @@ __meta__ = {
 }
 
 [node name="CottageBackground" type="Sprite" parent="CottageVisuals"]
-position = Vector2( 103.883, 0 )
+position = Vector2( 20.2331, -14.2383 )
 texture = ExtResource( 1 )
 centered = false
 
 [node name="CauldronBirdsEye" type="Sprite" parent="CottageVisuals"]
-position = Vector2( 1022.55, 537.605 )
+position = Vector2( 933.561, 501.119 )
 texture = ExtResource( 33 )
 
 [node name="ChestBirdsEye" type="Sprite" parent="CottageVisuals"]
-position = Vector2( 710.052, 253.348 )
+position = Vector2( 637.081, 233.77 )
 texture = ExtResource( 32 )
 
 [node name="TableTop" type="Sprite" parent="CottageVisuals"]
-position = Vector2( 1157.7, 537.347 )
+position = Vector2( 1065.45, 491.66 )
 scale = Vector2( 0.185609, 0.185609 )
 texture = ExtResource( 12 )
 
@@ -123,7 +130,7 @@ position = Vector2( 14.5425, 193.387 )
 texture = ExtResource( 34 )
 
 [node name="PlayerControl" type="KinematicBody2D" parent="."]
-position = Vector2( 1040.56, 872.942 )
+position = Vector2( 944.914, 816.678 )
 script = ExtResource( 4 )
 
 [node name="PlayerSprite" type="Sprite" parent="PlayerControl"]
@@ -133,16 +140,17 @@ texture = ExtResource( 3 )
 shape = SubResource( 1 )
 
 [node name="CottageColliders" type="Node2D" parent="."]
+position = Vector2( -64.0723, 65.8522 )
 
 [node name="WallCollider" type="StaticBody2D" parent="CottageColliders"]
 position = Vector2( 103.883, 0 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CottageColliders/WallCollider"]
-position = Vector2( -113.871, -32.9627 )
-polygon = PoolVector2Array( 205.442, 62.3401, 161.715, 909.964, 820.016, 1249.36, 1222.76, 1264.42, 1237.82, 1054.33, 1164.89, 1056.71, 1152.2, 1156.6, 934.973, 1151.05, 931.458, 1091.98, 945.442, 971.119, 864.533, 963.128, 687.733, 916.181, 568.867, 853.252, 481.966, 786.327, 414.042, 697.428, 371.091, 586.553, 374.087, 487.665, 424.031, 362.806, 548.89, 242.941, 772.637, 141.057, 960.003, 102.555, 1229.09, 127.221, 1430.9, 201.22, 1577.78, 307.734, 1662.99, 447.883, 1679.81, 540.942, 1655.14, 664.274, 1586.75, 759.575, 1474.63, 857.119, 1326.63, 931.118, 1180.88, 962.512, 1145, 970.36, 1153.21, 1096.98, 1854, 966.971, 1759.61, 48.2668 )
+position = Vector2( -117.642, -32.9628 )
+polygon = PoolVector2Array( 145.738, -33.0878, 161.715, 909.964, 820.016, 1249.36, 1222.76, 1264.42, 1237.82, 1054.33, 1156.37, 1054.12, 1152.2, 1156.6, 924.435, 1153.11, 915.323, 985.675, 752.586, 982.111, 384.348, 717.217, 398.602, 346.603, 762.272, 118.85, 1300.62, 120.736, 1667.65, 366.422, 1675.64, 722.021, 1311.93, 982.463, 1152.59, 988.12, 1153.21, 1096.98, 1854, 966.971, 1824.9, -25.1598 )
 
 [node name="CauldronCollider" type="StaticBody2D" parent="CottageColliders"]
-position = Vector2( 1025.13, 534.539 )
+position = Vector2( 998.433, 434.871 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CottageColliders/CauldronCollider"]
 position = Vector2( 0, 6.28717 )
@@ -151,31 +159,107 @@ shape = SubResource( 6 )
 [node name="Triggers" type="Node2D" parent="."]
 
 [node name="BenchTrigger" type="Area2D" parent="Triggers"]
-position = Vector2( 542.384, 519.591 )
+position = Vector2( 469.413, 507.133 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/BenchTrigger"]
 position = Vector2( -36.9583, -19.9774 )
 shape = SubResource( 10 )
 
 [node name="ExitTrigger" type="Area2D" parent="Triggers"]
-position = Vector2( 1041.29, 1052.94 )
+position = Vector2( 964.073, 1050.17 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/ExitTrigger"]
 position = Vector2( -5.21411, 15.5247 )
 shape = SubResource( 5 )
 
 [node name="StorageTrigger" type="Area2D" parent="Triggers"]
-position = Vector2( 760.602, 321.031 )
+position = Vector2( 691.19, 301.453 )
 rotation = -2.17468
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/StorageTrigger"]
 shape = SubResource( 3 )
 
 [node name="Cauldron Trigger" type="Area2D" parent="Triggers"]
-position = Vector2( 1021.23, 567.69 )
+position = Vector2( 934.021, 499.168 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/Cauldron Trigger"]
 shape = SubResource( 4 )
+
+[node name="PrepTablePanel" type="Node2D" parent="."]
+visible = false
+position = Vector2( -90.1211, 44.6636 )
+script = ExtResource( 36 )
+processButtonPath = NodePath("PanelContainer/HBoxContainer/Process")
+leaveButtonPath = NodePath("PanelContainer/HBoxContainer/Leave")
+inputSpotPath = NodePath("GridContainer/InventorySpot")
+outputSpotPath = NodePath("GridContainer/InventorySpot2")
+
+[node name="PrepTable" type="Sprite" parent="PrepTablePanel"]
+position = Vector2( 1049.22, 492.865 )
+texture = ExtResource( 35 )
+
+[node name="GridContainer" type="HBoxContainer" parent="PrepTablePanel"]
+margin_left = 941.975
+margin_top = 612.768
+margin_right = 1145.97
+margin_bottom = 712.768
+grow_horizontal = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="InventorySpot" parent="PrepTablePanel/GridContainer" instance=ExtResource( 37 )]
+
+[node name="TextureRect" type="TextureRect" parent="PrepTablePanel/GridContainer"]
+margin_left = 104.0
+margin_top = 14.0
+margin_right = 176.0
+margin_bottom = 86.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource( 38 )
+
+[node name="InventorySpot2" parent="PrepTablePanel/GridContainer" instance=ExtResource( 37 )]
+margin_left = 180.0
+margin_right = 280.0
+
+[node name="PanelContainer" type="PanelContainer" parent="PrepTablePanel"]
+margin_left = 1388.44
+margin_top = 717.8
+margin_right = 1768.44
+margin_bottom = 781.8
+size_flags_horizontal = 4
+size_flags_vertical = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PrepTablePanel/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 373.0
+margin_bottom = 57.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Process" type="Button" parent="PrepTablePanel/PanelContainer/HBoxContainer"]
+margin_right = 194.0
+margin_bottom = 50.0
+custom_fonts/font = SubResource( 13 )
+text = "Process (F)"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Leave" type="Button" parent="PrepTablePanel/PanelContainer/HBoxContainer"]
+margin_left = 198.0
+margin_right = 366.0
+margin_bottom = 50.0
+custom_fonts/font = SubResource( 13 )
+text = "Leave (Q)"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="CauldronPanel" type="Node2D" parent="."]
 visible = false
@@ -269,7 +353,6 @@ texture = ExtResource( 12 )
 region_rect = Rect2( 60.1954, 55.0933, 495.318, 862.813 )
 script = ExtResource( 14 )
 scoopAreaPath = NodePath("ScoopArea")
-slottedAreaPath = NodePath("SlottedArea")
 tableAreaPath = NodePath("TableArea")
 bowlPath = NodePath("PitcherArea")
 
@@ -308,19 +391,6 @@ texture = ExtResource( 34 )
 position = Vector2( 39.2834, -28.7429 )
 polygon = PoolVector2Array( 49.3945, 34.8667, 26.7279, -15.1333, 29.0612, -60.8, -1.93884, -86.4667, -86.2721, -95.8, -109.939, -66.4667, -105.272, -34.1333, -135.605, 28.8667, -127.264, 112.357, -69.2721, 166.533, -4.60547, 158.2, 31.3945, 113.867 )
 
-[node name="SlottedArea" type="Area2D" parent="CauldronPanel/ToolTable"]
-position = Vector2( -40.6666, -106 )
-priority = 2.0
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CauldronPanel/ToolTable/SlottedArea"]
-position = Vector2( 14.6666, -8 )
-polygon = PoolVector2Array( 156.45, 100.668, 172.45, 68.0015, 34.4501, 22.0015, -16.2166, -33.3319, -84.2166, -70.6652, -132.883, -60.6652, -138.217, 8.00146, -89.5499, 62.0015, 0.450073, 64.6681 )
-
-[node name="SlottedIcon" type="Sprite" parent="CauldronPanel/ToolTable/SlottedArea"]
-position = Vector2( 41.6125, 7.96814 )
-scale = Vector2( 3.89923, 3.89923 )
-texture = ExtResource( 13 )
-
 [node name="CauldronInventory" type="Area2D" parent="CauldronPanel"]
 position = Vector2( 974.297, 660.008 )
 priority = 1.0
@@ -358,12 +428,12 @@ __meta__ = {
 }
 
 [node name="LeaveButton" type="Button" parent="CauldronPanel"]
-margin_left = 1766.55
-margin_top = 992.403
-margin_right = 1877.55
-margin_bottom = 1042.4
+margin_left = 1678.71
+margin_top = 937.373
+margin_right = 1867.71
+margin_bottom = 987.373
 custom_fonts/font = SubResource( 2 )
-text = "Leave"
+text = "Leave  (Q)"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -395,6 +465,7 @@ cauldronPanelPath = NodePath("../CauldronPanel")
 toolTablePath = NodePath("../CauldronPanel/ToolTable")
 cauldronInventoryPath = NodePath("../CauldronPanel/CauldronInventory")
 garbageControlPath = NodePath("../CauldronPanel/GarbageArea")
+prepBenchPanelPath = NodePath("../PrepTablePanel")
 
 [node name="UI" type="CanvasLayer" parent="."]
 layer = 3
@@ -410,17 +481,17 @@ margin_bottom = 836.0
 visible = false
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -1326.0
+margin_left = -1415.03
 margin_top = 24.0
-margin_right = -28.0
+margin_right = -117.034
 margin_bottom = 788.0
 
 [node name="KeyPrompt" parent="UI" instance=ExtResource( 7 )]
 visible = false
-margin_left = -271.862
-margin_top = -81.1287
-margin_right = -16.8622
-margin_bottom = -23.1287
+margin_left = -231.816
+margin_top = -70.4174
+margin_right = -31.8157
+margin_bottom = -29.4174
 script = ExtResource( 8 )
 
 [node name="InventoryCursor" parent="UI" instance=ExtResource( 11 )]

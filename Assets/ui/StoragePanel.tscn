@@ -10,7 +10,7 @@
 size = 24
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=13]
 size = 40
 font_data = ExtResource( 3 )
 
@@ -491,7 +491,7 @@ custom_constants/separation = 10
 alignment = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="StoragePanelGrid/MarginContainer2/VBoxContainer/HBoxContainer"]
-margin_left = 1150.0
+margin_left = 1076.0
 margin_right = 1244.0
 margin_bottom = 62.0
 custom_constants/margin_top = 6
@@ -499,7 +499,7 @@ custom_constants/margin_bottom = 6
 
 [node name="LeaveButton" type="Button" parent="StoragePanelGrid/MarginContainer2/VBoxContainer/HBoxContainer/MarginContainer"]
 margin_top = 6.0
-margin_right = 94.0
+margin_right = 168.0
 margin_bottom = 56.0
-custom_fonts/font = SubResource( 3 )
-text = "Leave"
+custom_fonts/font = SubResource( 13 )
+text = "Leave (Q)"

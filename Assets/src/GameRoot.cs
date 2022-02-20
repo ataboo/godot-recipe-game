@@ -1,4 +1,5 @@
 using Godot;
+using RecipeGame.Helpers;
 using RecipeGame.Inventory;
 using RecipeGame.Models;
 using System;
@@ -6,6 +7,9 @@ using static RecipeGame.Helpers.Enums;
 
 public class GameRoot : Node2D
 {
+    [Export]
+    public NodePath recipePanelPath;
+
     private readonly InventoryService _inventoryService = new InventoryService();
 
     private MainMenuControl mainMenu;
@@ -20,6 +24,8 @@ public class GameRoot : Node2D
 
     private PlayerData playerData;
 
+    private RecipePanelControl recipePanel;
+
     private PackedScene cottageSceneRes = GD.Load<PackedScene>("res://Assets/scenes/CottageScene.tscn");
     private PackedScene outdoorSceneRes = GD.Load<PackedScene>("res://Assets/scenes/OutdoorScene.tscn");
 
@@ -28,18 +34,32 @@ public class GameRoot : Node2D
         mainMenu = GetNode<MainMenuControl>("MainMenu") ?? throw new NullReferenceException();
         fadePanel = GetNode<FadePanel>("FadePanel") ?? throw new NullReferenceException();
         levelHolder = GetNode<Node2D>("LevelHolder") ?? throw new NullReferenceException();
+        recipePanel = this.MustGetNode<RecipePanelControl>(recipePanelPath);
+
+        mainMenu.Connect(nameof(MainMenuControl.OnStartNewGame), this, nameof(HandleNewGamePress));
+        mainMenu.HamburgerButton.Connect("pressed", this, nameof(HandlePausePress));
+
+        recipePanel.Visible = false;
     }
 
     public override void _Process(float delta)
     {
-        if(!transitioning && level != null && Input.IsActionJustPressed("ui_cancel")) 
+        if(Input.IsActionJustPressed("ui_cancel")) 
         {
-            mainMenu.Visible = !mainMenu.Visible;
-            GetTree().Paused = mainMenu.Visible;
+            HandlePausePress();
         }        
     }
 
-    void OnNewGameButtonPress() 
+    void HandlePausePress()
+    {
+        if(!transitioning && level != null) 
+        {
+            mainMenu.Visible = !mainMenu.Visible;
+            GetTree().Paused = mainMenu.Visible;
+        }  
+    }
+
+    void HandleNewGamePress() 
     {
         if(transitioning) 
         {
@@ -48,18 +68,13 @@ public class GameRoot : Node2D
 
         playerData = new PlayerData();
         _inventoryService.InitNewInventories(playerData);
+
+        recipePanel.Show();
+        recipePanel.UpdateUnlockedRecipes(playerData);
+        mainMenu.ConfirmNewGames = true;
+        mainMenu.SpeedClock.Start();
         
         TransitionToCottage();
-        // TransitionToMap();
-    }
-
-    void OnContinueButtonPress() 
-    {
-        if(transitioning) 
-        {
-            return;
-        }
-        throw new NotImplementedException();
     }
     
     void OnInstructionsButtonPress() 
@@ -71,24 +86,14 @@ public class GameRoot : Node2D
         throw new NotSupportedException();
     }
 
-    void OnQuitButtonPress() 
-    {
-        if(transitioning) 
-        {
-            return;
-        }
-        
-        //TODO: Save
-
-        GetTree().Quit();
-    }
-
     public void TransitionToMap() 
     {
         DoTransition(() => {
             var outdoorLevel = outdoorSceneRes.Instance<OutdoorSceneControl>();
             outdoorLevel.PlayerData = playerData;
             outdoorLevel.Connect(nameof(OutdoorSceneControl.OnTransitionToCottage), this, nameof(TransitionToCottage));
+            outdoorLevel.Connect(nameof(OutdoorSceneControl.OnPurchasedRecipe), this, nameof(HandlePurchasedRecipe));
+            outdoorLevel.Connect(nameof(OutdoorSceneControl.OnGameVictory), this, nameof(HandleGameVictory));
             return outdoorLevel;
         });
     }
@@ -102,6 +107,16 @@ public class GameRoot : Node2D
             
             return cottageLevel;
         });
+    }
+
+    public void HandlePurchasedRecipe()
+    {
+        recipePanel.UpdateUnlockedRecipes(playerData);
+    }
+
+    public void HandleGameVictory()
+    {
+        mainMenu.SpeedClock.Stop();
     }
 
     private async void DoTransition(Func<Node> loadSceneAction) 

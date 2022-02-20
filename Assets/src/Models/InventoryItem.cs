@@ -14,11 +14,11 @@ namespace RecipeGame.Models
 
         public string DisplayName => Processed ? Stats.ProcessedName : Stats.Name;
 
-        public InventoryItem Clone() 
+        public InventoryItem Clone(bool empty = false) 
         {
             return new InventoryItem 
             {
-                StackAmount = this.StackAmount,
+                StackAmount = empty ? 0 : this.StackAmount,
                 Stats = this.Stats,
                 Processed = this.Processed
             };

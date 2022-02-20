@@ -1,0 +1,60 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Assets/fonts/MainFont40.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Assets/fonts/MainFont24.tres" type="DynamicFont" id=2]
+[ext_resource path="res://Assets/src/Outdoor/MarketBuyRowControl.cs" type="Script" id=3]
+
+[node name="MarketBuyRow" type="PanelContainer"]
+margin_right = 1291.0
+margin_bottom = 64.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+buyButtonPath = NodePath("HBoxContainer/BuyButton")
+nameLabelPath = NodePath("HBoxContainer/RecipeNameLabel")
+priceLabelPath = NodePath("HBoxContainer/MarginContainer/BuyPriceLabel")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 1284.0
+margin_bottom = 57.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RecipeNameLabel" type="Label" parent="HBoxContainer"]
+margin_top = 11.0
+margin_right = 1097.0
+margin_bottom = 38.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 2 )
+text = "Recipe: Mushrooms"
+autowrap = true
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+margin_left = 1101.0
+margin_right = 1201.0
+margin_bottom = 50.0
+custom_constants/margin_right = 20
+
+[node name="BuyPriceLabel" type="Label" parent="HBoxContainer/MarginContainer"]
+margin_top = 3.0
+margin_right = 80.0
+margin_bottom = 47.0
+custom_colors/font_color = Color( 0.87451, 0.886275, 0.34902, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "500"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BuyButton" type="Button" parent="HBoxContainer"]
+margin_left = 1205.0
+margin_right = 1277.0
+margin_bottom = 50.0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+custom_colors/font_color = Color( 0.87451, 0.886275, 0.34902, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "Buy"

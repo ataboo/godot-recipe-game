@@ -24,6 +24,8 @@ public class CottageSceneItemControl : Node
     public NodePath cauldronInventoryPath;
     [Export]
     public NodePath garbageControlPath;
+    [Export]
+    public NodePath prepBenchPanelPath;
 
     private InventoryGridControl satchel;
     private StoragePanelControl storagePanel;
@@ -35,6 +37,7 @@ public class CottageSceneItemControl : Node
     private CauldronPanelControl cauldronPanel;
     private CauldronInventoryControl cauldronInventory;
     private GarbageAreaControl garbageControl;
+    private PrepTablePanel prepBenchPanel;
 
     public override void _Ready()
     {
@@ -48,6 +51,7 @@ public class CottageSceneItemControl : Node
         cauldronPanel = GetNode<CauldronPanelControl>(cauldronPanelPath) ?? throw new NullReferenceException();
         cauldronInventory = GetNode<CauldronInventoryControl>(cauldronInventoryPath) ?? throw new NullReferenceException();
         garbageControl = GetNode<GarbageAreaControl>(garbageControlPath) ?? throw new NullReferenceException();
+        prepBenchPanel = GetNode<PrepTablePanel>(prepBenchPanelPath) ?? throw new NullReferenceException();
 
         storagePanel.InventoryGrid.Connect(nameof(InventoryGridControl.OnItemLeftPress), this, nameof(HandleInventoryItemClick), new Godot.Collections.Array{nameof(StorageInventory), true});
         storagePanel.InventoryGrid.Connect(nameof(InventoryGridControl.OnItemRightPress), this, nameof(HandleInventoryItemClick), new Godot.Collections.Array{nameof(StorageInventory), false});
@@ -68,6 +72,34 @@ public class CottageSceneItemControl : Node
         
         garbageControl.Connect(nameof(GarbageAreaControl.OnClickGarbage), this, nameof(HandleClickGarbage));
         garbageControl.Connect(nameof(GarbageAreaControl.OnConfirm), this, nameof(HandleConfirmGarbage));
+
+        prepBenchPanel.LeaveButton.Connect("pressed", this, nameof(HandlePrepBenchLeaveClick));
+        prepBenchPanel.ProcessButton.Connect("pressed", this, nameof(HandlePrepBenchProcess));
+
+        prepBenchPanel.InputSpot.IconControl.Connect(
+            nameof(InventoryIconControl.OnLeftPress), 
+            this, 
+            nameof(HandleInventoryItemClick), 
+            new Godot.Collections.Array{0, "prep_bench_input", true}
+        );
+        prepBenchPanel.InputSpot.IconControl.Connect(
+            nameof(InventoryIconControl.OnRightPress), 
+            this, 
+            nameof(HandleInventoryItemClick), 
+            new Godot.Collections.Array{0, "prep_bench_input", false}
+        );
+        prepBenchPanel.OutputSpot.IconControl.Connect(
+            nameof(InventoryIconControl.OnLeftPress), 
+            this, 
+            nameof(HandleInventoryItemClick), 
+            new Godot.Collections.Array{0, "prep_bench_output", true}
+        );
+        prepBenchPanel.OutputSpot.IconControl.Connect(
+            nameof(InventoryIconControl.OnRightPress), 
+            this, 
+            nameof(HandleInventoryItemClick), 
+            new Godot.Collections.Array{0, "prep_bench_output", false}
+        );
     }
 
     public override void _Process(float delta)
@@ -94,6 +126,27 @@ public class CottageSceneItemControl : Node
         if(cauldronPanel.Visible)
         {
             cauldronInventory.UpdateVisuals(playerData.Cauldron, delta);
+        }
+
+        if(Input.IsActionJustPressed("close_panel"))
+        {
+            if(storagePanel.Visible)
+            {
+                HandleStorageLeaveClick();
+            }
+            else if(cauldronPanel.Visible)
+            {
+                HandleCauldronLeaveButtonClick();
+            }
+            else if(prepBenchPanel.Visible)
+            {
+                HandlePrepBenchLeaveClick();
+            }
+        }
+
+        if(prepBenchPanel.Visible && Input.IsActionJustPressed("alternate_action"))
+        {
+            HandlePrepBenchProcess();
         }
     }
 
@@ -123,6 +176,16 @@ public class CottageSceneItemControl : Node
         satchel.Visible = true;
     }
 
+    public void ShowPrepBench()
+    {
+        prepBenchPanel.SetItems(playerData.PrepBench.InputItem, playerData.PrepBench.OutputItem, inventoryService.PrepBenchCanProcess(playerData.PrepBench));
+        satchel.SetItems(playerData.Inventory.Items);
+        cursorIcon.SetHeldItem(playerData.HeldItem, playerData.HeldTool);
+
+        prepBenchPanel.Visible = true;
+        satchel.Visible = true;
+    }
+
     void HandleInventoryItemClick(int index, string panelName, bool leftClick)
     {
         IInventory sourceInventory;
@@ -139,13 +202,17 @@ public class CottageSceneItemControl : Node
                 {
                     destInventory = playerData.Storage;
                 }
-                // else if(propBenchPanel.Visible)
-                // {
-                //     destInventory = playerData.PrepBench;
-                // }
+                else if(prepBenchPanel.Visible)
+                {
+                    destInventory = playerData.PrepBench.InputItems;
+                }
                 break;
-            case nameof(PrepBench):
-                sourceInventory = playerData.PrepBench;
+            case "prep_bench_input":
+                sourceInventory = playerData.PrepBench.InputItems;
+                destInventory = playerData.Inventory;
+                break;
+            case "prep_bench_output":
+                sourceInventory = playerData.PrepBench.OutputItems;
                 destInventory = playerData.Inventory;
                 break;
             default:
@@ -177,10 +244,10 @@ public class CottageSceneItemControl : Node
             {
                 satchel.SetItems(playerData.Inventory.Items);   
             }
-            // if(prepBenchPanel.Visible)
-            // {
-            //     prepBenchPanel.SetItems(playerData.PrepBench.Items);
-            // }
+            if(prepBenchPanel.Visible)
+            {
+                prepBenchPanel.SetItems(playerData.PrepBench.InputItem, playerData.PrepBench.OutputItem, inventoryService.PrepBenchCanProcess(playerData.PrepBench));
+            }
 
             cursorIcon.SetHeldItem(playerData.HeldItem, playerData.HeldTool);
         }
@@ -268,6 +335,24 @@ public class CottageSceneItemControl : Node
         cursorIcon.SetHeldItem(playerData.HeldItem, playerData.HeldTool);
 
         EmitSignal(nameof(OnLeaveUIPanels));
+    }
+
+    void HandlePrepBenchLeaveClick()
+    {
+        prepBenchPanel.Visible = false;
+        satchel.Visible = false;
+        inventoryService.EmptyPlayerHand(playerData);
+        cursorIcon.SetHeldItem(playerData.HeldItem, playerData.HeldTool);
+
+        EmitSignal(nameof(OnLeaveUIPanels));
+    }
+
+    void HandlePrepBenchProcess()
+    {
+        if(inventoryService.ProcessPrepBench(playerData.PrepBench))
+        {
+            prepBenchPanel.SetItems(playerData.PrepBench.InputItem, playerData.PrepBench.OutputItem, inventoryService.PrepBenchCanProcess(playerData.PrepBench));
+        }
     }
 
     void HandleStorageSort()

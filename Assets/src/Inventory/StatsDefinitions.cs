@@ -41,11 +41,11 @@ namespace RecipeGame.Inventory
             new IS(ItemType.Gruel, "Gruel", null, 64, 5, 1, ItemDisplayMode.Discrete, false),
             new IS(ItemType.BogWater, "Bog Water", null, 10000, 40, 1, ItemDisplayMode.Bar, true),
             new IS(ItemType.AmphibianCharm, "Amphibian Charm", "Cubed Amphibian Charm", 1, 300, 1, ItemDisplayMode.Single, false),
-            new IS(ItemType.Salt, "Salt", null, 64, 3, 1, ItemDisplayMode.Discrete, false),
-            new IS(ItemType.OysterSoup, "Oyster Soup", null, 64, 80, 1, ItemDisplayMode.Discrete, false),
-            new IS(ItemType.GlowCharm, "Glow Charm", "Mashed Glow Charm", 1, 500, 1, ItemDisplayMode.Single, false),
-            new IS(ItemType.CharismaCharm, "Charisma Charm", null, 1, 2500, 1, ItemDisplayMode.Single, false),
-            new IS(ItemType.BurntMuck, "Burnt Much", "Squished Burnt Much", 64, 1, 1, ItemDisplayMode.Discrete, false),
+            new IS(ItemType.Salt, "Salt", null, 64, 20, 1, ItemDisplayMode.Discrete, false),
+            new IS(ItemType.OysterSoup, "Oyster Soup", null, 64, 200, 1, ItemDisplayMode.Discrete, false),
+            new IS(ItemType.GlowCharm, "Glow Charm", "Mashed Glow Charm", 1, 1600, 1, ItemDisplayMode.Single, false),
+            new IS(ItemType.CharismaCharm, "Charisma Charm", null, 1, 4000, 1, ItemDisplayMode.Single, false),
+            new IS(ItemType.BurntMuck, "Burnt Much", "Squished Burnt Muck", 64, 1, 1, ItemDisplayMode.Discrete, false),
         };
 
         public static Lazy<Dictionary<ItemType, IS>> MappedItemStats = new Lazy<Dictionary<ItemType, IS>>(() => {
@@ -72,17 +72,17 @@ namespace RecipeGame.Inventory
             new BS(BiomeType.Lake, new Dictionary<ItemType, FP>{
                 {ItemType.FreshWater, new FP(100, 800, 1200)},
                 {ItemType.PeatMoss, new FP(50, 2, 10)},
-                {ItemType.EyeOfNewt, new FP(25, 1, 4)},
+                {ItemType.EyeOfNewt, new FP(25, 2, 6)},
                 {ItemType.Frog, new FP(5, 1, 1)}
             }),
             new BS(BiomeType.Shore, new Dictionary<ItemType, FP>{
                 {ItemType.SaltWater, new FP(100, 800, 1200)},
-                {ItemType.Oyster, new FP(25, 1, 4)},
+                {ItemType.Oyster, new FP(50, 3, 8)},
                 {ItemType.Jellyfish, new FP(5, 1, 1)}
             }),
             new BS(BiomeType.Cave, new Dictionary<ItemType, FP>{
                 {ItemType.CaveSlime, new FP(100, 800, 1200)},
-                {ItemType.Guano, new FP(25, 1, 4)},
+                {ItemType.Guano, new FP(50, 2, 8)},
                 {ItemType.Lodestone, new FP(5, 1, 1)}
             })
         };
@@ -93,7 +93,8 @@ namespace RecipeGame.Inventory
         {
             new RS()
             {
-                Name = "Gruel",
+                ItemType = ItemType.Gruel,
+                Price = null,
                 Temperature = new Vector2(100, 1e7f),
                 CookTime = 15,
                 Ingredients = new RI[]{
@@ -106,7 +107,8 @@ namespace RecipeGame.Inventory
             },
             new RS()
             {
-                Name = "Bog Water",
+                ItemType = ItemType.BogWater,
+                Price = 200,
                 Temperature = new Vector2(100, 400),
                 CookTime = 15,
                 Ingredients = new RI[]{
@@ -120,7 +122,8 @@ namespace RecipeGame.Inventory
             },
             new RS()
             {
-                Name = "Amphibian Charm",
+                ItemType = ItemType.AmphibianCharm,
+                Price = 400,
                 Temperature = new Vector2(100, 400),
                 CookTime = 30,
                 Ingredients = new RI[]{
@@ -137,7 +140,8 @@ namespace RecipeGame.Inventory
             },
             new RS()
             {
-                Name = "Salt",
+                ItemType = ItemType.Salt,
+                Price = 500,
                 Temperature = new Vector2(300, 1e7f),
                 CookTime = 15,
                 Ingredients = new RI[]{
@@ -150,7 +154,8 @@ namespace RecipeGame.Inventory
             },
             new RS()
             {
-                Name = "Oyster Soup",
+                ItemType = ItemType.OysterSoup,
+                Price = 1000,
                 Temperature = new Vector2(100, 300),
                 CookTime = 30,
                 Ingredients = new RI[]{
@@ -165,7 +170,8 @@ namespace RecipeGame.Inventory
             },
             new RS()
             {
-                Name = "Glow Charm",
+                ItemType = ItemType.GlowCharm,
+                Price = 2000,
                 Temperature = new Vector2(100, 400),
                 CookTime = 45,
                 Ingredients = new RI[]{
@@ -181,14 +187,15 @@ namespace RecipeGame.Inventory
             },
             new RS()
             {
-                Name = "Charisma Charm",
+                ItemType = ItemType.CharismaCharm,
+                Price = 4000,
                 Temperature = new Vector2(200, 400),
                 CookTime = 60,
                 Ingredients = new RI[]{
                     new RI(ItemType.SaltWater, new Vector2(750, 1250), false),
                     new RI(ItemType.FreshWater, new Vector2(750, 1250), false),
                     new RI(ItemType.BogWater, new Vector2(750, 1250), false),
-                    new RI(ItemType.CaveSlime, new Vector2(750, 1250), true),
+                    new RI(ItemType.CaveSlime, new Vector2(750, 1250), false),
                     new RI(ItemType.Guano, new Vector2(6, 12), true),
                     new RI(ItemType.Lodestone, new Vector2(1, 1), true),
                     new RI(ItemType.AmphibianCharm, new Vector2(1, 1), true),
@@ -200,7 +207,8 @@ namespace RecipeGame.Inventory
             },
             new RS()
             {
-                Name = "Burnt Muck",
+                ItemType = ItemType.BurntMuck,
+                Price = null,
                 Temperature = new Vector2(400, 1e7f),
                 CookTime = 10,
                 Ingredients = new RI[]{
@@ -218,5 +226,7 @@ namespace RecipeGame.Inventory
                 },
             },
         };
+
+        public static Lazy<Dictionary<ItemType, RS>> MappedRecipeStats = new Lazy<Dictionary<ItemType, RS>>(() => RecipeStats.ToDictionary(s => s.ItemType, s => s));
     }
 }

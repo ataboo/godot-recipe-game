@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://Assets/src/Outdoor/PlayerMapController.cs" type="Script" id=1]
 [ext_resource path="res://Art/Map/Witch.png" type="Texture" id=2]
@@ -18,6 +18,14 @@
 [ext_resource path="res://Art/Map/Seaside.png" type="Texture" id=16]
 [ext_resource path="res://Art/Map/Cave.png" type="Texture" id=17]
 [ext_resource path="res://Art/Map/Map.png" type="Texture" id=18]
+[ext_resource path="res://Assets/ui/MarketPanel.tscn" type="PackedScene" id=19]
+[ext_resource path="res://Assets/fonts/MainFont32.tres" type="DynamicFont" id=20]
+[ext_resource path="res://Art/CanvasBackground.png" type="Texture" id=21]
+[ext_resource path="res://Assets/fonts/AlmendriaBold24.tres" type="DynamicFont" id=22]
+[ext_resource path="res://Assets/fonts/AlmendriaNormal24.tres" type="DynamicFont" id=23]
+[ext_resource path="res://Assets/fonts/Deutsch.ttf" type="DynamicFontData" id=24]
+[ext_resource path="res://Assets/src/Outdoor/VictoryPanelControl.cs" type="Script" id=25]
+[ext_resource path="res://Assets/fonts/MainFont40.tres" type="DynamicFont" id=26]
 
 [sub_resource type="CircleShape2D" id=3]
 radius = 90.9415
@@ -28,6 +36,10 @@ extents = Vector2( 984, 12 )
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 12, 539 )
 
+[sub_resource type="DynamicFont" id=4]
+size = 60
+font_data = ExtResource( 24 )
+
 [node name="OutdoorScene" type="Node2D"]
 script = ExtResource( 6 )
 promptPath = NodePath("UI/KeyPrompt")
@@ -36,6 +48,8 @@ shoreAreaPath = NodePath("Triggers/ShoreArea")
 forestAreaPath = NodePath("Triggers/ForestArea")
 lakeAreaPath = NodePath("Triggers/LakeArea")
 townAreaPath = NodePath("Triggers/TownArea")
+caveWarningPanelPath = NodePath("Triggers/CaveArea/CaveWarningPanel")
+shoreWarningPanelPath = NodePath("Triggers/ShoreArea/ShoreWarningPanel")
 
 [node name="CanvasBackground" type="Sprite" parent="."]
 texture = ExtResource( 18 )
@@ -71,6 +85,7 @@ texture = ExtResource( 4 )
 
 [node name="TownArea" type="Area2D" parent="Triggers"]
 position = Vector2( 1598.21, 213.293 )
+script = ExtResource( 11 )
 
 [node name="Town2" type="Sprite" parent="Triggers/TownArea"]
 position = Vector2( 8.94653, -6.43036 )
@@ -119,6 +134,23 @@ __meta__ = {
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/CaveArea"]
 shape = SubResource( 3 )
+
+[node name="CaveWarningPanel" type="Panel" parent="Triggers/CaveArea"]
+visible = false
+margin_left = -104.0
+margin_top = -132.38
+margin_right = 115.0
+margin_bottom = -41.3797
+
+[node name="Label" type="Label" parent="Triggers/CaveArea/CaveWarningPanel"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 218.0
+margin_bottom = 80.0
+custom_fonts/font = ExtResource( 20 )
+text = "The cave is too 
+dark to explore!"
+align = 1
 
 [node name="LakeArea" type="Area2D" parent="Triggers"]
 position = Vector2( 1600.7, 812.634 )
@@ -173,6 +205,26 @@ __meta__ = {
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/ShoreArea"]
 shape = SubResource( 3 )
+
+[node name="ShoreWarningPanel" type="Panel" parent="Triggers/ShoreArea"]
+visible = false
+margin_left = -157.333
+margin_top = 36.0
+margin_right = 109.667
+margin_bottom = 127.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Triggers/ShoreArea/ShoreWarningPanel"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 218.0
+margin_bottom = 80.0
+custom_fonts/font = ExtResource( 20 )
+text = "The Water is 
+too Deep to Explore"
+align = 1
 
 [node name="HutArea" type="Area2D" parent="."]
 position = Vector2( 988.023, 376.132 )
@@ -240,6 +292,8 @@ script = ExtResource( 13 )
 satchelPath = NodePath("../UI/SatchelPanel")
 foragePath = NodePath("../UI/ForagePanel")
 cursorIconPath = NodePath("../UI/InventoryCursor")
+marketPanelPath = NodePath("../UI/MarketPanel")
+victoryPanelPath = NodePath("../UI/VictoryPanel")
 
 [node name="UI" type="CanvasLayer" parent="."]
 layer = 3
@@ -254,20 +308,116 @@ margin_bottom = 996.0
 [node name="ForagePanel" parent="UI" instance=ExtResource( 8 )]
 visible = false
 anchor_left = 1.0
-margin_left = -1324.0
+margin_left = -1416.55
 margin_top = 24.0
-margin_right = -1324.0
+margin_right = -1416.55
 margin_bottom = 24.0
 
 [node name="KeyPrompt" parent="UI" instance=ExtResource( 9 )]
 visible = false
-margin_left = -271.862
-margin_top = -81.1287
-margin_right = -16.8622
-margin_bottom = -23.1287
+margin_left = -323.545
+margin_top = -70.0045
+margin_right = -123.545
+margin_bottom = -29.0045
+grow_vertical = 2
 script = ExtResource( 10 )
 
-[node name="InventoryCursor" parent="UI" instance=ExtResource( 12 )]
+[node name="MarketPanel" parent="UI" instance=ExtResource( 19 )]
 visible = false
+margin_left = 507.314
+margin_top = 25.2585
+margin_right = 1860.31
+margin_bottom = 989.258
+
+[node name="VictoryPanel" type="TextureRect" parent="UI"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource( 21 )
+script = ExtResource( 25 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+closeButtonPath = NodePath("CenterContainer/PanelContainer/VBoxContainer/Button")
+
+[node name="CenterContainer" type="CenterContainer" parent="UI/VictoryPanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PanelContainer" type="PanelContainer" parent="UI/VictoryPanel/CenterContainer"]
+margin_left = 953.0
+margin_top = 533.0
+margin_right = 967.0
+margin_bottom = 547.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/VictoryPanel/CenterContainer/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 807.0
+margin_bottom = 494.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="UI/VictoryPanel/CenterContainer/PanelContainer/VBoxContainer"]
+margin_left = 314.0
+margin_right = 485.0
+margin_bottom = 66.0
+size_flags_horizontal = 4
+custom_fonts/font = SubResource( 4 )
+text = "Victory!"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/VictoryPanel/CenterContainer/PanelContainer/VBoxContainer"]
+margin_top = 70.0
+margin_right = 800.0
+margin_bottom = 433.0
+rect_min_size = Vector2( 800, 0 )
+custom_fonts/bold_font = ExtResource( 22 )
+custom_fonts/normal_font = ExtResource( 23 )
+bbcode_enabled = true
+bbcode_text = "As you enter the town, you are mobbed by a crowd trying to bask in your charismatic aura.  The Mayor embraces you, blubbering through tears.
+
+\"How could we have let you go?\"
+
+A feast of Oyster Soup is prepared in your honour.  You may choose to go back to your hut, but you will always have a warm place in town.
+
+Thanks for playing!
+
+[b][url]ataboo.itch.io/[/url][/b] and [b]Heather Camp[/b]"
+text = "As you enter the town, you are mobbed by a crowd trying to bask in your charismatic aura.  The Mayor embraces you, blubbering through tears.
+
+\"How could we have let you go?\"
+
+A feast of Oyster Soup is prepared in your honour.  You may choose to go back to your hut, but you will always have a warm place in town.
+
+Thanks for playing!
+
+ataboo.itch.io/ and Heather Camp"
+fit_content_height = true
+
+[node name="Button" type="Button" parent="UI/VictoryPanel/CenterContainer/PanelContainer/VBoxContainer"]
+margin_left = 710.0
+margin_top = 437.0
+margin_right = 800.0
+margin_bottom = 487.0
+size_flags_horizontal = 8
+size_flags_vertical = 4
+custom_fonts/font = ExtResource( 26 )
+text = "Close"
+
+[node name="InventoryCursor" parent="UI" instance=ExtResource( 12 )]
 
 [connection signal="body_entered" from="HutArea" to="." method="OnCottageEntered"]

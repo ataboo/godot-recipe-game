@@ -21,7 +21,6 @@ namespace RecipeGame.Inventory
             data.Inventory = new PlayerInventory() 
             {
                 Items = new InventoryItem[PlayerItemSlotCount],
-                Money = 0,
             };
 
             data.Storage = new StorageInventory() 
@@ -34,9 +33,14 @@ namespace RecipeGame.Inventory
                 Items = new InventoryItem[StorageItemSlotCount]
             };
 
+            data.MarketSell = new StorageInventory()
+            {
+                Items = new InventoryItem[StorageItemSlotCount]
+            };
+
             data.Cauldron = new Cauldron() 
             {
-                Ingredients = new Dictionary<ItemType, InventoryItem>(),
+                Ingredients = new Dictionary<(ItemType type, bool processed), InventoryItem>(),
                 Temperature = 0f,
                 Products = new List<InventoryItem>(),
                 HeatLevel = 0,
@@ -46,12 +50,26 @@ namespace RecipeGame.Inventory
 
             data.PrepBench = new PrepBench
             {
-                Items = new InventoryItem[PrepBenchSlots]
+                InputItems = new StorageInventory(){
+                    Items = new InventoryItem[1]
+                },
+                OutputItems = new StorageInventory(){
+                    Items = new InventoryItem[1]
+                }
             };
 
             data.HeldTool = HeldTool.Empty;
 
             data.HeldItem = null;
+
+            data.PurchasedRecipes = StatsDefinitions.RecipeStats.Where(r => r.Price.HasValue).Select(r => r.ItemType).ToDictionary(t => t, t => false);
+
+            // data.Inventory.Items[0] = new InventoryItem
+            // {
+            //     Processed = false,
+            //     StackAmount = 1,
+            //     Stats = StatsDefinitions.MappedItemStats.Value[ItemType.GlowCharm]
+            // };
         }
 
         public void MoveItem(IInventory sourceInventory, IInventory destInventory, int sourceIdx, int destIdx, int amount) 
@@ -132,6 +150,19 @@ namespace RecipeGame.Inventory
             return MoveItemWithTool(targetInventory, playerData, index, leftClick);
         }
 
+        public bool CanEnterBiome(PlayerData playerData, BiomeType biome)
+        {
+            switch(biome)
+            {
+                case BiomeType.Cave:
+                    return playerData.Inventory.Items.OfType<InventoryItem>().Any(i => i.Stats.ItemType == ItemType.GlowCharm && !i.Processed);
+                case BiomeType.Shore:
+                    return playerData.Inventory.Items.OfType<InventoryItem>().Any(i => i.Stats.ItemType == ItemType.AmphibianCharm && !i.Processed);
+                default:
+                    return true;
+            }
+        }
+
         private bool MoveItemWithTool(IInventory targetInventory, PlayerData playerData, int index, bool leftClick)
         {
             InventoryItem targetItem = targetInventory.Items[index];
@@ -145,12 +176,14 @@ namespace RecipeGame.Inventory
 
                 if(playerData.HeldItem == null)
                 {
-                    playerData.HeldItem = targetItem.Clone();
-                    playerData.HeldItem.StackAmount = 0;
+                    playerData.HeldItem = targetItem.Clone(true);
                 }
                 else
                 {
-                    if(playerData.HeldItem.Stats.ItemType != targetItem.Stats.ItemType || playerData.HeldItem.Stats.StackSize - playerData.HeldItem.StackAmount < moveAmount)
+                    if(playerData.HeldItem.Stats.ItemType != targetItem.Stats.ItemType ||
+                        playerData.HeldItem.Stats.StackSize - playerData.HeldItem.StackAmount < moveAmount || 
+                        playerData.HeldItem.Processed != targetItem.Processed
+                    )
                     {
                         return false;
                     }
@@ -172,13 +205,16 @@ namespace RecipeGame.Inventory
 
                 if(targetItem == null)
                 {
-                    targetItem = playerData.HeldItem.Clone();
-                    targetItem.StackAmount = 0;
+                    targetItem = playerData.HeldItem.Clone(true);
                     targetInventory.Items[index] = targetItem;
                 }
                 else
                 {
-                    if(targetItem.Stats.ItemType != playerData.HeldItem.Stats.ItemType || targetItem.Stats.StackSize - targetItem.StackAmount < moveAmount)
+                    if(
+                        targetItem.Stats.ItemType != playerData.HeldItem.Stats.ItemType || 
+                        targetItem.Stats.StackSize - targetItem.StackAmount < moveAmount ||
+                        targetItem.Processed != playerData.HeldItem.Processed
+                    )
                     {
                         return false;
                     }
@@ -207,13 +243,12 @@ namespace RecipeGame.Inventory
 
             if(targetItem == null)
             {
-                targetItem = playerData.HeldItem.Clone();
-                targetItem.StackAmount = 0;
+                targetItem = playerData.HeldItem.Clone(true);
                 targetInventory.Items[index] = targetItem;
             }
             else
             {
-                if(targetItem.Stats.ItemType != playerData.HeldItem.Stats.ItemType)
+                if(targetItem.Stats.ItemType != playerData.HeldItem.Stats.ItemType || targetItem.Processed != playerData.HeldItem.Processed)
                 {
                     return false;
                 }
@@ -243,12 +278,11 @@ namespace RecipeGame.Inventory
 
             if(playerData.HeldItem == null)
             {
-                playerData.HeldItem = targetItem.Clone();
-                playerData.HeldItem.StackAmount = 0;
+                playerData.HeldItem = targetItem.Clone(true);
             }
             else 
             {
-                if(targetItem.Stats.ItemType != playerData.HeldItem.Stats.ItemType)
+                if(targetItem.Stats.ItemType != playerData.HeldItem.Stats.ItemType || targetItem.Processed != playerData.HeldItem.Processed)
                 {
                     return false;
                 }
@@ -265,21 +299,6 @@ namespace RecipeGame.Inventory
             return pickupAmount > 0;
         }
 
-        // private (bool success, int amount) GetPickupAmountWithTool(PlayerData playerData, bool leftClick, InventoryItem item)
-        // {
-        //     switch(playerData.HeldTool)
-        //     {
-        //         case HeldTool.Empty:
-        //             return 
-        //         case HeldTool.Bowl:
-        //             return item.Stats.IsLiquid && item.StackAmount >= 1000 ? (true, 1000) : (false, 0);
-        //         case HeldTool.Scoop:
-        //             return !item.Stats.IsLiquid ? (true, 1) : (false, 0);
-        //         default:
-        //             return (false, 0);
-        //     }
-        // }
-
         public void EmptyPlayerHand(PlayerData playerData)
         {
             playerData.HeldTool = HeldTool.Empty;
@@ -294,7 +313,9 @@ namespace RecipeGame.Inventory
                 return;
             }
 
-            var matchingDestItems = destInventory.Items.OfType<InventoryItem>().Where(i => i.Stats.ItemType == sourceItem.Stats.ItemType);
+            var matchingDestItems = destInventory.Items
+                .OfType<InventoryItem>()
+                .Where(i => i.Stats.ItemType == sourceItem.Stats.ItemType && i.Processed == sourceItem.Processed);
 
             foreach(var destItem in matchingDestItems)
             {
@@ -318,6 +339,87 @@ namespace RecipeGame.Inventory
             }
         }
 
+        public bool BuyRecipe(PlayerData playerData, ItemType itemType)
+        {
+            if(!playerData.PurchasedRecipes.ContainsKey(itemType))
+            {
+                GD.PushError($"Failed to purchase recipe: {itemType}");
+                return false;
+            }
+
+            var price = StatsDefinitions.MappedRecipeStats.Value[itemType].Price;
+            if(!price.HasValue || playerData.CoinBalance < price.Value)
+            {
+                return false;
+            }
+
+            playerData.CoinBalance -= price.Value;
+            playerData.PurchasedRecipes[itemType] = true;
+
+            return true;
+        }
+
+        public void SellMarketItems(PlayerData playerData)
+        {
+            var value = GetSellMarketValue(playerData);
+            playerData.MarketSell.Items = new InventoryItem[InventoryService.StorageItemSlotCount];
+            playerData.CoinBalance += value;
+        }
+
+        public int GetSellMarketValue(PlayerData playerData)
+        {
+            return playerData.MarketSell.Items.OfType<InventoryItem>().Sum(i => i.StackAmount * i.Stats.BasePrice / (i.Stats.IsLiquid ? 1000 : 1));
+        }
+
+        public bool ProcessPrepBench(PrepBench prepBench)
+        {
+            if(!PrepBenchCanProcess(prepBench))
+            {
+                return false;
+            }
+
+            if(prepBench.OutputItem == null)
+            {
+                prepBench.OutputItem = prepBench.InputItem.Clone(true);
+                prepBench.OutputItem.Processed = true;
+            }
+
+            prepBench.InputItem.StackAmount -= 1;
+            prepBench.OutputItem.StackAmount += 1;
+
+            if(prepBench.InputItem.StackAmount == 0)
+            {
+                prepBench.InputItem = null;
+            }
+
+            return true;
+        }
+
+        public bool PrepBenchCanProcess(PrepBench prepBench)
+        {
+            if(prepBench.InputItem == null || string.IsNullOrEmpty(prepBench.InputItem.Stats.ProcessedName) || prepBench.InputItem.Stats.IsLiquid)
+            {
+                return false;
+            }
+
+            if(prepBench.OutputItem == null)
+            {
+                return true;
+            }
+
+            if(prepBench.OutputItem.Stats.ItemType != prepBench.InputItem.Stats.ItemType || !prepBench.OutputItem.Processed)
+            {
+                return false;
+            }
+
+            if(prepBench.OutputItem.StackAmount == prepBench.OutputItem.Stats.StackSize)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public bool MoveStack(IInventory sourceInventory, IInventory destInventory, int sourceIdx) 
         {
             if(sourceInventory == null || destInventory == null)
@@ -333,7 +435,9 @@ namespace RecipeGame.Inventory
                 return false;
             }
 
-            var matchingDestItems = destInventory.Items.OfType<InventoryItem>().Where(i => i.Stats.ItemType == sourceItem.Stats.ItemType);
+            var matchingDestItems = destInventory.Items
+                .OfType<InventoryItem>()
+                .Where(i => i.Stats.ItemType == sourceItem.Stats.ItemType && i.Processed == sourceItem.Processed);
 
             foreach(var destItem in matchingDestItems)
             {
@@ -397,7 +501,7 @@ namespace RecipeGame.Inventory
                 item.StackAmount -= amount;
             }
 
-            if(cauldron.Ingredients.TryGetValue(item.Stats.ItemType, out var mergeItem)) 
+            if(cauldron.Ingredients.TryGetValue((item.Stats.ItemType, item.Processed), out var mergeItem)) 
             {
                 // Item type already exists in cauldron, add to stack.
                 mergeItem.StackAmount += amount;
@@ -405,8 +509,8 @@ namespace RecipeGame.Inventory
             else 
             {
                 // New type in cauldron.
-                cauldron.Ingredients[item.Stats.ItemType] = item.Clone();
-                cauldron.Ingredients[item.Stats.ItemType].StackAmount = amount;
+                cauldron.Ingredients[(item.Stats.ItemType, item.Processed)] = item.Clone();
+                cauldron.Ingredients[(item.Stats.ItemType, item.Processed)].StackAmount = amount;
             }
         }
 

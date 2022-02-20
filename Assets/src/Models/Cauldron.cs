@@ -8,7 +8,7 @@ namespace RecipeGame.Models
 {
     public class Cauldron 
     {
-        public Dictionary<ItemType, InventoryItem> Ingredients { get; set; }
+        public Dictionary<(ItemType type, bool processed), InventoryItem> Ingredients { get; set; }
 
         public float HeatLevel { get; set; }
 

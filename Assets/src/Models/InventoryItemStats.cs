@@ -12,7 +12,7 @@ namespace RecipeGame.Models
 
         public int StackSize { get; }
 
-        public float BasePrice { get; }
+        public int BasePrice { get; }
 
         public int UnitVolume { get; }
 
@@ -20,7 +20,7 @@ namespace RecipeGame.Models
 
         public bool IsLiquid { get; set; }
 
-        public InventoryItemStats(ItemType type, string name, string desciption, int stackSize, float basePrice, int unitVolume, ItemDisplayMode displayMode, bool isLiquid) 
+        public InventoryItemStats(ItemType type, string name, string desciption, int stackSize, int basePrice, int unitVolume, ItemDisplayMode displayMode, bool isLiquid) 
         {
             
             ItemType = type;

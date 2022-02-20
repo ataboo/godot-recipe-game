@@ -1,0 +1,323 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Art/UI/RecipeArrow.png" type="Texture" id=1]
+[ext_resource path="res://Art/UI/RoyalSheetWithScroll.png" type="Texture" id=2]
+[ext_resource path="res://Assets/src/RecipePanelControl.cs" type="Script" id=3]
+[ext_resource path="res://Art/UI/RaggedSheetBlank.png" type="Texture" id=4]
+[ext_resource path="res://Assets/ui/RecipeCard.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Assets/src/RecipeCardControl.cs" type="Script" id=6]
+[ext_resource path="res://Assets/fonts/AlmendriaBold24.tres" type="DynamicFont" id=7]
+[ext_resource path="res://Assets/fonts/AlmendriaNormal24.tres" type="DynamicFont" id=8]
+[ext_resource path="res://Assets/fonts/CaveatNormal40.tres" type="DynamicFont" id=9]
+
+[node name="RecipePanel" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 920.0
+margin_bottom = 920.0
+mouse_filter = 1
+size_flags_horizontal = 5
+size_flags_vertical = 4
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+panelClosedYPos = 980.0
+panelMoveSpeed = 8.0
+recipeHolderPath = NodePath("HBoxContainer/RecipePanelCenter/RecipeHolder")
+leftButtonPath = NodePath("HBoxContainer/Left/LeftButton")
+rightButtonPath = NodePath("HBoxContainer/Right/RightButton")
+centerButtonPath = NodePath("HBoxContainer/RecipePanelCenter/RecipeButton")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 1910.0
+margin_bottom = 1070.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Left" type="MarginContainer" parent="HBoxContainer"]
+margin_left = 493.0
+margin_top = 402.0
+margin_right = 621.0
+margin_bottom = 658.0
+mouse_filter = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+
+[node name="LeftButton" type="TextureButton" parent="HBoxContainer/Left"]
+margin_right = 128.0
+margin_bottom = 256.0
+size_flags_horizontal = 8
+size_flags_vertical = 4
+texture_normal = ExtResource( 1 )
+flip_h = true
+
+[node name="RecipePanelCenter" type="MarginContainer" parent="HBoxContainer"]
+margin_left = 625.0
+margin_top = 45.0
+margin_right = 1275.0
+margin_bottom = 1015.0
+mouse_filter = 1
+size_flags_horizontal = 4
+size_flags_vertical = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RecipeHolder" type="MarginContainer" parent="HBoxContainer/RecipePanelCenter"]
+margin_right = 650.0
+margin_bottom = 970.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="CharismaCharm" parent="HBoxContainer/RecipePanelCenter/RecipeHolder" instance=ExtResource( 5 )]
+margin_right = 650.0
+margin_bottom = 970.0
+itemType = 19
+title = "Charm of Charisma"
+subtitle = "The bearer of this charm is beloved by all"
+bodyContent = "- Three flagons of brackish-boggy water
+- One jar of [b]Cave Slime[/b]
+- Seven and two more helpings of [b]Guano[/b]
+- One medium sized [b]Lodestone[/b], crushed
+- A single [b]Amphibian Charm[/b], cubed
+- One [b]Glow Charm[/b], gently mashed
+
+Boil gently until eyes dry out from admiring the charm absentmindedly.
+"
+
+[node name="GlowCharm" parent="HBoxContainer/RecipePanelCenter/RecipeHolder" instance=ExtResource( 5 )]
+margin_right = 650.0
+margin_bottom = 970.0
+itemType = 18
+title = "Charm of Luminance"
+subtitle = "A flameless torch harnessing the glow of the jellyfish"
+bodyContent = "- One flagon of [b]Salt Water[/b] made brackish by equal part fresh.
+- Six scoops of [b]Wood Chips[/b]
+- Four bowls of [b]Oyster Soup[/b]
+- Two globs of [b]Pureed Jellyfish[/b]
+
+Bring to a medium boil until glow is unbearable.
+"
+
+[node name="Salt" parent="HBoxContainer/RecipePanelCenter/RecipeHolder" instance=ExtResource( 5 )]
+margin_right = 650.0
+margin_bottom = 970.0
+itemType = 9
+title = "Salt"
+subtitle = "Where does the water hide it?"
+bodyContent = "- One Flagon of [b]Sea Water[/b]
+
+Boil until water goes somewhere, leaving salt in its stead."
+
+[node name="AmphibianCharm" parent="HBoxContainer/RecipePanelCenter/RecipeHolder" instance=ExtResource( 5 )]
+margin_right = 650.0
+margin_bottom = 970.0
+title = "Charm of the Amphibian"
+
+[node name="OysterSoup" parent="HBoxContainer/RecipePanelCenter/RecipeHolder" instance=ExtResource( 5 )]
+margin_right = 650.0
+margin_bottom = 970.0
+itemType = 17
+title = "Oyster Soup"
+subtitle = "A delightful treat for a rainy day"
+bodyContent = "- Hay dozen [b]Oysters[/b], shucked
+- One flagon of [b]Fresh Water[/b]
+- One whole [b]Shaved Truffle[/b]
+- Two pinches of [b]Salt[/b]
+
+Simmer gently but firmly so as not to release the humours from the oysters."
+backgroundTexture = ExtResource( 2 )
+
+[node name="BogWater" parent="HBoxContainer/RecipePanelCenter/RecipeHolder" instance=ExtResource( 5 )]
+margin_right = 650.0
+margin_bottom = 970.0
+itemType = 8
+title = "Bog Water"
+subtitle = "Dark, bold, and musky staple for all thing swamp"
+bodyContent = "- Ten sprigs of [b]Peat Moss[/b], shredded
+- One flagon of [b]Fresh Water[/b]
+
+Bring ingredients to a medium boil until mixture is sufficiently boggy."
+
+[node name="NoteAboutGruel" type="MarginContainer" parent="HBoxContainer/RecipePanelCenter/RecipeHolder"]
+margin_right = 650.0
+margin_bottom = 970.0
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+script = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+titlePath = NodePath("VBoxContainer/MarginContainer/TitleLabel")
+subtitlePath = NodePath("VBoxContainer/MarginContainer3/SubtitleLabel")
+contentPath = NodePath("VBoxContainer/MarginContainer2/ContentText")
+backgroundPath = NodePath("BackgroundTexture")
+title = "Gruel Shmool"
+subtitle = ""
+bodyContent = "Gruel shmool for cruel fools.  I made it for years before I found the way out.  Spat in every batch along the way.
+
+When you're in town, drop by the Scrollmart and they'll set you up with some recipes that are a bit more exciting.  Play your cards right and you may even charm your way out of this shack!"
+backgroundTexture = ExtResource( 4 )
+
+[node name="BackgroundTexture" type="TextureRect" parent="HBoxContainer/RecipePanelCenter/RecipeHolder/NoteAboutGruel"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 645.0
+margin_bottom = 965.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource( 4 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/RecipePanelCenter/RecipeHolder/NoteAboutGruel"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 645.0
+margin_bottom = 965.0
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/RecipePanelCenter/RecipeHolder/NoteAboutGruel/VBoxContainer"]
+margin_left = 233.0
+margin_right = 406.0
+margin_bottom = 231.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
+custom_constants/margin_top = 180
+
+[node name="TitleLabel" type="Label" parent="HBoxContainer/RecipePanelCenter/RecipeHolder/NoteAboutGruel/VBoxContainer/MarginContainer"]
+margin_top = 180.0
+margin_right = 173.0
+margin_bottom = 231.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
+custom_colors/font_color = Color( 0.2, 0.2, 0.184314, 1 )
+custom_fonts/font = ExtResource( 9 )
+text = "Gruel Shmool"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer3" type="MarginContainer" parent="HBoxContainer/RecipePanelCenter/RecipeHolder/NoteAboutGruel/VBoxContainer"]
+margin_left = 95.0
+margin_top = 235.0
+margin_right = 545.0
+margin_bottom = 267.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
+custom_constants/margin_top = 0
+
+[node name="SubtitleLabel" type="Label" parent="HBoxContainer/RecipePanelCenter/RecipeHolder/NoteAboutGruel/VBoxContainer/MarginContainer3"]
+margin_right = 450.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 450, 0 )
+size_flags_horizontal = 4
+size_flags_vertical = 0
+custom_colors/font_color = Color( 0.2, 0.2, 0.184314, 1 )
+custom_fonts/font = ExtResource( 8 )
+align = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer/RecipePanelCenter/RecipeHolder/NoteAboutGruel/VBoxContainer"]
+margin_top = 271.0
+margin_right = 640.0
+margin_bottom = 960.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_top = 50
+custom_constants/margin_bottom = 0
+
+[node name="ContentText" type="RichTextLabel" parent="HBoxContainer/RecipePanelCenter/RecipeHolder/NoteAboutGruel/VBoxContainer/MarginContainer2"]
+margin_left = 70.0
+margin_top = 50.0
+margin_right = 570.0
+margin_bottom = 689.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_min_size = Vector2( 500, 0 )
+rect_clip_content = false
+size_flags_horizontal = 4
+size_flags_vertical = 5
+custom_colors/default_color = Color( 0.2, 0.2, 0.184314, 1 )
+custom_fonts/bold_font = ExtResource( 7 )
+custom_fonts/normal_font = ExtResource( 8 )
+bbcode_enabled = true
+bbcode_text = "Gruel shmool for cruel fools.  I made it for years before I found the way out.  Spat in every batch along the way.
+
+When you're in town, drop by the Scrollmart and they'll set you up with some recipes that are a bit more exciting.  Play your cards right and you may even charm your way out of this shack!"
+text = "Gruel shmool for cruel fools.  I made it for years before I found the way out.  Spat in every batch along the way.
+
+When you're in town, drop by the Scrollmart and they'll set you up with some recipes that are a bit more exciting.  Play your cards right and you may even charm your way out of this shack!"
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Gruel" parent="HBoxContainer/RecipePanelCenter/RecipeHolder" instance=ExtResource( 5 )]
+margin_right = 650.0
+margin_bottom = 970.0
+Purchasable = false
+itemType = 11
+title = "Gruel"
+subtitle = "A humble peasant feed, guaranteed to keep passions tempered"
+bodyContent = "- Four scoops of [b]Crushed Grain[/b]
+- One flagon of [b]Fresh Water[/b]
+
+Apply wood to fire, fire to cauldron, and cauldron to contents.  Stir until mush becomes featureless.
+
+Best embibed with generous helpings of piety."
+backgroundTexture = ExtResource( 2 )
+
+[node name="Welcome" parent="HBoxContainer/RecipePanelCenter/RecipeHolder" instance=ExtResource( 5 )]
+visible = false
+margin_right = 650.0
+margin_bottom = 970.0
+Purchasable = false
+itemType = 0
+title = "Goodbye and Welcome"
+subtitle = "A guide to to your new life in exile"
+bodyContent = "Your former community has [s]banished you[/s] relieved you of the burdens of town life.  You will now harvest the bounties of the wilds and transform them into humble gruel.
+
+Do not be tempted by other ingredients as your station is that of the humble hermit.
+
+You will be permitted short visits to the town, but only to deliver your product.
+
+Forage the forests and lakes and hone your brewing crafts to make the most adequate gruel in the land."
+backgroundTexture = ExtResource( 2 )
+
+[node name="RecipeButton" type="TextureButton" parent="HBoxContainer/RecipePanelCenter"]
+modulate = Color( 1, 1, 1, 0 )
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 645.0
+margin_bottom = 965.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource( 4 )
+
+[node name="Right" type="MarginContainer" parent="HBoxContainer"]
+margin_left = 1279.0
+margin_top = 402.0
+margin_right = 1407.0
+margin_bottom = 658.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 4
+
+[node name="RightButton" type="TextureButton" parent="HBoxContainer/Right"]
+margin_right = 128.0
+margin_bottom = 256.0
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture_normal = ExtResource( 1 )

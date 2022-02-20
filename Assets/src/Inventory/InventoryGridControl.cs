@@ -1,7 +1,7 @@
 using Godot;
 using RecipeGame.Models;
 
-public class InventoryGridControl : PanelContainer
+public class InventoryGridControl : Control
 {
     [Signal]
     public delegate void OnItemLeftPress(int itemIdx);

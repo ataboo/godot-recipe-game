@@ -7,8 +7,6 @@ public class ToolTableControl : Sprite
     [Export]
     public NodePath scoopAreaPath;
     [Export]
-    public NodePath slottedAreaPath;
-    [Export]
     public NodePath tableAreaPath;
     [Export]
     public NodePath bowlPath;
@@ -17,7 +15,6 @@ public class ToolTableControl : Sprite
     public delegate void OnToolClicked(HeldTool tool, bool leftClick);
 
     private Area2D scoopArea;
-    private Area2D slottedArea;
     private Area2D tableArea;
     private Area2D bowlArea;
 
@@ -25,12 +22,10 @@ public class ToolTableControl : Sprite
     public override void _Ready()
     {
         scoopArea = GetNode<Area2D>(scoopAreaPath) ?? throw new NullReferenceException();
-        slottedArea = GetNode<Area2D>(slottedAreaPath) ?? throw new NullReferenceException();
         tableArea = GetNode<Area2D>(tableAreaPath) ?? throw new NullReferenceException();
         bowlArea = GetNode<Area2D>(bowlPath) ?? throw new NullReferenceException();
 
         scoopArea.Connect("input_event", this, nameof(HandleToolClicked), new Godot.Collections.Array{HeldTool.Scoop});
-        slottedArea.Connect("input_event", this, nameof(HandleToolClicked), new Godot.Collections.Array{HeldTool.SlottedSpoon});
         bowlArea.Connect("input_event", this, nameof(HandleToolClicked), new Godot.Collections.Array{HeldTool.Bowl});
         tableArea.Connect("input_event", this, nameof(HandleToolClicked), new Godot.Collections.Array{HeldTool.Empty});
     }
@@ -38,7 +33,6 @@ public class ToolTableControl : Sprite
     public void SetHeldTool(HeldTool tool)
     {
         scoopArea.Visible = tool != HeldTool.Scoop;
-        slottedArea.Visible = tool != HeldTool.SlottedSpoon;
         bowlArea.Visible = tool != HeldTool.Bowl;
     }
 
